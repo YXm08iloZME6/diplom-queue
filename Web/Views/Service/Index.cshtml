@@ -1,0 +1,22 @@
+@model List<Application.DTOs.ServiceDto>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <title>Очередь</title>
+</head>
+<body>
+<div>
+    <h2>Доступные сервисы</h2> 
+    @foreach (var service in Model)
+    {
+        <div>@service.Name</div>
+    }
+</div>
+</body>
+</html>
