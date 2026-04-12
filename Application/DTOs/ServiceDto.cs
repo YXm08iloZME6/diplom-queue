@@ -8,6 +8,8 @@ public class ServiceDto
     public string Name { get; set; } 
     public string? Letter { get; set; }
     public List<ServiceDto> Children { get; set; }
+    public string? Description { get; set; }
+    public string? IconName { get; set; }
 
     public ServiceDto(Service service)
     {
@@ -15,5 +17,11 @@ public class ServiceDto
        Name = service.Name;
        Letter = service.Letter;
        Children = service.Children.Select(x => new ServiceDto(x)).ToList();
+       Description = service.Description;
+       IconName = service.IconName;
     }
 }
+
+
+
+

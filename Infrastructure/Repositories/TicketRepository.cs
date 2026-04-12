@@ -17,14 +17,12 @@ public class TicketRepository : ITicketRepository
     public async Task<Ticket> AddAsync(Ticket ticket)
     {
         await _dbContext.Set<Ticket>().AddAsync(ticket);
+        await _dbContext.SaveChangesAsync();
         return ticket;
     }
 
-    public async Task<string> GenNumberAsync(Guid serviceId)
+    public async Task<int> GetTicketCountAsync(Guid serviceId)
     {
-        var service = await _dbContext.Set<Service>().FindAsync(serviceId);
-        var count = await _dbContext.Set<Ticket>().Where(t => t.ServiceId == serviceId).CountAsync();
-        
-        return $"{service?.Letter}-{(count + 1):D3}";
+        return await _dbContext.Set<Ticket>().Where(t => t.ServiceId == serviceId).CountAsync();
     }
 }

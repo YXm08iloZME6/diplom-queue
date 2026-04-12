@@ -1,17 +1,18 @@
-@model List<Application.DTOs.ServiceDto>
+@model Application.DTOs.ServiceDto
 
 @{
+    ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
 <div class="flex flex-col gap-12">
     <div>
-        <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">Услуги.</h1>
-        <p class="leading-7 not-first:mt-6">Для получения талона электронной очереди коснитесь экрана и выберите нужную услугу.</p>
+        <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">@(Model.Name).</h1>
+        <p class="leading-7 not-first:mt-6">@Model.Description</p>
     </div>
 
     <div class="flex justify-center gap-5 min-w-7xl">
-        @foreach (var service in @Model)
+        @foreach (var service in @Model.Children)
         {
             <a asp-controller="Service" asp-action="Select" asp-route-id="@service.Id" class="bg-white rounded-3xl p-8 shadow-lg flex flex-col justify-between max-w-72 cursor-pointer">
                 <div class="w-16 h-16 bg-[#f0f3f8] rounded-2xl flex items-center justify-center mb-12 text-slate-600">

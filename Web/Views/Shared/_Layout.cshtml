@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -6,29 +7,22 @@
     <title>@ViewData["Title"] - Web</title>
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true"/>
 </head>
-<body>
+<body class="flex flex-col min-h-screen bg-accent">
 <header>
-    <nav class="bg-white border-b shadow-sm mb-3">
-        <div class="max-w-full px-4 flex wrap items-center justify-between py-3">
-            <a class="text-xl font-semibold whitespace-nowrap" asp-area="" asp-controller="Home" asp-action="Index">Web</a>
-            <div class="hidden w-full sm:flex sm:items-center sm:w-auto grow">
-                <ul class="flex flex-col mt-4 sm:flex-row sm:space-x-8 sm:mt-0 sm:ml-4 grow">
-                    <li>
-                        <a class="block py-2 pr-4 pl-3 text-gray-900 hover:text-blue-700 sm:p-0" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li>
-                        <a class="block py-2 pr-4 pl-3 text-gray-900 hover:text-blue-700 sm:p-0" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
+    <nav class="border-b">
+        <div class="max-w-full px-4 flex wrap items-center justify-between py-8">
+            <a class="text-2xl font-semibold whitespace-nowrap" asp-area="" asp-controller="Home" asp-action="Index">ОЧЕРЕДЬ</a>
+            <div class="text-muted-foreground text-lg">
+                @DateOnly.FromDateTime(DateTime.Now).ToString("D", new CultureInfo("ru-RU"))
             </div>
         </div>
     </nav>
 </header>
-<div class="container">
-    <main role="main" class="pb-4">
-        @RenderBody()
-    </main>
-</div>
+
+<main role="main" class="container mx-auto flex grow justify-center pt-12 ">
+    @RenderBody()
+</main>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)

@@ -18,9 +18,9 @@ public class TicketController : Controller
 
     [HttpPost]
     public async Task<ActionResult<TicketDto>> CreateTicket(
-        Guid serviceId)
+        Guid serviceId, string letter)
     {
-        TicketDto ticket = await _ticketService.CreateTicketAsync(serviceId);
+        TicketDto ticket = await _ticketService.CreateTicketAsync(serviceId, "", letter);
         return Ok(ticket);
     }
 }

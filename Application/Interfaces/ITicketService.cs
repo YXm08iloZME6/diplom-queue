@@ -4,5 +4,5 @@ namespace Application.Interfaces;
 
 public interface ITicketService
 {
-    Task<TicketDto> CreateTicketAsync(Guid serviceId);
+    Task<TicketDto> CreateTicketAsync(Guid serviceId, string info, string letter);
 }
