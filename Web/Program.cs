@@ -1,10 +1,19 @@
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ДИАГНОСТИКА - ВРЕМЕННО
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine($"=== DEBUG: Connection string = '{connectionString}' ===");
+if (string.IsNullOrEmpty(connectionString))
+{
+    Console.WriteLine("=== DEBUG: Connection string is NULL or EMPTY! ===");
+}
+// КОНЕЦ ДИАГНОСТИКИ
 
 builder.Services.AddDbContext<QueueDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).UseSnakeCaseNamingConvention());

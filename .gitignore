@@ -1,6 +1,31 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
 bin/
 obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
-/Web/node_modules/
+Debug/
+Release/
+*.exe
+*.dll
+*.pdb
+
+# Dotnet
+*.lock.json
+*.log
+*.cache
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# OS files
+Thumbs.db
+.DS_Store
