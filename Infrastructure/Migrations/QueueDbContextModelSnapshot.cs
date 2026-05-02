@@ -155,7 +155,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("tickets", (string)null);
                 });
 
-            modelBuilder.Entity("Queue.Domain.Entities.Roles", b =>
+            modelBuilder.Entity("Queue.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -173,28 +173,21 @@ namespace Infrastructure.Migrations
                         .HasName("pk_roles");
 
                     b.ToTable("roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Title = "operator"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Title = "admin"
+                        });
                 });
 
-            modelBuilder.Entity("Queue.Domain.Entities.UserRoles", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
-
-                    b.HasKey("UserId", "RoleId")
-                        .HasName("pk_user_roles");
-
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_user_roles_role_id");
-
-                    b.ToTable("user_roles", (string)null);
-                });
-
-            modelBuilder.Entity("Queue.Domain.Entities.Users", b =>
+            modelBuilder.Entity("Queue.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -224,7 +217,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("password_hash");
 
-                    b.Property<Guid>("ServiceId")
+                    b.Property<Guid?>("ServiceId")
+                        .IsRequired()
                         .HasColumnType("uuid")
                         .HasColumnName("service_id");
 
@@ -247,6 +241,25 @@ namespace Infrastructure.Migrations
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("Queue.Domain.Entities.UserRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("UserId", "RoleId")
+                        .HasName("pk_user_roles");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_user_roles_role_id");
+
+                    b.ToTable("user_roles", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Service", b =>
                 {
                     b.HasOne("Domain.Entities.Service", "Parent")
@@ -257,28 +270,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Queue.Domain.Entities.UserRoles", b =>
-                {
-                    b.HasOne("Queue.Domain.Entities.Roles", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_roles_roles_role_id");
-
-                    b.HasOne("Queue.Domain.Entities.Users", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_roles_users_user_id");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Queue.Domain.Entities.Users", b =>
+            modelBuilder.Entity("Queue.Domain.Entities.User", b =>
                 {
                     b.HasOne("Domain.Entities.Service", "Service")
                         .WithMany()
@@ -290,17 +282,38 @@ namespace Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("Queue.Domain.Entities.UserRole", b =>
+                {
+                    b.HasOne("Queue.Domain.Entities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_roles_roles_role_id");
+
+                    b.HasOne("Queue.Domain.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_roles_users_user_id");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.Service", b =>
                 {
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("Queue.Domain.Entities.Roles", b =>
+            modelBuilder.Entity("Queue.Domain.Entities.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Queue.Domain.Entities.Users", b =>
+            modelBuilder.Entity("Queue.Domain.Entities.User", b =>
                 {
                     b.Navigation("UserRoles");
                 });

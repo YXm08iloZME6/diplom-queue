@@ -2,7 +2,7 @@
 
 namespace Application.DTOs;
 
-public class UsersDto
+public class UserDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
@@ -10,8 +10,15 @@ public class UsersDto
     public string? MiddleName { get; set; }
     public string Status { get; set; }
     public string Email { get; set; }
-    public Guid ServiceId { get; set; }
+    public Guid? ServiceId { get; set; }
     public List<string> Roles { get; set; }
+}
+
+public class RegisterUserDto
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public string ConfirmPassword { get; set; }
 }
 
 public class CreateUserDto
@@ -21,7 +28,8 @@ public class CreateUserDto
     public string? MiddleName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
-    public Guid ServiceId { get; set; }
+    public string Status { get; set; }
+    public Guid? ServiceId { get; set; }
 }
 
 public class LoginUserDto
@@ -30,7 +38,7 @@ public class LoginUserDto
     public string Password { get; set; }
 }
 
-public class UpdateUserDto
+public class EditUserDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
@@ -38,7 +46,9 @@ public class UpdateUserDto
     public string? MiddleName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
-    public Guid ServiceId { get; set; }
+    public string Status { get; set; }
+    public Guid? ServiceId { get; set; }
+    public List<string> Roles { get; set; } = new();
 }
 
 public class UpdateUserStatusDto
@@ -46,3 +56,4 @@ public class UpdateUserStatusDto
     public Guid UserId { get; set; }
     public UserStatus Status { get; set; }
 }
+

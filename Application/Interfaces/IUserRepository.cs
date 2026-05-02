@@ -1,12 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Queue.Domain.Entities;
 
-namespace Application.Interfaces
+namespace Queue.Applications.Interfaces;
+public interface IUserRepository
 {
-    internal class IUserRepository
-    {
-    }
+    Task<User?> GetByIdAsync(Guid id);
+    Task<User?> GetByEmailAsync(string email);
+    Task<List<User>> GetAllAsync();
+    Task<bool> EmailExistsAsync(string email);
+
+    Task AddAsync(User user);
+    Task UpdateAsync(User user);
+    Task DeleteAsync(User user);
+    Task RemoveUserRolesAsync(Guid userId);
+    Task AddUserRoleAsync(UserRole userRole);
+    Task SaveChangesAsync();
+
+    Task BeginTransactionAsync();
+    Task CommitTransactionAsync();
+    Task RollbackTransactionAsync();
 }

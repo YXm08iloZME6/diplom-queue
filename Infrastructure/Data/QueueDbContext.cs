@@ -10,9 +10,9 @@ public class QueueDbContext : DbContext
     
     public DbSet<Ticket>? Tickets { get; set; }
     public DbSet<Service>? Services { get; set; }
-    public DbSet<Users>? Users { get; set; }
-    public DbSet<UserRoles>? UserRoles { get; set; }
-    public DbSet<Roles>? Roles { get; set; }
+    public DbSet<User>? Users { get; set; }
+    public DbSet<UserRole>? UserRoles { get; set; }
+    public DbSet<Role>? Roles { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,7 +41,7 @@ public class QueueDbContext : DbContext
             new {Id = Guid.Parse("d320728d-0a5e-490c-be3c-04bcf3a7a4c8"), Name = "Оформление больничного", Description = "Официальное подтверждение временной нетрудоспособности.", IconName="CheckBook", ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") }
         );
 
-        var users = builder.Entity<Users>();
+        var users = builder.Entity<User>();
         users.ToTable("users");
         users.HasKey(u => u.Id);
         users.Property(u => u.Id).HasDefaultValueSql("gen_random_uuid()");
@@ -51,20 +51,23 @@ public class QueueDbContext : DbContext
         users.Property(u => u.Email).IsRequired().HasMaxLength(30);
         users.Property(u => u.PasswordHash).IsRequired().HasMaxLength(100);
         users.Property(u => u.Status).IsRequired().HasMaxLength(10);
-        users.HasOne(u => u.Service).WithMany().HasForeignKey(u => u.ServiceId).IsRequired();
+        users.HasOne(u => u.Service).WithMany().HasForeignKey(u => u.ServiceId);
 
-        var roles = builder.Entity<Roles>();
+        var roles = builder.Entity<Role>();
         roles.ToTable("roles");
         roles.HasKey(r => r.Id);
         roles.Property(r => r.Id).HasDefaultValueSql("gen_random_uuid()");
         roles.Property(r => r.Title).IsRequired().HasMaxLength(20);
 
-        var userRoles = builder.Entity<UserRoles>();
+        var userRoles = builder.Entity<UserRole>();
         userRoles.ToTable("user_roles");
         userRoles.HasKey(ur => new { ur.UserId, ur.RoleId });
         userRoles.HasOne(ur => ur.User).WithMany(u => u.UserRoles).HasForeignKey(ur => ur.UserId).IsRequired();
         userRoles.HasOne(ur => ur.Role).WithMany(r => r.UserRoles).HasForeignKey(ur => ur.RoleId).IsRequired();
 
-
+        roles.HasData(
+            new { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Title = "operator" },
+            new { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Title = "admin" }
+            );
     } 
 }

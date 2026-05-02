@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.DTOs;
+using Queue.Domain.Entities;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface IAuthService
 {
-    internal interface IAuthRepository
-    {
-    }
+    Task<bool> ValidateUser(LoginUserDto user);
+    Task<UserDto> GetUserByEmail(string email);
+
+    Task<UserDto> CreateUser(RegisterUserDto user);
+
 }
