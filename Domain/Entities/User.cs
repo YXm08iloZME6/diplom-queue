@@ -13,8 +13,5 @@ public class User
     public UserStatus Status { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
-
-    public Guid? ServiceId { get; set; }
-    public Service? Service { get; set; }
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }
