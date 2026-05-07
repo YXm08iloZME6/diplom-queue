@@ -1,4 +1,4 @@
-namespace Queue.Domain.Entities;
+namespace Domain.Entities;
 
 public class UserRole
 {

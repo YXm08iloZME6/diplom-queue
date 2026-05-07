@@ -1,5 +1,5 @@
 ﻿using Application.DTOs;
-using Queue.Domain.Entities;
+using Domain.Entities;
 
 namespace Application.Interfaces;
 

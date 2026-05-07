@@ -1,8 +1,6 @@
-using Domain.Entities;
 using Domain.Enums;
 
-
-namespace Queue.Domain.Entities;
+namespace Domain.Entities;
 
 public class User
 {
@@ -13,5 +11,8 @@ public class User
     public UserStatus Status { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
+
+    public Guid? WindowId { get; set; }
+    public Window? Window { get; set; }
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

@@ -32,6 +32,12 @@
                                             <a asp-controller="Admin" asp-action="Index">Панель администратора</a>
                                         }
                                     }
+                                    @{
+                                        if (User.IsInRole("operator"))
+                                        {
+                                            <a asp-controller="Operator" asp-action="Index">Рабочее место оператора</a>
+                                        }
+                                    }
                                     <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
                                         <button type="submit" class="nav-link btn btn-link text-dark">
                                             Выйти

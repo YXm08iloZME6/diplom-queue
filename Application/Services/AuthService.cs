@@ -2,7 +2,7 @@
 using Application.Interfaces;
 using Domain.Enums;
 using Queue.Applications.Interfaces;
-using Queue.Domain.Entities;
+using Domain.Entities;
 
 namespace Queue.Applications.Services
 {
@@ -34,7 +34,7 @@ namespace Queue.Applications.Services
                 MiddleName = user.MiddleName,
                 Status = user.Status.ToString(),
                 Email = user.Email,
-                ServiceId = user.ServiceId,
+                WindowId = user.WindowId,
                 Roles = user.UserRoles
                     .Select(ur => ur.Role.Title)
                     .ToList()

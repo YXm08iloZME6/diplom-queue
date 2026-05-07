@@ -2,9 +2,9 @@
 
 public enum UserStatus
 {
-        Waiting,
-        Away,
-        Busy,
-        Deleted,
+    Waiting,
+    Away,
+    Busy,
+    Deleted
 }
 

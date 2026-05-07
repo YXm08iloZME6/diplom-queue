@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260507112327_CalledAt")]
+    partial class CalledAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,6 +178,7 @@ namespace Infrastructure.Migrations
                         .HasColumnName("number");
 
                     b.Property<string>("RedirectComment")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("redirect_comment");
 
@@ -310,15 +313,6 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_windows_service_id");
 
                     b.ToTable("windows", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            ServiceId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"),
-                            Status = "Open",
-                            Title = "Регистратура"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Service", b =>

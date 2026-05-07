@@ -1,7 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
 using Queue.Applications.Interfaces;
-using Queue.Domain.Entities;
+using Domain.Entities;
 
 namespace Queue.Applications.Services
 {
@@ -52,7 +52,7 @@ namespace Queue.Applications.Services
                 MiddleName = dto.MiddleName,
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                ServiceId = dto.ServiceId
+                WindowId = dto.WindowId
             };
 
             await _userRepository.AddAsync(user);
@@ -97,7 +97,7 @@ namespace Queue.Applications.Services
             user.Surname = dto.Surname;
             user.MiddleName = dto.MiddleName;
             user.Email = dto.Email;
-            user.ServiceId = dto.ServiceId;
+            user.WindowId = dto.WindowId;
 
             if (!string.IsNullOrWhiteSpace(dto.Password))
             {
@@ -158,7 +158,7 @@ namespace Queue.Applications.Services
                 MiddleName = user.MiddleName,
                 Status = user.Status.ToString(),
                 Email = user.Email,
-                ServiceId = user.ServiceId,
+                WindowId = user.WindowId,
                 Roles = user.UserRoles
                     .Select(ur => ur.Role.Title)
                     .ToList()

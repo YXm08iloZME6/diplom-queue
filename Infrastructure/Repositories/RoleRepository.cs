@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Queue.Applications.Interfaces;
-using Queue.Domain.Entities;
+using Domain.Entities;
 
 namespace Queue.Infrastructure.Repositories
 {

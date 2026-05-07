@@ -10,7 +10,7 @@ public class UserDto
     public string? MiddleName { get; set; }
     public string Status { get; set; }
     public string Email { get; set; }
-    public Guid? ServiceId { get; set; }
+    public Guid? WindowId { get; set; }
     public List<string> Roles { get; set; }
 }
 
@@ -29,7 +29,7 @@ public class CreateUserDto
     public string Email { get; set; }
     public string Password { get; set; }
     public string Status { get; set; }
-    public Guid? ServiceId { get; set; }
+    public Guid? WindowId { get; set; }
 }
 
 public class LoginUserDto
@@ -47,7 +47,7 @@ public class EditUserDto
     public string Email { get; set; }
     public string Password { get; set; }
     public string Status { get; set; }
-    public Guid? ServiceId { get; set; }
+    public Guid? WindowId { get; set; }
     public List<string> Roles { get; set; } = new();
 }
 

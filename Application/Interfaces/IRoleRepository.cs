@@ -1,4 +1,4 @@
-﻿using Queue.Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Queue.Applications.Interfaces;
 

@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
+using Domain.Enums;
 
-namespace Domain.Entities
+
+namespace Domain.Entities;
+
+public class Window
 {
-    internal class Window
-    {
-    }
+    public Guid Id { get; set; }
+    public string? Title { get; set; }
+    public WindowStatus Status { get; set; }
+
+    public Guid? ServiceId { get; set; }
+    public Service? Service { get; set; }
+    public ICollection<User> Operators { get; set; } = new List<User>();
 }

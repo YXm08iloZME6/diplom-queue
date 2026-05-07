@@ -59,7 +59,7 @@ namespace Queue.Controllers
                 Surname = user.Surname,
                 MiddleName = user.MiddleName,
                 Email = user.Email,
-                ServiceId = user.ServiceId,
+                WindowId = user.WindowId,
                 Roles = user.Roles
             };
 
