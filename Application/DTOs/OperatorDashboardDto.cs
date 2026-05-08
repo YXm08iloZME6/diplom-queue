@@ -8,5 +8,6 @@ public class OperatorDashboardDto
 
     public int WaitingCount { get; set; }
     public List<TicketDto> WaitingTickets { get; set; } = new();
+    public List<ServiceDto> AllServices { get; set; } = new();
 }
 

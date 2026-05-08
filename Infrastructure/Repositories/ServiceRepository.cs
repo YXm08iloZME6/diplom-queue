@@ -13,7 +13,15 @@ public class ServiceRepository : IServiceRepository
     {
         _dbContext = dbContext;
     }
-    
+
+    public async Task<List<Guid>> GetChildrenIdAsync(Guid parentId)
+    {
+        return await _dbContext.Set<Service>()
+            .Where(s => s.ParentId == parentId)
+            .Select(s => s.Id)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Service>> GetMainServicesAsync()
     {
         return await _dbContext.Set<Service>()

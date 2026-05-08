@@ -22,12 +22,10 @@
                     <div class="ticket-number">
                         @Model.CurrentTicket.Number
                     </div>
+
                     <span class="ticket-status">
                         @Model.CurrentTicket.Status
                     </span>
-                </div>
-                <div class="ticket-service"> 
-                    @* Услуга: @Model.CurrentTicket.ServiceName *@
                 </div>
             }
             else
@@ -37,42 +35,87 @@
                 </div>
             }
 
-            <form asp-action="CallNext" method="post">
-                <button class="main-btn" type="submit">
-                    Вызвать следующего
-                </button>
-            </form>
+            @if (Model.CurrentTicket == null)
+            {
+                <form asp-action="CallNext" method="post">
+                    <button class="main-btn" type="submit">
+                        Вызвать следующего
+                    </button>
+                </form>
+            }
+
+            @if (Model.CurrentTicket != null)
+            {
+                <div class="action-buttons">
+                    <form asp-action="StartProcessing" method="post">
+                        <input type="hidden" name="ticketId" value="@Model.CurrentTicket.Id" />
+                        <button type="submit">На обслуживание</button>
+                    </form>
+
+                    <form asp-action="Recall" method="post">
+                        <input type="hidden" name="ticketId" value="@Model.CurrentTicket.Id" />
+                        <button type="submit">Перевызвать</button>
+                    </form>
+
+                    <form asp-action="Complete" method="post">
+                        <input type="hidden" name="ticketId" value="@Model.CurrentTicket.Id" />
+                        <button type="submit">Завершить</button>
+                    </form>
+
+                    <form asp-action="Cancel" method="post">
+                        <input type="hidden" name="ticketId" value="@Model.CurrentTicket.Id" />
+                        <button type="submit">Отменить</button>
+                    </form>
+
+                    <form asp-action="Redirect" method="post">
+                        <select name="serviceId" class="main-btn" onchange="this.form.submit()">
+                            <option value="" disabled selected>Выберите услугу для перенаправления...</option>
+                            @foreach (var service in Model.AllServices)
+                            {
+                                <option value="@service.Id">@service.Name</option>
+                            }
+                        </select>
+                    </form>
+                </div>
+            }
         </div>
 
         <div class="operator-card">
             <h2>Список ожидающих клиентов</h2>
-            <p>Всего ожидает: @Model.WaitingCount</p>
 
-            @if (Model.WaitingTickets != null && Model.WaitingTickets.Any())
-            {
-                <table class="queue-table">
-                    <thead>
-                        <tr>
-                            <th>Номер талона</th>
-                            <th>Время создания</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <table class="queue-table">
+                <thead>
+                    <tr>
+                        <th>Номер талона</th>
+                        @* <th>Услуга</th> *@
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.WaitingTickets != null && Model.WaitingTickets.Any())
+                    {
                         @foreach (var ticket in Model.WaitingTickets)
                         {
                             <tr>
                                 <td>@ticket.Number</td>
-                                <td>@ticket.CreatedAt.ToString("HH:mm")</td>
+                                @* <td>@ticket.ServiceName</td> *@
+                                <td>@ticket.Status</td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <p>Очередь пуста</p>
-            }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">Очередь пуста</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
+    </div>
+
+    <div class="back-link">
+        <a asp-controller="Home" asp-action="Index">← Назад в панель</a>
     </div>
 </div>
 
@@ -89,6 +132,7 @@
     align-items: center;
     margin-bottom: 30px;
 }
+
 .operator-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

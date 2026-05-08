@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
+using Domain.Entities;
 using Domain.Enums;
 
 namespace Application.Services;
@@ -7,22 +8,26 @@ namespace Application.Services;
 public class OperatorService: IOperatorService
 {
     private readonly IOperatorRepository _operatorRepository;
+    private readonly IServiceRepository _serviceRepository;
 
-    public OperatorService(IOperatorRepository operatorRepository)
+    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository)
     {
         _operatorRepository = operatorRepository;
+        _serviceRepository = serviceRepository;
     }
+
 
     public async Task<TicketDto> CallNextTicket(Guid userId)
     {
         var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
 
-        if (window == null)
+        if (window == null || window.ServiceId == null)
         {
-            throw new Exception("Окна не существует.");
+            throw new InvalidOperationException("Окно не привязано к услуге");
         }
 
-        var ticket = await _operatorRepository.GetNextWaitingTicketAsync();
+        var serviceIds = await _serviceRepository.GetChildrenIdAsync(window.ServiceId.Value);
+        var ticket = await _operatorRepository.GetNextWaitingTicketAsync(serviceIds);
 
         if (ticket == null)
         {
@@ -33,10 +38,75 @@ public class OperatorService: IOperatorService
         ticket.CalledAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Called;
 
-        await _operatorRepository.UpdateTicketAsync(ticket);
-        await _operatorRepository.SaveChangesAsync();
+        await SaveAndReturnDto(ticket);
 
         return new TicketDto(ticket);
+    }
+
+    public async Task<TicketDto> RecallTicket(Guid userId)
+    {
+        var window = await GetActiveWindowAsync(userId);
+        var currentTicket = await GetCurrentTicketAsync(window.Id);
+
+        currentTicket.CalledAt = DateTime.UtcNow;
+
+        await SaveAndReturnDto(currentTicket);
+
+        return new TicketDto(currentTicket);
+    }
+
+    public async Task<TicketDto> CancelTicket(Guid userId)
+    {
+        var window = await GetActiveWindowAsync(userId);
+        var currentTicket = await GetCurrentTicketAsync(window.Id);
+
+        currentTicket.Status = TicketStatus.Cancelled;
+        currentTicket.CompletedAt = DateTime.UtcNow;
+
+        await SaveAndReturnDto(currentTicket);
+
+        return new TicketDto(currentTicket);
+    }
+
+    public async Task<TicketDto> CompleteTicket(Guid userId)
+    {
+        var window = await GetActiveWindowAsync(userId);
+        var currentTicket = await GetCurrentTicketAsync(window.Id);
+
+        currentTicket.Status = TicketStatus.Completed;
+        currentTicket.CompletedAt = DateTime.UtcNow;
+        
+        await SaveAndReturnDto(currentTicket);
+
+        return new TicketDto(currentTicket);
+    }
+
+    public async Task<TicketDto> RedirectTicket(Guid userId, Guid targetServiceId, string comment)
+    {
+        var window = await GetActiveWindowAsync(userId);
+        var currentTicket = await GetCurrentTicketAsync(window.Id);
+
+        currentTicket.ServiceId = targetServiceId;
+        currentTicket.Status = TicketStatus.Waiting;
+        currentTicket.WindowId = null;
+        currentTicket.CalledAt = null;
+        currentTicket.RedirectComment = comment;
+
+        await SaveAndReturnDto(currentTicket);
+
+        return new TicketDto(currentTicket);
+    }
+
+    public async Task<TicketDto> StartProcessingTicket(Guid userId)
+    {
+        var window = await GetActiveWindowAsync(userId);
+        var currentTicket = await GetCurrentTicketAsync(window.Id);
+
+        currentTicket.Status = TicketStatus.Processing;
+        
+        await SaveAndReturnDto(currentTicket);
+
+        return new TicketDto(currentTicket);
     }
 
     public async Task<OperatorDashboardDto> GetDashboardData(Guid userId)
@@ -44,15 +114,39 @@ public class OperatorService: IOperatorService
         var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
         if (window == null) throw new Exception("Окно не найдено");
 
+        var serviceIds = await _serviceRepository.GetChildrenIdAsync(window.ServiceId.Value);
         var currentTicket = await _operatorRepository.GetCurrentTicketByWindowIdAsync(window.Id);
-        var waitingTickets = await _operatorRepository.GetNextWaitingTicketListAsync();
+        var waitingTickets = await _operatorRepository.GetNextWaitingTicketListAsync(serviceIds);
+
+        var allServices = await _serviceRepository.GetMainServicesAsync();
 
         return new OperatorDashboardDto
         {
             Window = new WindowDto(window),
             CurrentTicket = currentTicket != null ? new TicketDto(currentTicket) : null,
             WaitingCount = waitingTickets.Count,
-            WaitingTickets = waitingTickets.Select(t => new TicketDto(t)).ToList()
-        }; 
+            WaitingTickets = waitingTickets.Select(t => new TicketDto(t)).ToList(),
+            AllServices = allServices.Select(s => new ServiceDto(s)).ToList()
+        };
+    }
+
+    private async Task<Window> GetActiveWindowAsync(Guid userId)
+    {
+        var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
+        if (window == null) throw new Exception("Окно не найдено");
+        return window;
+    }
+
+    private async Task<Ticket> GetCurrentTicketAsync(Guid windowId)
+    {
+        var currentTicket = await _operatorRepository.GetCurrentTicketByWindowIdAsync(windowId);
+        if (currentTicket == null) throw new Exception("Нет текущего билета");
+        return currentTicket;
+    }
+
+    private async Task SaveAndReturnDto(Ticket ticket)
+    {
+        await _operatorRepository.UpdateTicketAsync(ticket);
+        await _operatorRepository.SaveChangesAsync();
     }
 }

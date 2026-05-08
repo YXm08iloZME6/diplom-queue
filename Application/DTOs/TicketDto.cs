@@ -1,3 +1,4 @@
+using System.Security.Authentication.ExtendedProtection;
 using Domain.Entities;
 
 namespace Application.DTOs;
@@ -26,7 +27,7 @@ public class TicketDto
        Id = ticket.Id;
        CreatedAt = (DateTime)ticket.CreatedAt;
        Status = ticket.Status.ToString();
-       Number = ticket.Number;
+        Number = ticket.Number;
     }
 }
 
