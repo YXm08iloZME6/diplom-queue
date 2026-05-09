@@ -1,0 +1,90 @@
+﻿body {
+}
+/* Общий контейнер */
+.login-container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+    /* Заголовок */
+    .login-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+
+/* Группа формы */
+.form-group {
+    margin-bottom: 18px;
+}
+
+    /* Лейблы */
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    /* Инпуты */
+    .form-group input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+
+        /* Фокус */
+        .form-group input:focus {
+            border-color: #0a58ca;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 88, 202, 0.15);
+        }
+
+/* Ошибки */
+.field-validation-error {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Общая ошибка */
+.validation {
+    color: #dc3545;
+    font-size: 13px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Кнопка */
+.login-btn {
+    width: 100%;
+    padding: 11px;
+    border: none;
+    border-radius: 8px;
+    background: #0a58ca;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    /* Hover */
+    .login-btn:hover {
+        background: #084298;
+    }
+
+    /* Active */
+    .login-btn:active {
+        transform: scale(0.98);
+    }

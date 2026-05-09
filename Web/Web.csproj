@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.36">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,6 +17,16 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Update="appsettings.*.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -30,10 +41,10 @@
       <Folder Include="wwwroot\icons\" />
     </ItemGroup>
     <Target Name="Tailwind" BeforeTargets="Build;PrepareForPublish">
-        <Exec Command="npm install"/>
-        <Exec Command="npx @tailwindcss/cli -i ./wwwroot/css/input.css -o ./wwwroot/css/output.css --minify"/>
+        <Exec Command="npm install" />
+        <Exec Command="npx @tailwindcss/cli -i ./wwwroot/css/input.css -o ./wwwroot/css/output.css --minify" />
         <ItemGroup>
-            <Content Include="wwwroot/css/output.css" CopyToPublishDirectory="Always"/>
+            <Content Include="wwwroot/css/output.css" CopyToPublishDirectory="Always" />
         </ItemGroup>
     </Target>
 </Project>

@@ -6,4 +6,5 @@ public interface IServiceRepository
 {
     Task<IEnumerable<Service>> GetMainServicesAsync();
     Task<Service> GetServiceByIdAsync(Guid id);
+    Task<List<Guid>> GetChildrenIdAsync(Guid parentId);
 }

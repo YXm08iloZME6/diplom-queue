@@ -1,0 +1,73 @@
+﻿@model List<Application.DTOs.UserDto>
+
+<div class="users-container">
+    <div class="users-header">
+        <h2>Список сотрудников</h2>
+
+        <a asp-controller="Admin" asp-action="AddUser" class="btn-primary">
+            + Добавить сотрудника
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-wrapper">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Отчество</th>
+                        <th>Email</th>
+                        <th>Статус</th>
+                        <th>Роли</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@(user.Name ?? "-")</td>
+                            <td>@(user.Surname ?? "-")</td>
+                            <td>@(user.MiddleName ?? "-")</td>
+                            <td>@(user.Email ?? "-")</td>
+
+                            <td>
+                                <span class="status-badge">
+                                    @(user.Status ?? "—")
+                                </span>
+                            </td>
+
+                            <td class="roles">
+                                @(string.Join(", ", user.Roles))
+                            </td>
+
+                            <td class="actions">
+                                <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id" class="btn-edit">
+                                    ✏️
+                                </a>
+                                <form asp-action="RemoveUser" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" onclick="return confirm('Удалить пользователя?')">
+                                        🗑
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            Сотрудников не найдено
+        </div>
+    }
+
+    <div class="back-link">
+        <a href="@Url.Action("Index", "Admin")">← Назад в панель</a>
+    </div>
+</div>

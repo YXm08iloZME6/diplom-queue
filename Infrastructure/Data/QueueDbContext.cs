@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
@@ -9,12 +10,11 @@ public class QueueDbContext : DbContext
     
     public DbSet<Ticket>? Tickets { get; set; }
     public DbSet<Service>? Services { get; set; }
+    public DbSet<User>? Users { get; set; }
+    public DbSet<UserRole>? UserRoles { get; set; }
+    public DbSet<Role>? Roles { get; set; }
+    public DbSet<Window>? Windows { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        options.UseNpgsql("Host=localhost;Port=5432;Database=queuedb;Username=user;Password=pass");
-    }
-    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         var ticket = builder.Entity<Ticket>();
@@ -24,7 +24,8 @@ public class QueueDbContext : DbContext
         ticket.Property(t => t.Number).IsRequired();
         ticket.Property(t => t.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
         ticket.Property(t => t.Facets).HasColumnType("jsonb");
-        
+        ticket.HasOne<Window>().WithMany().HasForeignKey(t => t.WindowId).IsRequired(false);
+
         var service = builder.Entity<Service>();
         service.ToTable("services");
         service.HasKey(s => s.Id);
@@ -41,5 +42,56 @@ public class QueueDbContext : DbContext
             new {Id = Guid.Parse("9d78a673-efa3-4af3-9828-55515d26e134"), Name = "Запись на прием к врачу", Description = "Выбор специалиста и бронирование подходящего времени визита.", IconName="Clock", ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") },
             new {Id = Guid.Parse("d320728d-0a5e-490c-be3c-04bcf3a7a4c8"), Name = "Оформление больничного", Description = "Официальное подтверждение временной нетрудоспособности.", IconName="CheckBook", ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") }
         );
+
+        var users = builder.Entity<User>();
+        users.ToTable("users");
+        users.HasKey(u => u.Id);
+        users.Property(u => u.Id).HasDefaultValueSql("gen_random_uuid()");
+        users.Property(u => u.Name).HasMaxLength(30);
+        users.Property(u => u.Surname).HasMaxLength(50);
+        users.Property(u => u.MiddleName).HasMaxLength(50);
+        users.Property(u => u.Email).IsRequired().HasMaxLength(30);
+        users.Property(u => u.PasswordHash).IsRequired().HasMaxLength(100);
+        users.Property(u => u.Status).IsRequired().HasMaxLength(10);
+        users.HasOne(u => u.Window).WithMany().HasForeignKey(u => u.WindowId);
+
+        var roles = builder.Entity<Role>();
+        roles.ToTable("roles");
+        roles.HasKey(r => r.Id);
+        roles.Property(r => r.Id).HasDefaultValueSql("gen_random_uuid()");
+        roles.Property(r => r.Title).IsRequired().HasMaxLength(20);
+
+        roles.HasData(
+            new { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Title = "operator" },
+            new { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Title = "admin" }
+            );
+
+        var userRoles = builder.Entity<UserRole>();
+        userRoles.ToTable("user_roles");
+        userRoles.HasKey(ur => new { ur.UserId, ur.RoleId });
+        userRoles.HasOne(ur => ur.User).WithMany(u => u.UserRoles).HasForeignKey(ur => ur.UserId).IsRequired();
+        userRoles.HasOne(ur => ur.Role).WithMany(r => r.UserRoles).HasForeignKey(ur => ur.RoleId).IsRequired();
+
+        
+        var window = builder.Entity<Window>();
+        window.ToTable("windows");
+        window.HasKey(w => w.Id);
+        window.Property(w => w.Id).HasDefaultValueSql("gen_random_uuid()");
+        window.Property(w => w.Title).IsRequired().HasMaxLength(50);
+        window.Property(w => w.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
+        window.HasOne(w => w.Service).WithMany().HasForeignKey(w => w.ServiceId).IsRequired();
+        window.HasMany(w => w.Operators).WithOne(u => u.Window).HasForeignKey(u => u.WindowId);
+
+        var testWindowId = Guid.Parse("33333333-3333-3333-3333-333333333333");
+        var serviceId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc");
+
+        window.HasData(new
+        {
+            Id = testWindowId,
+            Title = "Регистратура",
+            Status = WindowStatus.Open,
+            ServiceId = serviceId
+        });
+
     } 
 }

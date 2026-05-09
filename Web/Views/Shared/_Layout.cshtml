@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using System.Security.Claims
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,14 +7,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Web</title>
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/userlist.css" asp-append-version="true" />
 </head>
 <body class="flex flex-col min-h-screen bg-accent">
 <header>
     <nav class="border-b">
         <div class="max-w-full px-4 flex wrap items-center justify-between py-8">
             <a class="text-2xl font-semibold whitespace-nowrap" asp-area="" asp-controller="Home" asp-action="Index">ОЧЕРЕДЬ</a>
-            <div class="text-muted-foreground text-lg">
-                @DateOnly.FromDateTime(DateTime.Now).ToString("D", new CultureInfo("ru-RU"))
+            <div>
+                    @{
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="navbar-sign-in">
+                                <div class="user-profile">
+                                    @{
+                                        var details = User.FindFirst(ClaimTypes.Name)?.Value;
+                                    }
+                                    <div>@details</div>
+                                    @{
+                                        if (User.IsInRole("admin"))
+                                        {
+                                            <a asp-controller="Admin" asp-action="Index">Панель администратора</a>
+                                        }
+                                    }
+                                    @{
+                                        if (User.IsInRole("operator"))
+                                        {
+                                            <a asp-controller="Operator" asp-action="Index">Рабочее место оператора</a>
+                                        }
+                                    }
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
+                                        <button type="submit" class="nav-link btn btn-link text-dark">
+                                            Выйти
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="navbar-not-sign-in">
+                                <a asp-controller="Account" asp-action="Login">Войти</a>
+                            </div>
+                        }
+                    }
             </div>
         </div>
     </nav>

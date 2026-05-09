@@ -22,6 +22,38 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_roles");
+
+                    b.ToTable("roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Title = "operator"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Title = "admin"
+                        });
+                });
+
             modelBuilder.Entity("Domain.Entities.Service", b =>
                 {
                     b.Property<Guid>("Id")
@@ -114,11 +146,19 @@ namespace Infrastructure.Migrations
                         .HasColumnName("id")
                         .HasDefaultValueSql("gen_random_uuid()");
 
+                    b.Property<DateTime?>("CalledAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("called_at");
+
                     b.Property<Guid?>("ClientId")
                         .HasColumnType("uuid")
                         .HasColumnName("client_id");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completed_at");
+
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
@@ -135,9 +175,17 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("number");
 
+                    b.Property<string>("RedirectComment")
+                        .HasColumnType("text")
+                        .HasColumnName("redirect_comment");
+
                     b.Property<Guid?>("ServiceId")
                         .HasColumnType("uuid")
                         .HasColumnName("service_id");
+
+                    b.Property<DateTime?>("StartedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("started_at");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -152,7 +200,125 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_tickets");
 
+                    b.HasIndex("WindowId")
+                        .HasDatabaseName("ix_tickets_window_id");
+
                     b.ToTable("tickets", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("MiddleName")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("middle_name");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("password_hash");
+
+                    b.Property<int>("Status")
+                        .HasMaxLength(10)
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Surname")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("surname");
+
+                    b.Property<Guid?>("WindowId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("window_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.HasIndex("WindowId")
+                        .HasDatabaseName("ix_users_window_id");
+
+                    b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("UserId", "RoleId")
+                        .HasName("pk_user_roles");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_user_roles_role_id");
+
+                    b.ToTable("user_roles", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Window", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<Guid?>("ServiceId")
+                        .IsRequired()
+                        .HasColumnType("uuid")
+                        .HasColumnName("service_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_windows");
+
+                    b.HasIndex("ServiceId")
+                        .HasDatabaseName("ix_windows_service_id");
+
+                    b.ToTable("windows", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            ServiceId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"),
+                            Status = "Open",
+                            Title = "Регистратура"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Service", b =>
@@ -165,9 +331,75 @@ namespace Infrastructure.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Ticket", b =>
+                {
+                    b.HasOne("Domain.Entities.Window", null)
+                        .WithMany()
+                        .HasForeignKey("WindowId")
+                        .HasConstraintName("fk_tickets_windows_window_id");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.HasOne("Domain.Entities.Window", "Window")
+                        .WithMany("Operators")
+                        .HasForeignKey("WindowId")
+                        .HasConstraintName("fk_users_windows_window_id");
+
+                    b.Navigation("Window");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserRole", b =>
+                {
+                    b.HasOne("Domain.Entities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_roles_roles_role_id");
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_roles_users_user_id");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Window", b =>
+                {
+                    b.HasOne("Domain.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_windows_services_service_id");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("Domain.Entities.Service", b =>
                 {
                     b.Navigation("Children");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Window", b =>
+                {
+                    b.Navigation("Operators");
                 });
 #pragma warning restore 612, 618
         }
