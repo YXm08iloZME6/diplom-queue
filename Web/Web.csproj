@@ -31,6 +31,7 @@
 
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Tickets\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Display\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
