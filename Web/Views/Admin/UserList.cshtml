@@ -21,7 +21,7 @@
                         <th>Email</th>
                         <th>Статус</th>
                         <th>Роли</th>
-                        <th></th>
+                        <th>Окно</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,12 +35,16 @@
 
                             <td>
                                 <span class="status-badge">
-                                    @(user.Status ?? "—")
+                                    @(user.Status)
                                 </span>
                             </td>
 
                             <td class="roles">
                                 @(string.Join(", ", user.Roles))
+                            </td>
+
+                            <td class="window">
+                                @(user.WindowId)
                             </td>
 
                             <td class="actions">

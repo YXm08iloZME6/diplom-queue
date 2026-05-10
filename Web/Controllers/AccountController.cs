@@ -29,14 +29,12 @@ namespace Queue.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserDto model)
         {
-            Console.WriteLine(1);
             if (!ModelState.IsValid)
                 return View(model);
-            Console.WriteLine(2);
+
             var user = await _authService.CreateUser(model);
-            Console.WriteLine(3);
+            
             await Authenticate(user);
-            Console.WriteLine(4);
             return RedirectToAction("Index", "Home");
         }
 

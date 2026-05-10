@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using System.Security;
+using Application.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
@@ -9,11 +10,13 @@ public class OperatorService: IOperatorService
 {
     private readonly IOperatorRepository _operatorRepository;
     private readonly IServiceRepository _serviceRepository;
+    private readonly ITicketRepository _ticketRepository;
 
-    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository)
+    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository, ITicketRepository ticketRepository)
     {
         _operatorRepository = operatorRepository;
         _serviceRepository = serviceRepository;
+        _ticketRepository = ticketRepository;
     }
 
 
@@ -85,6 +88,17 @@ public class OperatorService: IOperatorService
     {
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
+
+        var targetService = await _serviceRepository.GetServiceByIdAsync(targetServiceId);
+        Console.WriteLine(targetServiceId);
+        if (targetService == null) throw new Exception("Сервис для перенаправления не найден");
+
+        var countTargetService = await _ticketRepository.GetTicketCountAsync(targetServiceId);
+
+        if (!string.IsNullOrEmpty(targetService.Letter))
+        {
+            currentTicket.Number = $"{targetService.Letter}-{(countTargetService + 1):D3}";
+        }
 
         currentTicket.ServiceId = targetServiceId;
         currentTicket.Status = TicketStatus.Waiting;

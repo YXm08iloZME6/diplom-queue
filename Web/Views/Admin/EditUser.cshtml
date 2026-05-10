@@ -1,4 +1,4 @@
-﻿@model Application.DTOs.EditUserDto
+﻿@model Web.Models.EditUserViewModel
 
 @{
     ViewData["Title"] = "Редактирование сотрудника";
@@ -9,43 +9,43 @@
 <form asp-action="EditUser" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UserData.Id" />
 
     <div class="row">
         <div class="col-md-6">
             <div class="form-group mb-3">
-                <label asp-for="Name" class="form-label">Имя</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="UserData.Name" class="form-label">Имя</label>
+                <input asp-for="UserData.Name" class="form-control" />
+                <span asp-validation-for="UserData.Name" class="text-danger"></span>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="form-group mb-3">
-                <label asp-for="Surname" class="form-label">Фамилия</label>
-                <input asp-for="Surname" class="form-control" />
-                <span asp-validation-for="Surname" class="text-danger"></span>
+                <label asp-for="UserData.Surname" class="form-label">Фамилия</label>
+                <input asp-for="UserData.Surname" class="form-control" />
+                <span asp-validation-for="UserData.Surname" class="text-danger"></span>
             </div>
         </div>
     </div>
 
     <div class="form-group mb-3">
-        <label asp-for="MiddleName" class="form-label">Отчество</label>
-        <input asp-for="MiddleName" class="form-control" />
-        <span asp-validation-for="MiddleName" class="text-danger"></span>
+        <label asp-for="UserData.MiddleName" class="form-label">Отчество</label>
+        <input asp-for="UserData.MiddleName" class="form-control" />
+        <span asp-validation-for="UserData.MiddleName" class="text-danger"></span>
     </div>
 
     <div class="form-group mb-3">
-        <label asp-for="Email" class="form-label">Email</label>
-        <input asp-for="Email" class="form-control" type="email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+        <label asp-for="UserData.Email" class="form-label">Email</label>
+        <input asp-for="UserData.Email" class="form-control" type="email" />
+        <span asp-validation-for="UserData.Email" class="text-danger"></span>
     </div>
 
     <div class="form-group mb-3">
-        <label asp-for="Password" class="form-label">Пароль</label>
-        <input asp-for="Password" class="form-control" type="password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-        <small class="text-muted">Оставьте пустым, если не хотите менять пароль</small>
+        <label asp-for="UserData.Password" class="form-label">Пароль</label>
+        <input asp-for="UserData.Password" class="form-control" type="password" />
+        <span asp-validation-for="UserData.Password" class="text-danger"></span>
+        <small>Оставьте пустым, если не хотите менять пароль</small>
     </div>
 
     <div class="form-group mb-3">
@@ -54,13 +54,13 @@
         <div class="roles-box">
 
             <label class="role-item">
-                <input type="checkbox" name="roleNames" value="operator" checked disabled />
+                <input type="checkbox" name="Roles" value="operator" checked disabled />
                 Оператор
-                <input type="hidden" name="roleNames" value="operator" />
+                <input type="hidden" name="Roles" value="operator" />
             </label>
 
             <label class="role-item">
-                <input type="checkbox" name="roleNames" value="admin" />
+                <input type="checkbox" name="Roles" value="admin" />
                 Администратор
             </label>
 
@@ -68,9 +68,29 @@
     </div>
 
     <div class="form-group mb-3">
-        <label asp-for="Status" class="form-label">Статус</label>
-        <input asp-for="Status" class="form-control" placeholder="Активен / Неактивен" />
-        <span asp-validation-for="Status" class="text-danger"></span>
+        <label asp-for="UserData.WindowId" class="form-label">Окно</label>
+
+        <select asp-for="UserData.WindowId" class="form-select">
+            <option value="">Не выбрано</option>
+
+            @foreach (var window in Model.AvailableWindows)
+            {
+                <option value="@window.Id">
+                    @window.Title
+                </option>
+            }
+        </select>
+
+        <span asp-validation-for="UserData.WindowId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="UserData.Status" class="form-label">Статус</label>
+        <select asp-for="UserData.Status"
+                asp-items="Html.GetEnumSelectList<Domain.Enums.UserStatus>()"
+                class="form-select">
+        </select>
+        <span asp-validation-for="UserData.Status" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -78,9 +98,3 @@
         <a asp-action="UserList" class="btn btn-secondary">Отмена</a>
     </div>
 </form>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.Models;
 
 namespace Queue.Controllers
 {
@@ -9,10 +10,12 @@ namespace Queue.Controllers
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
+        private readonly IWindowService _windowService;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdminService adminService, IWindowService windowService)
         {
             _adminService = adminService;
+            _windowService = windowService;
         }
 
         public IActionResult Index()
@@ -27,19 +30,41 @@ namespace Queue.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddUser()
+        public async Task<IActionResult> AddUserAsync()
         {
-            return View();
+            var model = new AddUserViewModel
+            {
+                AvailableWindows = await _windowService.GetAllWindows()
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser(CreateUserDto model, List<string> roleNames)
+        public async Task<IActionResult> AddUser(AddUserViewModel model, List<string> roleNames)
         {
             if (!ModelState.IsValid)
-                return View(model);
+            {
+                foreach (var key in ModelState.Keys)
+                {
+                    var errors = ModelState[key].Errors;
+                    if (errors.Any())
+                    {
+                        Console.WriteLine($"Key: {key}");
+                        foreach (var error in errors)
+                        {
+                            Console.WriteLine($"  Error: {error.ErrorMessage}");
+                            Console.WriteLine($"  Exception: {error.Exception?.Message}");
+                        }
+                    }
+                }
 
-            var result = await _adminService.AddUser(model, roleNames);
+                model.AvailableWindows = await _windowService.GetAllWindows();
+                return View(model);
+            }
+
+            var result = await _adminService.AddUser(model.UserData, roleNames);
 
             return RedirectToAction(nameof(UserList));
         }
@@ -63,17 +88,28 @@ namespace Queue.Controllers
                 Roles = user.Roles
             };
 
-            return View(dto);
+            var model = new EditUserViewModel
+            {
+                UserData = dto,
+                Roles = user.Roles.Select(r => r.ToLower()).ToList(),
+                AvailableWindows = await _windowService.GetAllWindows()
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUser(EditUserDto model)
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                model.AvailableWindows = await _windowService.GetAllWindows();
                 return View(model);
+            }
+                
 
-            await _adminService.EditUser(model, model.Roles);
+            await _adminService.EditUser(model.UserData, model.Roles);
 
             return RedirectToAction(nameof(UserList));
         }

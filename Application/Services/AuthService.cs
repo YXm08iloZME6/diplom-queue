@@ -32,7 +32,7 @@ namespace Queue.Applications.Services
                 Name = user.Name,
                 Surname = user.Surname,
                 MiddleName = user.MiddleName,
-                Status = user.Status.ToString(),
+                Status = user.Status,
                 Email = user.Email,
                 WindowId = user.WindowId,
                 Roles = user.UserRoles
@@ -93,7 +93,7 @@ namespace Queue.Applications.Services
                 {
                     Id = created.Id,
                     Email = created.Email,
-                    Status = created.Status.ToString(),
+                    Status = created.Status,
                     Roles = created.UserRoles.Select(r => r.Role.Title).ToList()
                 };
             }
