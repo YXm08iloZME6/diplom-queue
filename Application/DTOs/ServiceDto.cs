@@ -10,7 +10,7 @@ public class ServiceDto
     public List<ServiceDto> Children { get; set; }
     public string? Description { get; set; }
     public string? IconName { get; set; }
-
+    public ServiceDto() { }
     public ServiceDto(Service service)
     {
        Id = service.Id;
@@ -20,6 +20,14 @@ public class ServiceDto
        Description = service.Description;
        IconName = service.IconName;
     }
+}
+
+public class CreateServiceDto
+{
+    public string Name { get; set; }
+    public string Letter { get; set; }
+    public string? Description { get; set; }
+    public string? IconName { get; set; }
 }
 
 

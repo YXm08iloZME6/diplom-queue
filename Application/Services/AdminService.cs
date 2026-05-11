@@ -52,7 +52,8 @@ namespace Queue.Applications.Services
                 MiddleName = dto.MiddleName,
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                WindowId = dto.WindowId
+                WindowId = dto.WindowId,
+                Status = dto.Status
             };
 
             await _userRepository.AddAsync(user);
@@ -101,8 +102,7 @@ namespace Queue.Applications.Services
 
             if (!string.IsNullOrWhiteSpace(dto.Password))
             {
-                user.PasswordHash =
-                    BCrypt.Net.BCrypt.HashPassword(dto.Password);
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             }
 
             await _userRepository.RemoveUserRolesAsync(user.Id);
@@ -156,7 +156,7 @@ namespace Queue.Applications.Services
                 Name = user.Name,
                 Surname = user.Surname,
                 MiddleName = user.MiddleName,
-                Status = user.Status.ToString(),
+                Status = user.Status,
                 Email = user.Email,
                 WindowId = user.WindowId,
                 Roles = user.UserRoles

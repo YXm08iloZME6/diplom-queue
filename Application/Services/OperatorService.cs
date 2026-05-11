@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using System.Security;
+using Application.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
@@ -9,13 +10,35 @@ public class OperatorService: IOperatorService
 {
     private readonly IOperatorRepository _operatorRepository;
     private readonly IServiceRepository _serviceRepository;
+    private readonly ITicketRepository _ticketRepository;
 
-    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository)
+    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository, ITicketRepository ticketRepository)
     {
         _operatorRepository = operatorRepository;
         _serviceRepository = serviceRepository;
+        _ticketRepository = ticketRepository;
     }
 
+    public async Task<OperatorDashboardDto> GetDashboardData(Guid userId)
+    {
+        var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
+        if (window == null) throw new Exception("Окно не найдено");
+
+        var serviceIds = await _serviceRepository.GetServiceTreeByIdAsync(window.ServiceId.Value);
+        var currentTicket = await _operatorRepository.GetCurrentTicketByWindowIdAsync(window.Id);
+        var waitingTickets = await _operatorRepository.GetNextWaitingTicketListAsync(serviceIds);
+
+        var allServices = await _serviceRepository.GetMainServicesAsync();
+
+        return new OperatorDashboardDto
+        {
+            Window = new WindowDto(window),
+            CurrentTicket = currentTicket != null ? new TicketDto(currentTicket) : null,
+            WaitingCount = waitingTickets.Count,
+            WaitingTickets = waitingTickets.Select(t => new TicketDto(t)).ToList(),
+            AllServices = allServices.Select(s => new ServiceDto(s)).ToList()
+        };
+    }
 
     public async Task<TicketDto> CallNextTicket(Guid userId)
     {
@@ -26,7 +49,7 @@ public class OperatorService: IOperatorService
             throw new InvalidOperationException("Окно не привязано к услуге");
         }
 
-        var serviceIds = await _serviceRepository.GetChildrenIdAsync(window.ServiceId.Value);
+        var serviceIds = await _serviceRepository.GetServiceTreeByIdAsync(window.ServiceId.Value);
         var ticket = await _operatorRepository.GetNextWaitingTicketAsync(serviceIds);
 
         if (ticket == null)
@@ -86,6 +109,17 @@ public class OperatorService: IOperatorService
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
+        var targetService = await _serviceRepository.GetServiceByIdAsync(targetServiceId);
+        Console.WriteLine(targetServiceId);
+        if (targetService == null) throw new Exception("Сервис для перенаправления не найден");
+
+        var countTargetService = await _ticketRepository.GetTicketCountAsync(targetServiceId);
+
+        if (!string.IsNullOrEmpty(targetService.Letter))
+        {
+            currentTicket.Number = $"{targetService.Letter}-{(countTargetService + 1):D3}";
+        }
+
         currentTicket.ServiceId = targetServiceId;
         currentTicket.Status = TicketStatus.Waiting;
         currentTicket.WindowId = null;
@@ -109,26 +143,6 @@ public class OperatorService: IOperatorService
         return new TicketDto(currentTicket);
     }
 
-    public async Task<OperatorDashboardDto> GetDashboardData(Guid userId)
-    {
-        var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
-        if (window == null) throw new Exception("Окно не найдено");
-
-        var serviceIds = await _serviceRepository.GetChildrenIdAsync(window.ServiceId.Value);
-        var currentTicket = await _operatorRepository.GetCurrentTicketByWindowIdAsync(window.Id);
-        var waitingTickets = await _operatorRepository.GetNextWaitingTicketListAsync(serviceIds);
-
-        var allServices = await _serviceRepository.GetMainServicesAsync();
-
-        return new OperatorDashboardDto
-        {
-            Window = new WindowDto(window),
-            CurrentTicket = currentTicket != null ? new TicketDto(currentTicket) : null,
-            WaitingCount = waitingTickets.Count,
-            WaitingTickets = waitingTickets.Select(t => new TicketDto(t)).ToList(),
-            AllServices = allServices.Select(s => new ServiceDto(s)).ToList()
-        };
-    }
 
     private async Task<Window> GetActiveWindowAsync(Guid userId)
     {

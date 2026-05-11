@@ -1,0 +1,48 @@
+﻿@model Web.Models.CreateWindowViewModel
+
+@{
+    ViewData["Title"] = "Создание окна";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="CreateWindow" method="post">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Window.Title"></label>
+        <input asp-for="Window.Title" class="form-control" />
+        <span asp-validation-for="Window.Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Window.Status" class="form-label">Статус</label>
+        <select asp-for="Window.Status"
+                asp-items="Html.GetEnumSelectList<Domain.Enums.WindowStatus>()"
+                class="form-select">
+        </select>
+        <span asp-validation-for="Window.Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Window.ServiceId">Сервис</label>
+        <select asp-for="Window.ServiceId" class="form-select">
+            <option value="">Не выбрано</option>
+
+            @foreach (var service in Model.Services)
+            {
+                <option value="@service.Id">
+                    @service.Name
+                </option>
+            }
+        </select>
+        <span asp-validation-for="Window.ServiceId" class="text-danger"></span>
+    </div>
+
+    <button type="submit">Создать</button>
+</form>
+
+<div>
+    <a asp-action="Index">Назад</a>
+</div>

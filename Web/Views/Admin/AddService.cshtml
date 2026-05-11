@@ -1,0 +1,34 @@
+﻿@model Application.DTOs.CreateServiceDto
+
+<h2>Добавить услугу</h2>
+
+<form asp-action="AddService" asp-controller="Admin" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Letter"></label>
+        <input asp-for="Letter" class="form-control" />
+        <span asp-validation-for="Letter" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IconName"></label>
+        <input asp-for="IconName" class="form-control" />
+        <span asp-validation-for="IconName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Добавить</button>
+    <a asp-action="ServiceList">Отмена</a>
+</form>

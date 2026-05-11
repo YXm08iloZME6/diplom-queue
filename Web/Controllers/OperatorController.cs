@@ -82,7 +82,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Redirect(Guid serviceId, string comment)
         {
             var userId = GetUserId();
-            //var serviceId = Guid.Parse("9d78a673-efa3-4af3-9828-55515d26e134"); // временно жестко задаем сервис для перенаправления, в будущем нужно будет выбирать из списка
+
             await _operatorService.RedirectTicket(userId, serviceId, comment);
 
             return RedirectToAction(nameof(Index));
