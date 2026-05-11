@@ -42,4 +42,14 @@ public class ServiceRepository : IServiceRepository
             .Include(s => s.Parent)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
+
+    public async Task CreateServiceAsync(Service service)
+    {
+        await _dbContext.AddAsync(service);
+    }
+
+    public Task SaveChangeAsync()
+    {
+        return _dbContext.SaveChangesAsync();
+    }
 }

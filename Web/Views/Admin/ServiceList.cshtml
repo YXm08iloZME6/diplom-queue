@@ -10,7 +10,6 @@
             <th>Буква</th>
             <th>Описание</th>
             <th>Иконка</th>
-            <th>Действия</th>
         </tr>
     </thead>
 
@@ -22,14 +21,11 @@
                 <td>@service.Letter</td>
                 <td>@service.Description</td>
                 <td>@service.IconName</td>
-                <td>
-                    <a asp-controller="Service" asp-action="Select" asp-route-id="@service.Id"> Открыть</a>
-                </td>
             </tr>
         }
     </tbody>
 </table>
-
+<a asp-controller="Admin" asp-action="AddService"> Добавить</a>
 <style>
     .table {
         width: 100%;

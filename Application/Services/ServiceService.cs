@@ -1,5 +1,6 @@
 using Application.DTOs;
 using Application.Interfaces;
+using Domain.Entities;
 
 namespace Application.Services;
 
@@ -31,4 +32,26 @@ public class ServiceService : IServiceService
 
       return dto;
    }
+
+    public async Task<ServiceDto> AddServiceAsync(CreateServiceDto serviceDto)
+    {
+        var newService = new Service
+        {
+            Name = serviceDto.Name,
+            Letter = serviceDto.Letter,
+            Description = serviceDto.Description,
+            IconName = serviceDto.IconName
+        };
+
+        await _repository.CreateServiceAsync(newService);
+        await _repository.SaveChangeAsync();
+
+        return new ServiceDto
+        {
+            Name = serviceDto.Name,
+            Letter = serviceDto.Letter,
+            Description = serviceDto.Description,
+            IconName = serviceDto.IconName
+        };
+    }
 }

@@ -32,6 +32,38 @@ namespace Queue.Controllers
             return View(services);
         }
 
+        [HttpGet]
+        public IActionResult AddService()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddService(CreateServiceDto service)
+        {
+            if (!ModelState.IsValid) 
+            {
+                foreach (var key in ModelState.Keys)
+                {
+                    var errors = ModelState[key].Errors;
+                    if (errors.Any())
+                    {
+                        Console.WriteLine($"Key: {key}");
+                        foreach (var error in errors)
+                        {
+                            Console.WriteLine($"  Error: {error.ErrorMessage}");
+                            Console.WriteLine($"  Exception: {error.Exception?.Message}");
+                        }
+                    }
+                }
+                return View(service); 
+            }
+
+            await _serviceService.AddServiceAsync(service);
+            return View(service);
+        }
+
         public async Task<IActionResult> UserList()
         {
             var users = await _adminService.GetAllUsers();
