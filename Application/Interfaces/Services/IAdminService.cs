@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
 
-namespace Application.Interfaces;
+namespace Application.Interfaces.Services;
     public interface IAdminService
 {
     Task<UserDto> GetUserById(Guid id);

@@ -31,6 +31,16 @@ public class TicketDto
     }
 }
 
+public class UpdateTicketDto
+{
+    public Guid? ServiceId { get; set; }
+    public Guid? WindowId { get; set; }
+    public string? Number { get; set; }
+    public string? Facets { get; set; }
+    public string? RedirectComment { get; set; }
+}
+
+
 public class RedirectTicketDto
 {
     public Guid Id { get; set; }

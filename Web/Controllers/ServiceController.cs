@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
@@ -36,7 +37,7 @@ public class ServiceController : Controller
     public async Task<IActionResult> GetTicket(Guid serviceId, string letter, string phoneNumber, string fullName )
     {
         var facets = System.Text.Json.JsonSerializer.Serialize(new {phoneNumber, fullName});
-        var ticket = await _ticketService.CreateTicketAsync(serviceId, facets, letter);
+        var ticket = await _ticketService.CreateAsync(serviceId, facets, letter);
         return View("Ticket", ticket);
     }
 }

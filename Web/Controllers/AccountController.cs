@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Application.Interfaces;
 using Application.DTOs;
+using Application.Interfaces.Services;
 
 namespace Queue.Controllers
 {

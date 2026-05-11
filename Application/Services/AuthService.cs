@@ -1,7 +1,8 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Domain.Enums;
-using Queue.Applications.Interfaces;
 using Domain.Entities;
 
 namespace Queue.Applications.Services

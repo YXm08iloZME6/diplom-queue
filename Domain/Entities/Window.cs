@@ -8,6 +8,7 @@ public class Window
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }
+    public string? Number { get; set; }
     public WindowStatus Status { get; set; }
 
     public Guid? ServiceId { get; set; }

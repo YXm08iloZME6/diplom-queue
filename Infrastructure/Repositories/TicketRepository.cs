@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,39 @@ public class TicketRepository : ITicketRepository
     {
         _dbContext = dbContext;
     }
-    
-    public async Task<Ticket> AddAsync(Ticket ticket)
+
+    public async Task<Ticket?> GetByIdAsync(Guid id)
     {
-        await _dbContext.Set<Ticket>().AddAsync(ticket);
-        await _dbContext.SaveChangesAsync();
-        return ticket;
+        return await _dbContext.Tickets!.FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    public async Task<int> GetTicketCountAsync(Guid serviceId)
+    public async Task<List<Ticket>> GetAllAsync()
     {
-        return await _dbContext.Set<Ticket>().Where(t => t.ServiceId == serviceId).CountAsync();
+        return await _dbContext.Tickets!
+            .OrderByDescending(t => t.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task AddAsync(Ticket ticket)
+    {
+        await _dbContext.Tickets!.AddAsync(ticket);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(Ticket ticket)
+    {
+        _dbContext.Tickets!.Update(ticket);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Ticket ticket)
+    {
+        _dbContext.Tickets!.Remove(ticket);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<int> GetTicketCountAsync(string letter)
+    {
+        return await _dbContext.Set<Ticket>().Where(t => t.Number.StartsWith(letter)).CountAsync();
     }
 }

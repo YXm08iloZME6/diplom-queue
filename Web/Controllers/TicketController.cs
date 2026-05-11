@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.DTOs;
+using Application.Interfaces.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ public class TicketController : Controller
     public async Task<ActionResult<TicketDto>> CreateTicket(
         Guid serviceId, string letter)
     {
-        TicketDto ticket = await _ticketService.CreateTicketAsync(serviceId, "", letter);
+        TicketDto ticket = await _ticketService.CreateAsync(serviceId, "", letter);
         return Ok(ticket);
     }
 }

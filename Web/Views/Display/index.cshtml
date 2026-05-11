@@ -1,0 +1,64 @@
+@model Application.DTOs.DisplayDto
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <title>title</title>
+    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true"/>
+</head>
+<body class="min-h-screen bg-white border-4 border-blue-500">
+        <div class="p-10 flex flex-col">
+            <header class="flex items-start justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-extrabold mt-1 tracking-wide">Текущие вызовы</h2>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-2 gap-4">
+                @if (!Model.ActiveTickets.Any())
+                {
+                    <div class="col-span-2 text-center py-12 text-gray-400">Нет окон</div>
+                }
+                else
+                {
+                    @foreach (var call in Model.ActiveTickets)
+                    {
+                        <div class="bg-gray-100 rounded-xl py-6 px-4 text-center">
+                            <div class="text-xs font-semibold text-blue-500 tracking-widest uppercase">@call.Title</div>
+                            <div class="text-3xl font-extrabold text-gray-900 mt-2">
+                                @(string.IsNullOrEmpty(call.TicketNumber) ? "---" : call.TicketNumber)
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <div class="mt-10">
+                <div class="flex items-baseline justify-between mb-4">
+                    <h3 class="text-3xl font-extrabold tracking-wide">Следующие</h3>
+                </div>
+
+                <div class="flex gap-3">
+                    @if (!Model.WaitingTickets.Any())
+                    {
+                        <div class="col-span-3 text-center py-6 text-gray-400">Очередь пуста</div>
+                    }
+                    else
+                    {
+                        @foreach (var t in Model.WaitingTickets)
+                        {
+                            <div class="bg-gray-100 px-8 rounded-xl py-4 flex justify-center items-center text-2xl font-extrabold">
+                                @t.Number
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -30,14 +31,14 @@ public class ServiceRepository : IServiceRepository
 
     public async Task<IEnumerable<Service>> GetMainServicesAsync()
     {
-        return await _dbContext.Set<Service>()
+        return await _dbContext.Services!
             .Where(s => s.ParentId == null)
             .ToListAsync();
     }
 
-    public async Task<Service> GetServiceByIdAsync(Guid id)
+    public async Task<Service?> GetServiceByIdAsync(Guid id)
     {
-        return await _dbContext.Set<Service>()
+        return await _dbContext.Services!
             .Include(s => s.Children)
             .Include(s => s.Parent)
             .FirstOrDefaultAsync(s => s.Id == id);

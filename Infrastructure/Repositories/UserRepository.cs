@@ -1,8 +1,8 @@
 ﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Queue.Applications.Interfaces;
 using Domain.Entities;
 
 namespace Queue.Infrastructure.Repositories

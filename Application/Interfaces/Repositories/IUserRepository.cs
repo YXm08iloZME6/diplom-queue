@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 
-namespace Queue.Applications.Interfaces;
+namespace Application.Interfaces.Repositories;
 public interface IUserRepository
 {
     Task<User?> GetByIdAsync(Guid id);
