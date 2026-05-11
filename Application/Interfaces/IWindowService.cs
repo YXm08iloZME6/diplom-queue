@@ -6,4 +6,5 @@ public interface IWindowService
 {
     Task<List<WindowDto>> GetAllWindows();
     Task<WindowDto> GetWindowById(Guid windowId);
+    Task<WindowDto> CreateWindowAsync(CreateWindowDto window);
 }

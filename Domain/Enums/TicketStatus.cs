@@ -6,6 +6,5 @@ public enum TicketStatus
     Called,
     Processing,
     Completed,
-    Redirected,
     Cancelled
 }

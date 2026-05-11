@@ -14,6 +14,11 @@ public class WindowRepository : IWindowRepository
         _context = context;
     }
 
+    public async Task CreateWindowAsync(Window window)
+    {
+        await _context.Windows.AddAsync(window);
+    }
+
     public async Task<List<Window>> GetAllWindowsAsync()
     {
         return await _context.Windows.ToListAsync();
@@ -22,5 +27,10 @@ public class WindowRepository : IWindowRepository
     public async Task<Window> GetWindowTitleByIdAsync(Guid windowId)
     {
         return await _context.Windows.FirstOrDefaultAsync(w => w.Id == windowId);
+    }
+
+    public Task SaveChangeAsync()
+    {
+        return _context.SaveChangesAsync();
     }
 }

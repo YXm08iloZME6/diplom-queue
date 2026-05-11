@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
@@ -11,16 +12,24 @@ namespace Queue.Controllers
     {
         private readonly IAdminService _adminService;
         private readonly IWindowService _windowService;
+        private readonly IServiceService _serviceService;
 
-        public AdminController(IAdminService adminService, IWindowService windowService)
+        public AdminController(IAdminService adminService, IWindowService windowService, IServiceService serviceService)
         {
             _adminService = adminService;
             _windowService = windowService;
+            _serviceService = serviceService;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> ServiceListAsync()
+        {
+            var services = await _serviceService.GetMainServicesAsync();
+            return View(services);
         }
 
         public async Task<IActionResult> UserList()
@@ -107,7 +116,7 @@ namespace Queue.Controllers
                 model.AvailableWindows = await _windowService.GetAllWindows();
                 return View(model);
             }
-                
+
 
             await _adminService.EditUser(model.UserData, model.Roles);
 
@@ -119,6 +128,52 @@ namespace Queue.Controllers
         {
             await _adminService.RemoveUser(id);
             return RedirectToAction(nameof(UserList));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> WindowsList()
+        {
+            var windows = await _windowService.GetAllWindows();
+            return View(windows);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateWindow()
+        {
+            var model = new CreateWindowViewModel
+            {
+                Services = await _serviceService.GetMainServicesAsync(),
+            };
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateWindow(CreateWindowViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                foreach (var key in ModelState.Keys)
+                {
+                    var errors = ModelState[key].Errors;
+                    if (errors.Any())
+                    {
+                        Console.WriteLine($"Key: {key}");
+                        foreach (var error in errors)
+                        {
+                            Console.WriteLine($"  Error: {error.ErrorMessage}");
+                            Console.WriteLine($"  Exception: {error.Exception?.Message}");
+                        }
+                    }
+                }
+
+                model.Services = await _serviceService.GetMainServicesAsync();
+                return View(model);
+            }
+
+            await _windowService.CreateWindowAsync(model.Window);
+            return RedirectToAction(nameof(WindowsList));
         }
     }
 }

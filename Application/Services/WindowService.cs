@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
+using Domain.Entities;
 
 namespace Application.Services
 {
@@ -12,6 +13,28 @@ namespace Application.Services
             _windowRepository = windowRepository;
         }
 
+        public async Task<WindowDto> CreateWindowAsync(CreateWindowDto window)
+        {
+            var newWindow = new Window
+            {
+                Title = window.Title,
+                Status = window.Status,
+                ServiceId = window.ServiceId
+            };
+
+            await _windowRepository.CreateWindowAsync(newWindow);
+            await _windowRepository.SaveChangeAsync();
+
+            return new WindowDto
+            {
+                Id = newWindow.Id,
+                Title = newWindow.Title,
+                Status = newWindow.Status,
+                ServiceId = newWindow.ServiceId
+            };
+
+        }
+
         public async Task<List<WindowDto>> GetAllWindows()
         {
             var windows = await _windowRepository.GetAllWindowsAsync();
@@ -20,7 +43,8 @@ namespace Application.Services
             {
                 Id = w.Id,
                 Title = w.Title,
-                Status = w.Status
+                Status = w.Status,
+                ServiceId = w.ServiceId
             }).ToList();
         }
 

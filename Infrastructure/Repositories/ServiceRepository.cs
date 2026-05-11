@@ -14,12 +14,18 @@ public class ServiceRepository : IServiceRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<Guid>> GetChildrenIdAsync(Guid parentId)
+    public async Task<List<Guid>> GetServiceTreeByIdAsync(Guid parentId)
     {
-        return await _dbContext.Set<Service>()
+        var result = new List<Guid> { parentId };
+        
+        var children = await _dbContext.Set<Service>()
             .Where(s => s.ParentId == parentId)
             .Select(s => s.Id)
             .ToListAsync();
+
+        result.AddRange(children);
+
+        return result;
     }
 
     public async Task<IEnumerable<Service>> GetMainServicesAsync()

@@ -19,8 +19,7 @@ public class WindowDto
     }
 }
 
-
-public class UpdateWindowDto
+public class CreateWindowDto
 {
         public string? Title { get; set; }
         public WindowStatus Status { get; set; }
