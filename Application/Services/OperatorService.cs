@@ -14,6 +14,7 @@ public class OperatorService: IOperatorService
     private readonly IServiceRepository _serviceRepository;
     private readonly ITicketRepository _ticketRepository;
 
+
     public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository, ITicketRepository ticketRepository)
     {
         _operatorRepository = operatorRepository;
@@ -115,10 +116,9 @@ public class OperatorService: IOperatorService
         Console.WriteLine(targetServiceId);
         if (targetService == null) throw new Exception("Сервис для перенаправления не найден");
 
-        var countTargetService = await _ticketRepository.GetTicketCountAsync(targetServiceId);
-
         if (!string.IsNullOrEmpty(targetService.Letter))
         {
+            var countTargetService = await _ticketRepository.GetTicketCountAsync(targetService.Letter);
             currentTicket.Number = $"{targetService.Letter}-{(countTargetService + 1):D3}";
         }
 

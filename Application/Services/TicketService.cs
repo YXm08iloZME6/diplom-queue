@@ -49,7 +49,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
-            throw new InvalidOperationException($"Талон {ticketId} не найден");
+            throw new Exception($"Талон {ticketId} не найден");
         
         if (dto.ServiceId.HasValue) ticket.ServiceId = dto.ServiceId;
         if (dto.WindowId.HasValue) ticket.WindowId = dto.WindowId;
@@ -75,7 +75,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
-            throw new InvalidOperationException($"Талон {ticketId} не найден");
+            throw new Exception($"Талон {ticketId} не найден");
         
         ticket.WindowId = windowId;
         ticket.CalledAt = DateTime.UtcNow;
@@ -89,7 +89,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
-            throw new InvalidOperationException($"Талон {ticketId} не найден");
+            throw new Exception($"Талон {ticketId} не найден");
 
         ticket.CalledAt = DateTime.UtcNow;
 
@@ -101,7 +101,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
-            throw new InvalidOperationException($"Талон {ticketId} не найден");
+            throw new Exception($"Талон {ticketId} не найден");
         
         ticket.StartedAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Processing;
@@ -114,7 +114,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
-            throw new InvalidOperationException($"Талон {ticketId} не найден");
+            throw new Exception($"Талон {ticketId} не найден");
         
         ticket.CompletedAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Completed;
@@ -127,7 +127,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
-            throw new InvalidOperationException($"Талон {ticketId} не найден");
+            throw new Exception($"Талон {ticketId} не найден");
         
 
         ticket.CompletedAt = DateTime.UtcNow;
@@ -141,7 +141,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
-            throw new InvalidOperationException($"Талон {ticketId} не найден");
+            throw new Exception($"Талон {ticketId} не найден");
         
         ticket.ServiceId = newServiceId;
         ticket.WindowId = null;

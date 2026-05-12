@@ -1,10 +1,11 @@
 ﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Application.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Queue.Applications.Interfaces;
 using Queue.Applications.Services;
 using Queue.Controllers;
 using Queue.Infrastructure.Repositories;
@@ -36,7 +37,7 @@ builder.Services.AddScoped<IDisplayRepository, DisplayRepository>();
 builder.Services.AddScoped<IDisplayService, DisplayService>();
 builder.Services.AddScoped<IWindowRepository, WindowRepository>();
 builder.Services.AddScoped<IWindowService, WindowService>();
-
+builder.Services.AddSignalR();
 
 
 var app = builder.Build();
