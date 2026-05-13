@@ -26,9 +26,9 @@ namespace Queue.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ServiceListAsync()
+        public async Task<IActionResult> ServiceList()
         {
-            var services = await _serviceService.GetMainServicesAsync();
+            var services = await _serviceService.GetAllServicesAsync();
             return View(services);
         }
 
@@ -62,6 +62,12 @@ namespace Queue.Controllers
 
             await _serviceService.AddServiceAsync(service);
             return View(service);
+        }
+
+        public async Task<IActionResult> ToggleServiceStatus(Guid id)
+        {
+            await _adminService.ToggleServiceStatus(id);
+            return RedirectToAction(nameof(ServiceList));
         }
 
         public async Task<IActionResult> UserList()

@@ -10,13 +10,13 @@ namespace Queue.Applications.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IServiceRepository _serviceRepository;
 
-        public AdminService(
-            IUserRepository userRepository,
-            IRoleRepository roleRepository)
+        public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, IServiceRepository serviceRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _serviceRepository = serviceRepository;
         }
 
         public async Task<UserDto> GetUserById(Guid id)
@@ -164,6 +164,20 @@ namespace Queue.Applications.Services
                     .Select(ur => ur.Role.Title)
                     .ToList()
             };
+        }
+
+        public async Task ToggleServiceStatus(Guid serviceId)
+        {
+            var service = await _serviceRepository.GetServiceByIdAsync(serviceId);
+
+            if (service == null)
+            {
+                throw new InvalidOperationException("Такой услуги не существует");
+            }
+
+            service.IsActive = !service.IsActive;
+
+            await _serviceRepository.SaveChangeAsync();
         }
     }
 }

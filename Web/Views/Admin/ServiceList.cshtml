@@ -21,11 +21,26 @@
                 <td>@service.Letter</td>
                 <td>@service.Description</td>
                 <td>@service.IconName</td>
+                <td>
+                    <form asp-action="ToggleServiceStatus" method="post" class="inline">
+                        <input type="hidden" name="id" value="@service.Id" />
+
+                        <button type="submit"
+                                class="relative inline-flex h-7 w-14 items-center rounded-full transition
+                       @(service.IsActive ? "bg-green-500" : "bg-gray-300")">
+
+                            <span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition
+                         @(service.IsActive ? "translate-x-8" : "translate-x-1")">
+                            </span>
+                        </button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 <a asp-controller="Admin" asp-action="AddService"> Добавить</a>
+
 <style>
     .table {
         width: 100%;

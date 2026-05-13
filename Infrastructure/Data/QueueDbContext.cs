@@ -33,14 +33,15 @@ public class QueueDbContext : DbContext
         service.Property(s => s.Name).IsRequired().HasMaxLength(50);
         service.Property(s => s.Description).IsRequired().HasMaxLength(200);
         service.Property(s => s.Letter).HasMaxLength(1);
+        service.Property(s => s.IsActive).IsRequired().HasDefaultValue(true);
         service.HasOne(s => s.Parent).WithMany(s => s.Children).HasForeignKey(s => s.ParentId).IsRequired(false);
 
         service.HasData(
-            new {Id = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"), Name = "Регистратура", Description = "Запись на первичный прием, заведение медицинских карт и предоставление справочной информации о работе клиники.", IconName="Book", Letter = "A", ParentId = (Guid?)null },
-            new {Id = Guid.Parse("99c48a22-122d-4821-afea-2b2b345e592c"), Name = "Платные услуги", Description = "Оформление и оплата медицинских услуг, не входящих в программу ОМС.", IconName="Ruble", Letter = "B", ParentId = (Guid?)null },
-            new {Id = Guid.Parse("7370aa38-cbb9-4220-915d-ce042194f24e"), Name = "Анализы", Description = "Лабораторная диагностика от общих анализов крови до генетических исследований.", IconName="Lab", Letter = "C", ParentId = (Guid?)null },
-            new {Id = Guid.Parse("9d78a673-efa3-4af3-9828-55515d26e134"), Name = "Запись на прием к врачу", Description = "Выбор специалиста и бронирование подходящего времени визита.", IconName="Clock", ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") },
-            new {Id = Guid.Parse("d320728d-0a5e-490c-be3c-04bcf3a7a4c8"), Name = "Оформление больничного", Description = "Официальное подтверждение временной нетрудоспособности.", IconName="CheckBook", ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") }
+            new {Id = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"), Name = "Регистратура", Description = "Запись на первичный прием, заведение медицинских карт и предоставление справочной информации о работе клиники.", IconName="Book", Letter = "A", IsActive = true, ParentId = (Guid?)null },
+            new {Id = Guid.Parse("99c48a22-122d-4821-afea-2b2b345e592c"), Name = "Платные услуги", Description = "Оформление и оплата медицинских услуг, не входящих в программу ОМС.", IconName="Ruble", Letter = "B", IsActive = true, ParentId = (Guid?)null },
+            new {Id = Guid.Parse("7370aa38-cbb9-4220-915d-ce042194f24e"), Name = "Анализы", Description = "Лабораторная диагностика от общих анализов крови до генетических исследований.", IconName="Lab", Letter = "C", IsActive = true, ParentId = (Guid?)null },
+            new {Id = Guid.Parse("9d78a673-efa3-4af3-9828-55515d26e134"), Name = "Запись на прием к врачу", Description = "Выбор специалиста и бронирование подходящего времени визита.", IconName="Clock", IsActive = true, ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") },
+            new {Id = Guid.Parse("d320728d-0a5e-490c-be3c-04bcf3a7a4c8"), Name = "Оформление больничного", Description = "Официальное подтверждение временной нетрудоспособности.", IconName="CheckBook", IsActive = true, ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") }
         );
 
         var users = builder.Entity<User>();

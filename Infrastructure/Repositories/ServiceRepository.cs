@@ -32,6 +32,13 @@ public class ServiceRepository : IServiceRepository
     public async Task<IEnumerable<Service>> GetMainServicesAsync()
     {
         return await _dbContext.Services!
+            .Where(s => s.ParentId == null && s.IsActive)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Service>> GetAllServicesAsync()
+    {
+        return await _dbContext.Set<Service>()
             .Where(s => s.ParentId == null)
             .ToListAsync();
     }
