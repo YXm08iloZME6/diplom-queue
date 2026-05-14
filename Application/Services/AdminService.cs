@@ -179,5 +179,18 @@ namespace Queue.Applications.Services
 
             await _serviceRepository.SaveChangeAsync();
         }
+
+        public async Task ToggleServiceFacets(Guid serviceId)
+        {
+            var service = await _serviceRepository.GetServiceByIdAsync(serviceId);
+
+            if (service == null)
+            {
+                throw new InvalidOperationException("Такой услуги не существует");
+            }
+
+            service.IsNeedFacets = !service.IsNeedFacets;
+            await _serviceRepository.SaveChangeAsync();
+        }
     }
 }

@@ -9,4 +9,5 @@ namespace Application.Interfaces.Services;
     Task<UserDto> EditUser(EditUserDto dto,List<string> roleNames);
     Task<bool> RemoveUser(Guid id);
     Task ToggleServiceStatus(Guid serviceId);
+    Task ToggleServiceFacets(Guid serviceId);
 }

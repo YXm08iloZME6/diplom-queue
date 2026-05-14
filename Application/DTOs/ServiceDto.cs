@@ -11,6 +11,7 @@ public class ServiceDto
     public string? Description { get; set; }
     public string? IconName { get; set; }
     public bool IsActive { get; set; }
+    public bool IsNeedFacets { get; set; }
     public ServiceDto() { }
     public ServiceDto(Service service)
     {
@@ -21,6 +22,7 @@ public class ServiceDto
        Description = service.Description;
        IconName = service.IconName;
        IsActive = service.IsActive;
+        IsNeedFacets = service.IsNeedFacets;
     }
 }
 

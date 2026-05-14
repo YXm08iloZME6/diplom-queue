@@ -11,4 +11,5 @@ public interface IServiceRepository
     Task<List<Guid>> GetServiceTreeByIdAsync(Guid parentId);
     Task CreateServiceAsync(Service service);
     Task SaveChangeAsync();
+    Task UpdateAsync(Service service);
 }

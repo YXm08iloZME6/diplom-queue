@@ -10,6 +10,8 @@
             <th>Буква</th>
             <th>Описание</th>
             <th>Иконка</th>
+            <th>Активный?</th>
+            <th>Доп информация</th>
         </tr>
     </thead>
 
@@ -34,6 +36,18 @@
                             </span>
                         </button>
                     </form>
+                </td>
+                <td><form asp-action="ToggleServiceFacets" method="post">
+                    <input type="hidden" name="id" value="@service.Id" />
+
+                    <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition
+                   @(service.IsNeedFacets ? "bg-blue-600" : "bg-gray-300")">
+
+                        <span class="inline-block h-4 w-4 transform rounded-full bg-white transition
+                     @(service.IsNeedFacets ? "translate-x-6" : "translate-x-1")">
+                        </span>
+                    </button>
+                </form>
                 </td>
             </tr>
         }

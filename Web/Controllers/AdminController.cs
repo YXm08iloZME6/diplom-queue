@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.Interfaces;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +66,12 @@ namespace Queue.Controllers
         public async Task<IActionResult> ToggleServiceStatus(Guid id)
         {
             await _adminService.ToggleServiceStatus(id);
+            return RedirectToAction(nameof(ServiceList));
+        }
+
+        public async Task<IActionResult> ToggleServiceFacets(Guid id)
+        {
+            await _adminService.ToggleServiceFacets(id);
             return RedirectToAction(nameof(ServiceList));
         }
 

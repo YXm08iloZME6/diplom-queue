@@ -1,5 +1,7 @@
+using System.Diagnostics.Metrics;
 using Application.Interfaces;
 using Application.Interfaces.Services;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
@@ -30,7 +32,14 @@ public class ServiceController : Controller
             return View("ChildServices", service);
         }
 
-        return View("Form", service);
+        if (service.IsNeedFacets)
+        {
+            return View("Form", service);
+        }
+        
+        var ticket = await _ticketService.CreateAsync(service.Id, null, service.Letter);
+
+        return View("Ticket", ticket);
     }
 
     [HttpPost]

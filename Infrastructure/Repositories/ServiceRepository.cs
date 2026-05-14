@@ -60,4 +60,10 @@ public class ServiceRepository : IServiceRepository
     {
         return _dbContext.SaveChangesAsync();
     }
+
+    public Task UpdateAsync(Service service)
+    {
+        _dbContext.Services.Update(service);
+        return _dbContext.SaveChangesAsync();
+    }
 }
