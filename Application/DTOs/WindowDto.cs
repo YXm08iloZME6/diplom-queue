@@ -9,6 +9,7 @@ public class WindowDto
     public string? Title { get; set; }
     public WindowStatus Status { get; set; }
     public Guid? ServiceId { get; set; }
+    public string ServiceName { get; set; }
     public WindowDto() { }
     public WindowDto(Window window)
     {
@@ -16,6 +17,7 @@ public class WindowDto
         Title = window.Title;
         Status = window.Status;
         ServiceId = window.ServiceId;
+        ServiceName = window.Service?.Name;
     }
 }
 

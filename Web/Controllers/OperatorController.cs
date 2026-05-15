@@ -5,6 +5,7 @@ using Application.Interfaces.Services;
 using Infrastructure.Migrations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.Models;
 
 namespace Web.Controllers
 {
@@ -22,9 +23,15 @@ namespace Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = GetUserId();
-            var model = await _operatorService.GetDashboardData(userId);
+            var dto = await _operatorService.GetDashboardData(userId);
+            var vm = new OperatorDashboardViewModel
+            {
+                dashboard = dto,
+                windowName = dto.Window.Title,
+                serviceName = dto.Window.ServiceName,
+            };
             
-            return View(model);
+            return View(vm);
 
         }
 

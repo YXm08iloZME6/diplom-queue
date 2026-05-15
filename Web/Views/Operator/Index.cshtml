@@ -1,212 +1,145 @@
-﻿@model Application.DTOs.OperatorDashboardDto
+﻿@model Web.Models.OperatorDashboardViewModel
 
 @{
     ViewData["Title"] = "Рабочее место оператора";
 }
 
-<div class="operator-page">
-    <div class="operator-header">
-        <h1>Рабочее место оператора</h1>
-        <div class="operator-user">
-            <span>@User.Identity?.Name</span>
+<div class="min-h-screen bg-[#F4F7FA] p-8 font-sans text-slate-700">
+
+    <header class="max-w-6xl mx-auto mb-8 flex justify-between items-center px-4">
+        <div>
+            <h1 class="text-2xl font-semibold text-slate-800">Панель оператора</h1>
+            <p class="text-sm text-slate-500">@Model.windowName — @Model.serviceName</p>
         </div>
-    </div>
 
-    <div class="operator-grid">
-        <div class="operator-card">
-            <h2>Текущий клиент</h2>
+        <div class="flex items-center gap-3">
+            <span class="text-sm font-medium text-slate-600">@User.Identity?.Name</span>
+            <div class="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm">
+                <span class="text-xs">👤</span>
+            </div>
+        </div>
+    </header>
 
-            @if (Model.CurrentTicket != null)
-            {
-                <div class="ticket-number-row">
-                    <div class="ticket-number">
-                        @Model.CurrentTicket.Number
+    <main class="max-w-6xl mx-auto grid grid-cols-12 gap-6">
+
+        <div class="col-span-12 lg:col-span-7">
+            <div class="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-12 h-full flex flex-col items-center justify-center text-center">
+
+                @if (Model.dashboard.CurrentTicket != null)
+                {
+                    <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">Сейчас в обслуживании</span>
+                    <div class="text-8xl font-light text-slate-900 tracking-tight mb-6">
+                        @Model.dashboard.CurrentTicket.Number
                     </div>
+                    <div class="px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-xs font-semibold text-slate-500 mb-10 uppercase tracking-wide">
+                        Статус: @Model.dashboard.CurrentTicket.Status
+                    </div>
+                }
+                else
+                {
+                    <div class="py-12">
+                        <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">☕</div>
+                        <h2 class="text-xl font-medium text-slate-400">Очередь свободна</h2>
+                    </div>
+                }
 
-                    <span class="ticket-status">
-                        @Model.CurrentTicket.Status
+                <div class="w-full max-w-md space-y-3">
+                    @if (Model.dashboard.CurrentTicket == null)
+                    {
+                        <form asp-action="CallNext" method="post">
+                            <button type="submit" class="w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white font-medium py-4 rounded-2xl transition-all duration-200 shadow-sm active:transform active:scale-[0.99]">
+                                Вызвать следующего клиента
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="grid grid-cols-1 gap-3">
+                            @if (Model.dashboard.CurrentTicket.Status == "Called")
+                            {
+                                <form asp-action="StartProcessing" method="post">
+                                    <input type="hidden" name="ticketId" value="@Model.dashboard.CurrentTicket.Id" />
+                                    <button type="submit" class="w-full bg-[#10B981] hover:bg-[#059669] text-white font-medium py-3.5 rounded-xl transition-all">
+                                        Начать обслуживание
+                                    </button>
+                                </form>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <form asp-action="Recall" method="post">
+                                        <input type="hidden" name="ticketId" value="@Model.dashboard.CurrentTicket.Id" />
+                                        <button type="submit" class="w-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium py-3 rounded-xl transition-all">
+                                            Повторить вызов
+                                        </button>
+                                    </form>
+                                    <form asp-action="Cancel" method="post">
+                                        <input type="hidden" name="ticketId" value="@Model.dashboard.CurrentTicket.Id" />
+                                        <button type="submit" class="w-full bg-white border border-slate-200 text-red-500 hover:bg-red-50 font-medium py-3 rounded-xl transition-all">
+                                            Отменить
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+
+                            @if (Model.dashboard.CurrentTicket.Status == "Processing")
+                            {
+                                <form asp-action="Complete" method="post">
+                                    <input type="hidden" name="ticketId" value="@Model.dashboard.CurrentTicket.Id" />
+                                    <button type="submit" class="w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white font-medium py-4 rounded-xl shadow-sm transition-all">
+                                        Завершить прием
+                                    </button>
+                                </form>
+                                <form asp-action="Redirect" method="post">
+                                    <select name="serviceId" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-600 outline-none focus:ring-2 ring-blue-100 transition-all cursor-pointer" onchange="this.form.submit()">
+                                        <option value="" disabled selected>Перенаправить на другую услугу...</option>
+                                        @foreach (var service in Model.dashboard.AllServices)
+                                        {
+                                            <option value="@service.Id">@service.Name</option>
+                                        }
+                                    </select>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-5">
+            <div class="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-6 h-full">
+                <div class="flex items-center justify-between mb-6 px-2">
+                    <h2 class="font-semibold text-slate-800">Ожидают в очереди</h2>
+                    <span class="text-xs font-bold bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">
+                        @(Model.dashboard.WaitingTickets?.Count() ?? 0)
                     </span>
                 </div>
-            }
-            else
-            {
-                <div class="ticket-empty">
-                    Сейчас активного клиента нет
-                </div>
-            }
 
-            @if (Model.CurrentTicket == null)
-            {
-                <form asp-action="CallNext" method="post">
-                    <button class="main-btn" type="submit">
-                        Вызвать следующего
-                    </button>
-                </form>
-            }
-
-            @if (Model.CurrentTicket != null)
-            {
-                <div class="action-buttons">
-                    <form asp-action="StartProcessing" method="post">
-                        <input type="hidden" name="ticketId" value="@Model.CurrentTicket.Id" />
-                        <button type="submit">На обслуживание</button>
-                    </form>
-
-                    <form asp-action="Recall" method="post">
-                        <input type="hidden" name="ticketId" value="@Model.CurrentTicket.Id" />
-                        <button type="submit">Перевызвать</button>
-                    </form>
-
-                    <form asp-action="Complete" method="post">
-                        <input type="hidden" name="ticketId" value="@Model.CurrentTicket.Id" />
-                        <button type="submit">Завершить</button>
-                    </form>
-
-                    <form asp-action="Cancel" method="post">
-                        <input type="hidden" name="ticketId" value="@Model.CurrentTicket.Id" />
-                        <button type="submit">Отменить</button>
-                    </form>
-
-                    <form asp-action="Redirect" method="post">
-                        <select name="serviceId" class="main-btn" onchange="this.form.submit()">
-                            <option value="" disabled selected>Выберите услугу для перенаправления...</option>
-                            @foreach (var service in Model.AllServices)
-                            {
-                                <option value="@service.Id">@service.Name</option>
-                            }
-                        </select>
-                    </form>
-                </div>
-            }
-        </div>
-
-        <div class="operator-card">
-            <h2>Список ожидающих клиентов</h2>
-
-            <table class="queue-table">
-                <thead>
-                    <tr>
-                        <th>Номер талона</th>
-                        @* <th>Услуга</th> *@
-                        <th>Статус</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.WaitingTickets != null && Model.WaitingTickets.Any())
+                <div class="space-y-2">
+                    @if (Model.dashboard.WaitingTickets != null && Model.dashboard.WaitingTickets.Any())
                     {
-                        @foreach (var ticket in Model.WaitingTickets)
+                        @foreach (var ticket in Model.dashboard.WaitingTickets)
                         {
-                            <tr>
-                                <td>@ticket.Number</td>
-                                @* <td>@ticket.ServiceName</td> *@
-                                <td>@ticket.Status</td>
-                            </tr>
+                            <div class="flex items-center justify-between p-4 bg-slate-50/50 border border-slate-100 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all group">
+                                <span class="font-semibold text-slate-700 group-hover:text-blue-600">@ticket.Number</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-white px-2 py-1 rounded border border-slate-100">
+                                    @ticket.Status
+                                </span>
+                            </div>
                         }
                     }
                     else
                     {
-                        <tr>
-                            <td colspan="3">Очередь пуста</td>
-                        </tr>
+                        <div class="text-center py-10 border-2 border-dashed border-slate-100 rounded-2xl">
+                            <p class="text-sm text-slate-400">Список пуст</p>
+                        </div>
                     }
-                </tbody>
-            </table>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <div class="back-link">
-        <a asp-controller="Home" asp-action="Index">← Назад в панель</a>
-    </div>
+    <footer class="max-w-6xl mx-auto mt-8 px-4">
+        <a asp-controller="Home" asp-action="Index" class="text-sm text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-2">
+            <span>←</span> Вернуться в главное меню
+        </a>
+    </footer>
+
 </div>
-
-<style>
-.operator-page {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 20px;
-}
-
-.operator-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.operator-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-}
-
-.operator-card {
-    background: white;
-    border-radius: 18px;
-    padding: 28px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-}
-
-.ticket-number-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.ticket-number {
-    font-size: 42px;
-    font-weight: 700;
-}
-
-.ticket-status {
-    background: #f3f4f6;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 14px;
-}
-
-.ticket-service {
-    margin: 16px 0 24px;
-    font-size: 18px;
-}
-
-.main-btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.action-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.action-buttons button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.queue-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.queue-table th,
-.queue-table td {
-    text-align: left;
-    padding: 14px;
-    border-bottom: 1px solid #eee;
-}
-
-.back-link {
-    margin-top: 24px;
-}
-</style>
