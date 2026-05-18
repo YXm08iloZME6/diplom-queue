@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Queue.Applications.Services
 {
@@ -11,12 +12,14 @@ namespace Queue.Applications.Services
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IServiceRepository _serviceRepository;
+        private readonly ITicketRepository _ticketRepository;
 
-        public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, IServiceRepository serviceRepository)
+        public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, IServiceRepository serviceRepository, ITicketRepository ticketRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _serviceRepository = serviceRepository;
+            _ticketRepository = ticketRepository;
         }
 
         public async Task<UserDto> GetUserById(Guid id)
@@ -191,6 +194,18 @@ namespace Queue.Applications.Services
 
             service.IsNeedFacets = !service.IsNeedFacets;
             await _serviceRepository.SaveChangeAsync();
+        }
+
+        public async Task QueueResetAsync()
+        {
+            var tickets = await _ticketRepository.GetAllActiveAsync();
+            foreach (var ticket in tickets)
+            {
+                ticket.Status = TicketStatus.Cancelled;
+                await _ticketRepository.UpdateAsync(ticket);
+            }
+
+            await _ticketRepository.SaveChangesAsync();
         }
     }
 }

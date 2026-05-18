@@ -10,4 +10,5 @@ namespace Application.Interfaces.Services;
     Task<bool> RemoveUser(Guid id);
     Task ToggleServiceStatus(Guid serviceId);
     Task ToggleServiceFacets(Guid serviceId);
+    Task QueueResetAsync();
 }

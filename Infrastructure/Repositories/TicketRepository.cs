@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,5 +49,17 @@ public class TicketRepository : ITicketRepository
     public async Task<int> GetTicketCountAsync(string letter)
     {
         return await _dbContext.Set<Ticket>().Where(t => t.Number.StartsWith(letter)).CountAsync();
+    }
+
+    public async Task<List<Ticket>> GetAllActiveAsync()
+    {
+        var targetStatus = new List<TicketStatus> { TicketStatus.Waiting, TicketStatus.Processing, TicketStatus.Called };
+
+        return await _dbContext.Tickets.Where(t => targetStatus.Contains(t.Status)).ToListAsync();
+    }
+
+    public Task SaveChangesAsync()
+    {
+        return _dbContext.SaveChangesAsync();
     }
 }

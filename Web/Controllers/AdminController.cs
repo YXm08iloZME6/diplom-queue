@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
+using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
@@ -63,12 +64,14 @@ namespace Queue.Controllers
             return View(service);
         }
 
+        [HttpPost]
         public async Task<IActionResult> ToggleServiceStatus(Guid id)
         {
             await _adminService.ToggleServiceStatus(id);
             return RedirectToAction(nameof(ServiceList));
         }
 
+        [HttpPost]
         public async Task<IActionResult> ToggleServiceFacets(Guid id)
         {
             await _adminService.ToggleServiceFacets(id);
@@ -217,6 +220,14 @@ namespace Queue.Controllers
 
             await _windowService.CreateWindowAsync(model.Window);
             return RedirectToAction(nameof(WindowsList));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> QueueReset()
+        {
+            await _adminService.QueueResetAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
