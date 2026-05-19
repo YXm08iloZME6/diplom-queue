@@ -33,4 +33,10 @@ public class WindowRepository : IWindowRepository
     {
         return _context.SaveChangesAsync();
     }
+    
+    public Task UpdateWindowAsync(Window window) //дэнчик
+    {
+        _context.Windows.Update(window);
+        return Task.CompletedTask;
+    }
 }

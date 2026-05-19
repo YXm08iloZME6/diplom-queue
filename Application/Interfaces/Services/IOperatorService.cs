@@ -11,4 +11,6 @@ public interface IOperatorService
     Task<TicketDto> CompleteTicket(Guid userId);
     Task<TicketDto> CancelTicket(Guid userId);
     Task<TicketDto> RedirectTicket(Guid userId, Guid targetServiceId, string comment);
+    Task<WindowDto> StartShiftAsync(Guid userId);//добавил дэнчик
+    Task<WindowDto> EndShiftAsync(Guid userId);//добавил дэнчик
 }

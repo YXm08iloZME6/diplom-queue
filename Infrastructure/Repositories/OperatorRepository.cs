@@ -54,4 +54,10 @@ public class OperatorRepository : IOperatorRepository
         _context.Tickets.Update(ticket);
         return Task.CompletedTask;
     }
+    
+    public Task UpdateWindowAsync(Window window) //дэнчик
+    {
+        _context.Windows.Update(window);
+        return Task.CompletedTask;
+    }
 }

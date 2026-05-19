@@ -165,4 +165,28 @@ public class OperatorService: IOperatorService
         await _operatorRepository.UpdateTicketAsync(ticket);
         await _operatorRepository.SaveChangesAsync();
     }
+    
+    public async Task<WindowDto> StartShiftAsync(Guid userId)
+    {
+        var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
+        if (window == null) throw new Exception("Окно не найдено");
+
+        window.Status = WindowStatus.Open;
+        await _operatorRepository.UpdateWindowAsync(window);
+        await _operatorRepository.SaveChangesAsync();
+
+        return new WindowDto(window);
+    }
+
+    public async Task<WindowDto> EndShiftAsync(Guid userId)
+    {
+        var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
+        if (window == null) throw new Exception("Окно не найдено");
+
+        window.Status = WindowStatus.Offline;
+        await _operatorRepository.UpdateWindowAsync(window);
+        await _operatorRepository.SaveChangesAsync();
+
+        return new WindowDto(window);
+    }
 }
