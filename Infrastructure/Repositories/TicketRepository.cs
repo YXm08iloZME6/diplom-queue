@@ -62,4 +62,11 @@ public class TicketRepository : ITicketRepository
     {
         return _dbContext.SaveChangesAsync();
     }
+
+    public async Task<List<Ticket>> GetByDateRangeAsync(DateTime start, DateTime end)
+    {
+        return await _dbContext.Tickets
+            .Where(t => t.CompletedAt >= start && t.CompletedAt <= end)
+            .ToListAsync();
+    }
 }

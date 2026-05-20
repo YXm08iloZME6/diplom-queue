@@ -24,6 +24,10 @@ public class QueueDbContext : DbContext
         ticket.Property(t => t.Number).IsRequired();
         ticket.Property(t => t.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
         ticket.Property(t => t.Facets).HasColumnType("jsonb");
+        ticket.Property(t => t.CreatedAt).HasColumnType("timestamp without time zone");
+        ticket.Property(t => t.CalledAt).HasColumnType("timestamp without time zone");
+        ticket.Property(t => t.StartedAt).HasColumnType("timestamp without time zone");
+        ticket.Property(t => t.CompletedAt).HasColumnType("timestamp without time zone");
         ticket.HasOne<Window>().WithMany().HasForeignKey(t => t.WindowId).IsRequired(false);
 
         var service = builder.Entity<Service>();

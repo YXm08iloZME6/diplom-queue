@@ -229,5 +229,24 @@ namespace Queue.Controllers
             await _adminService.QueueResetAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult Statistics()
+        {
+            return View(new StatisticsViewModel
+            {
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Statistics(StatisticsViewModel model)
+        {
+            
+            model.Tickets = await _adminService.TicketStats(model.StartDate, model.EndDate);
+
+            return View(model);
+        }
     }
 }

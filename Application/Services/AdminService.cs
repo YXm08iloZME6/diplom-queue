@@ -152,23 +152,6 @@ namespace Queue.Applications.Services
             return true;
         }
 
-        private UserDto MapToUserDto(User user)
-        {
-            return new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                MiddleName = user.MiddleName,
-                Status = user.Status,
-                Email = user.Email,
-                WindowId = user.WindowId,
-                Roles = user.UserRoles
-                    .Select(ur => ur.Role.Title)
-                    .ToList()
-            };
-        }
-
         public async Task ToggleServiceStatus(Guid serviceId)
         {
             var service = await _serviceRepository.GetServiceByIdAsync(serviceId);
@@ -206,6 +189,32 @@ namespace Queue.Applications.Services
             }
 
             await _ticketRepository.SaveChangesAsync();
+        }
+
+        public async Task<List<TicketDto>> TicketStats(DateTime start, DateTime end)
+        {
+            var tickets = await _ticketRepository.GetByDateRangeAsync(start, end);
+
+            if (tickets == null) { return new List<TicketDto>(); }
+
+            return tickets.Select(t => new TicketDto(t)).ToList();
+        }
+
+        private UserDto MapToUserDto(User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                MiddleName = user.MiddleName,
+                Status = user.Status,
+                Email = user.Email,
+                WindowId = user.WindowId,
+                Roles = user.UserRoles
+                    .Select(ur => ur.Role.Title)
+                    .ToList()
+            };
         }
     }
 }
