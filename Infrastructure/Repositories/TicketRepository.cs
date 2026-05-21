@@ -54,23 +54,4 @@ public class TicketRepository : ITicketRepository
         }
         return await _dbContext.Tickets!.Where(t => t.Number.StartsWith(letter)).Where(t => t.Status == TicketStatus.Waiting).CountAsync();
     }
-
-    public async Task<List<Ticket>> GetAllActiveAsync()
-    {
-        var targetStatus = new List<TicketStatus> { TicketStatus.Waiting, TicketStatus.Processing, TicketStatus.Called };
-
-        return await _dbContext.Tickets.Where(t => targetStatus.Contains(t.Status)).ToListAsync();
-    }
-
-    public Task SaveChangesAsync()
-    {
-        return _dbContext.SaveChangesAsync();
-    }
-
-    public async Task<List<Ticket>> GetByDateRangeAsync(DateTime start, DateTime end)
-    {
-        return await _dbContext.Tickets
-            .Where(t => t.CompletedAt >= start && t.CompletedAt <= end)
-            .ToListAsync();
-    }
 }

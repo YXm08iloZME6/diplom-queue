@@ -1,7 +1,7 @@
 ﻿using Application.DTOs;
 using Domain.Entities;
 
-namespace Application.Interfaces.Repositories;
+namespace Application.Interfaces;
 
 public interface IWindowRepository
 {

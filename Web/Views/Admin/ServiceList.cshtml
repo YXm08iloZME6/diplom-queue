@@ -1,135 +1,49 @@
 ﻿@model List<Application.DTOs.ServiceDto>
+<a asp-controller="Admin" asp-action="WindowsList">Окна</a>
 
-<a asp-controller="Admin"
-   asp-action="WindowsList"
-   class="inline-block mb-6 text-blue-600 hover:text-blue-800 font-medium">
-    Окна
-</a>
+<h2>Список услуг</h2>
 
-<div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-bold text-gray-800">
-        Список услуг
-    </h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Буква</th>
+            <th>Описание</th>
+            <th>Иконка</th>
+        </tr>
+    </thead>
 
-    <a asp-controller="Admin"
-       asp-action="AddService"
-       class="px-4 py-2 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
-        Добавить
-    </a>
-</div>
-
-<div class="overflow-x-auto rounded-2xl shadow border border-gray-200 bg-white">
-    <table class="min-w-full text-sm text-left">
-        <thead class="bg-gray-100 text-gray-700">
+    <tbody>
+        @foreach (var service in Model)
+        {
             <tr>
-                <th class="px-5 py-4 font-semibold">Название</th>
-                <th class="px-5 py-4 font-semibold">Буква</th>
-                <th class="px-5 py-4 font-semibold">Описание</th>
-                <th class="px-5 py-4 font-semibold">Иконка</th>
-                <th class="px-5 py-4 font-semibold">Активный?</th>
-                <th class="px-5 py-4 font-semibold">Доп. информация</th>
+                <td>@service.Name</td>
+                <td>@service.Letter</td>
+                <td>@service.Description</td>
+                <td>@service.IconName</td>
             </tr>
-        </thead>
+        }
+    </tbody>
+</table>
+<a asp-controller="Admin" asp-action="AddService"> Добавить</a>
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+    }
 
-        <tbody class="divide-y divide-gray-200">
-            @foreach (var service in Model)
-            {
-                <tr class="bg-white hover:bg-gray-50 transition">
-                    <td class="px-5 py-4 font-semibold text-gray-800">
-                        @service.Name
-                    </td>
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-                    <td class="px-5 py-4 text-gray-600">
-                        @service.Letter
-                    </td>
+        .table th {
+            background-color: #f2f2f2;
+        }
 
-                    <td class="px-5 py-4 text-gray-600 max-w-md">
-                        @service.Description
-                    </td>
-
-                    <td class="px-5 py-4 text-gray-600">
-                        @service.IconName
-                    </td>
-
-                    <td class="px-5 py-4">
-                        <form asp-action="ToggleServiceStatus" method="post">
-                            <input type="hidden" name="id" value="@service.Id" />
-
-                            <button type="submit"
-                                    class="relative inline-flex h-7 w-14 items-center rounded-full transition
-                                    @(service.IsActive ? "bg-green-500" : "bg-gray-300")">
-
-                                <span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition
-                                    @(service.IsActive ? "translate-x-8" : "translate-x-1")">
-                                </span>
-                            </button>
-                        </form>
-                    </td>
-
-                    <td class="px-5 py-4">
-                        <form asp-action="ToggleServiceFacets" method="post">
-                            <input type="hidden" name="id" value="@service.Id" />
-
-                            <button type="submit"
-                                    class="relative inline-flex h-7 w-14 items-center rounded-full transition
-                                    @(service.IsNeedFacets ? "bg-blue-600" : "bg-gray-300")">
-
-                                <span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition
-                                    @(service.IsNeedFacets ? "translate-x-8" : "translate-x-1")">
-                                </span>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-
-                @foreach (var child in service.Children)
-                {
-                    <tr class="bg-gray-50 hover:bg-gray-100 transition">
-                        <td class="px-5 py-4 pl-14 text-gray-700">
-                            ↳ @child.Name
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">
-                            @child.Letter
-                        </td>
-                        <td class="px-5 py-4 text-gray-600 max-w-md">
-                            @child.Description
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">
-                            @child.IconName
-                        </td>
-
-                        <td class="px-5 py-4">
-                            <form asp-action="ToggleServiceStatus" method="post">
-                                <input type="hidden" name="id" value="@child.Id" />
-
-                                <button type="submit"
-                                        class="relative inline-flex h-7 w-14 items-center rounded-full transition
-                                        @(child.IsActive ? "bg-green-500" : "bg-gray-300")">
-
-                                    <span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition
-                                        @(child.IsActive ? "translate-x-8" : "translate-x-1")">
-                                    </span>
-                                </button>
-                            </form>
-                        </td>
-
-                        <td class="px-5 py-4">
-                            <form asp-action="ToggleServiceFacets" method="post">
-                                <input type="hidden" name="id" value="@child.Id" />
-
-                                <button type="submit"
-                                        class="relative inline-flex h-7 w-14 items-center rounded-full transition
-                                        @(child.IsNeedFacets ? "bg-blue-600" : "bg-gray-300")">
-
-                                    <span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition
-                                        @(child.IsNeedFacets ? "translate-x-8" : "translate-x-1")">
-                                    </span>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-</div>
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+</style>
