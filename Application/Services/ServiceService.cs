@@ -21,13 +21,7 @@ public class ServiceService : IServiceService
       return services.Select(s => new ServiceDto(s)).ToList();
    }
 
-    public async Task<List<ServiceDto>> GetAllServicesAsync()
-    {
-        var services = await _repository.GetAllServicesAsync();
-        return services.Select(s => new ServiceDto(s)).ToList();
-    }
-
-    public async Task<ServiceDto> GetServiceByIdAsync(Guid id)
+   public async Task<ServiceDto> GetServiceByIdAsync(Guid id)
    {
       var service = await _repository.GetServiceByIdAsync(id);
       var dto = new ServiceDto(service);
@@ -54,12 +48,6 @@ public class ServiceService : IServiceService
       await _repository.CreateServiceAsync(newService);
       await _repository.SaveChangeAsync();
 
-      return new ServiceDto
-      {
-         Name = serviceDto.Name,
-         Letter = serviceDto.Letter,
-         Description = serviceDto.Description,
-         IconName = serviceDto.IconName
-      };
+      return new ServiceDto(newService);
    }
 }

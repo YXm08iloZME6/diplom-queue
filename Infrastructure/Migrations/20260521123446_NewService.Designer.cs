@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    [Migration("20260514211256_AddNeedFacets")]
-    partial class AddNeedFacets
+    [Migration("20260521123446_NewService")]
+    partial class NewService
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,18 +74,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("icon_name");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_active");
-
-                    b.Property<bool>("IsNeedFacets")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_need_facets");
-
                     b.Property<string>("Letter")
                         .HasMaxLength(1)
                         .HasColumnType("character varying(1)")
@@ -96,6 +84,12 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
+
+                    b.Property<bool>("NeedMoreInfo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("need_more_info");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid")
@@ -115,8 +109,6 @@ namespace Infrastructure.Migrations
                             Id = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"),
                             Description = "Запись на первичный прием, заведение медицинских карт и предоставление справочной информации о работе клиники.",
                             IconName = "Book",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Letter = "A",
                             Name = "Регистратура"
                         },
@@ -125,8 +117,6 @@ namespace Infrastructure.Migrations
                             Id = new Guid("99c48a22-122d-4821-afea-2b2b345e592c"),
                             Description = "Оформление и оплата медицинских услуг, не входящих в программу ОМС.",
                             IconName = "Ruble",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Letter = "B",
                             Name = "Платные услуги"
                         },
@@ -135,18 +125,23 @@ namespace Infrastructure.Migrations
                             Id = new Guid("7370aa38-cbb9-4220-915d-ce042194f24e"),
                             Description = "Лабораторная диагностика от общих анализов крови до генетических исследований.",
                             IconName = "Lab",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Letter = "C",
                             Name = "Анализы"
+                        },
+                        new
+                        {
+                            Id = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
+                            Description = "Мне просто спросить",
+                            IconName = "Lab",
+                            Letter = "D",
+                            Name = "Просто спросить",
+                            NeedMoreInfo = true
                         },
                         new
                         {
                             Id = new Guid("9d78a673-efa3-4af3-9828-55515d26e134"),
                             Description = "Выбор специалиста и бронирование подходящего времени визита.",
                             IconName = "Clock",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Name = "Запись на прием к врачу",
                             ParentId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc")
                         },
@@ -155,8 +150,6 @@ namespace Infrastructure.Migrations
                             Id = new Guid("d320728d-0a5e-490c-be3c-04bcf3a7a4c8"),
                             Description = "Официальное подтверждение временной нетрудоспособности.",
                             IconName = "CheckBook",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Name = "Оформление больничного",
                             ParentId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc")
                         });

@@ -7,9 +7,9 @@ public class Service
     public string? Description { get; set; }
     public string? Letter { get; set; }
     public string? IconName { get; set; }
-
     public bool IsActive { get; set; } = true;
     public bool IsNeedFacets { get; set; } = true;
+    public bool NeedMoreInfo { get; set; } = false;
 
     public Guid? ParentId { get; set; }
     public Service? Parent { get; set; }

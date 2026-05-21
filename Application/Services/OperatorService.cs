@@ -61,7 +61,7 @@ public class OperatorService: IOperatorService
         }
 
         ticket.WindowId = window.Id;
-        ticket.CalledAt = DateTime.Now;
+        ticket.CalledAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Called;
 
         await SaveAndReturnDto(ticket);
@@ -74,7 +74,7 @@ public class OperatorService: IOperatorService
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
-        currentTicket.CalledAt = DateTime.Now;
+        currentTicket.CalledAt = DateTime.UtcNow;
 
         await SaveAndReturnDto(currentTicket);
 
@@ -87,7 +87,7 @@ public class OperatorService: IOperatorService
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
         currentTicket.Status = TicketStatus.Cancelled;
-        currentTicket.CompletedAt = DateTime.Now;
+        currentTicket.CompletedAt = DateTime.UtcNow;
 
         await SaveAndReturnDto(currentTicket);
 
@@ -100,7 +100,7 @@ public class OperatorService: IOperatorService
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
         currentTicket.Status = TicketStatus.Completed;
-        currentTicket.CompletedAt = DateTime.Now;
+        currentTicket.CompletedAt = DateTime.UtcNow;
         
         await SaveAndReturnDto(currentTicket);
 
@@ -139,7 +139,6 @@ public class OperatorService: IOperatorService
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
         currentTicket.Status = TicketStatus.Processing;
-        currentTicket.StartedAt = DateTime.Now;
         
         await SaveAndReturnDto(currentTicket);
 
@@ -165,5 +164,29 @@ public class OperatorService: IOperatorService
     {
         await _operatorRepository.UpdateTicketAsync(ticket);
         await _operatorRepository.SaveChangesAsync();
+    }
+    
+    public async Task<WindowDto> StartShiftAsync(Guid userId)
+    {
+        var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
+        if (window == null) throw new Exception("Окно не найдено");
+
+        window.Status = WindowStatus.Open;
+        await _operatorRepository.UpdateWindowAsync(window);
+        await _operatorRepository.SaveChangesAsync();
+
+        return new WindowDto(window);
+    }
+
+    public async Task<WindowDto> EndShiftAsync(Guid userId)
+    {
+        var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
+        if (window == null) throw new Exception("Окно не найдено");
+
+        window.Status = WindowStatus.Offline;
+        await _operatorRepository.UpdateWindowAsync(window);
+        await _operatorRepository.SaveChangesAsync();
+
+        return new WindowDto(window);
     }
 }

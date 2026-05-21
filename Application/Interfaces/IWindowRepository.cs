@@ -1,6 +1,7 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
+using Domain.Entities;
 
-namespace Application.Interfaces.Repositories;
+namespace Application.Interfaces;
 
 public interface IWindowRepository
 {
@@ -8,4 +9,5 @@ public interface IWindowRepository
     Task<Window> GetWindowTitleByIdAsync(Guid windowId);
     Task CreateWindowAsync(Window window);
     Task SaveChangeAsync();
+    Task UpdateWindowAsync(Window window);//добавил дэнчик
 }

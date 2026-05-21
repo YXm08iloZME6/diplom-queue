@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -32,5 +32,11 @@ public class WindowRepository : IWindowRepository
     public Task SaveChangeAsync()
     {
         return _context.SaveChangesAsync();
+    }
+    
+    public Task UpdateWindowAsync(Window window) //дэнчик
+    {
+        _context.Windows.Update(window);
+        return Task.CompletedTask;
     }
 }
