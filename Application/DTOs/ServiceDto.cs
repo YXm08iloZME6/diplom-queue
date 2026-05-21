@@ -9,8 +9,6 @@ public class ServiceDto
     public string? Letter { get; set; }
     public string? Description { get; set; }
     public string? IconName { get; set; }
-<<<<<<< HEAD
-
     public bool IsActive { get; set; }
     public bool IsNeedFacets { get; set; }
 
@@ -36,18 +34,6 @@ public class ServiceDto
         Children = service.Children?
             .Select(x => new ServiceDto(x))
             .ToList() ?? new List<ServiceDto>();
-=======
-    public bool NeedMoreInfo { get; set; }
-    public ServiceDto(Service service)
-    {
-       Id = service.Id;
-       Name = service.Name;
-       Letter = service.Letter;
-       Children = service.Children.Select(x => new ServiceDto(x)).ToList();
-       Description = service.Description;
-       IconName = service.IconName;
-       NeedMoreInfo = service.NeedMoreInfo;
->>>>>>> origin/main
     }
 }
 

@@ -1,10 +1,8 @@
 @model Application.DTOs.TicketDto
-
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-
-    Dictionary<string, string> status = new Dictionary<string, string> { { "Waiting", "Ожидание" }, {"Processing", "Обслуживается"}, {"Completed", "Завершён"}, {"Cancelled", "Отменён"} };
+    Dictionary<string, string> status = new Dictionary<string, string> { { "Waiting", "Ожидание" }, { "Processing", "Обслуживается" }, { "Completed", "Завершён" }, { "Cancelled", "Отменён" } };
 }
 <div class="flex flex-col items-center gap-8">
     <div class="flex h-fit flex-col items-center gap-8 w-full max-w-xl bg-white rounded-3xl p-12 shadow-lg text-center">
@@ -18,27 +16,13 @@
         </div>
         <div class="flex justify-between w-full text-lg text-muted-foreground">
             <span>Статус: <span class="font-semibold text-foreground">@status[@Model.Status]</span></span>
-            <span>@Model.CreatedAt.ToString("HH:mm")</span>
+            @* <span>@Model.CreatedAt.ToString("HH:mm")</span> *@
         </div>
     </div>
     <div>
-<<<<<<< HEAD
-        <h1 class="text-3xl font-extrabold tracking-tight mb-1">Ваш талон</h1>
-        <p class="text-muted-foreground text-lg">Запомните номер и ожидайте вызова</p>
-    </div>
-    <div class="flex flex-col items-center gap-2 bg-accent rounded-2xl w-full py-10">
-        <span class="text-muted-foreground text-xl font-medium">Номер талона</span>
-        <span class="text-7xl font-extrabold tracking-tight">@Model.Number</span>
-    </div>
-    <div class="flex justify-between w-full text-lg text-muted-foreground">
-        <span>Статус: <span class="font-semibold text-foreground">@status[@Model.Status]</span></span>
-        @* <span>@Model.CreatedAt.ToString("HH:mm")</span> *@
-=======
         <a class="text-gray-500" asp-area="" asp-controller="Home" asp-action="Index">Вернуться на главную</a>
->>>>>>> origin/main
     </div>
 </div>
-
 <script>
     setTimeout(() => {
         window.location.replace("https://localhost:7233/")
