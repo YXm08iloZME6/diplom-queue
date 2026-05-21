@@ -1,9 +1,8 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Services;
 using Infrastructure.Data;
-using Infrastructure.Hubs;
-using Infrastructure.Notifications;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +21,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.LogoutPath = new PathString("/Account/Logout");
 });
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ITicketService, TicketService>();
@@ -40,13 +37,10 @@ builder.Services.AddScoped<IDisplayRepository, DisplayRepository>();
 builder.Services.AddScoped<IDisplayService, DisplayService>();
 builder.Services.AddScoped<IWindowRepository, WindowRepository>();
 builder.Services.AddScoped<IWindowService, WindowService>();
-builder.Services.AddScoped<IQueueNotifier, QueueNotifier>();
 builder.Services.AddSignalR();
 
 
 var app = builder.Build();
-
-app.MapHub<QueueHub>("/hubs/queue");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

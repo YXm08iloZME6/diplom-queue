@@ -1,36 +1,30 @@
-﻿<div class="mx-auto my-[60px] max-w-[1000px] px-5 font-sans">
-    <h1 class="text-center text-[28px] font-semibold mb-10 text-slate-800">Панель администратора</h1>
+﻿<div class="admin-container">
+    <h1 class="admin-title">Панель администратора</h1>
 
-    <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-5">
-        <a asp-controller="Admin" asp-action="UserList"
-           class="group block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)]">
-            <div class="text-[32px] mb-[15px]">👥</div>
-            <div class="text-xl font-semibold mb-1.5 transition-colors duration-250 group-hover:text-[#0a58ca]">Сотрудники</div>
-            <div class="text-[13px] text-[#666]">Управление пользователями</div>
+    <div class="admin-grid">
+
+        <a asp-controller="Admin" asp-action="UserList" class="admin-card">
+            <div class="icon">👥</div>
+            <div class="card-title">Сотрудники</div>
+            <div class="card-desc">Управление пользователями</div>
         </a>
 
-        <a asp-controller="Admin" asp-action="ServiceList"
-           class="group block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)]">
-            <div class="text-[32px] mb-[15px]">🛠</div>
-            <div class="text-xl font-semibold mb-1.5 transition-colors duration-250 group-hover:text-[#0a58ca]">Услуги</div>
-            <div class="text-[13px] text-[#666]">Настройка услуг</div>
+        <a asp-controller="Admin" asp-action="ServiceList" class="admin-card">
+            <div class="icon">🛠</div>
+            <div class="card-title">Услуги</div>
+            <div class="card-desc">Настройка услуг</div>
         </a>
 
-        <form asp-controller="Admin" asp-action="QueueReset" method="post" class="inline-block w-full">
-            @Html.AntiForgeryToken()
-            <button type="submit"
-                    class="group w-full block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)] cursor-pointer">
-                <div class="text-[32px] mb-[15px]">🔄</div>
-                <div class="text-xl font-semibold mb-1.5 transition-colors duration-250 group-hover:text-[#0a58ca]">Сброс очереди</div>
-                <div class="text-[13px] text-[#666]">Очистка текущей очереди</div>
-            </button>
-        </form>
+        <a asp-controller="Admin" asp-action="QueueReset" class="admin-card">
+            <div class="icon">🔄</div>
+            <div class="card-title">Сброс очереди</div>
+            <div class="card-desc">Очистка текущей очереди</div>
+        </a>
 
-        <a asp-controller="Admin" asp-action="Statistics"
-           class="group block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)]">
-            <div class="text-[32px] mb-[15px]">📊</div>
-            <div class="text-xl font-semibold mb-1.5 transition-colors duration-250 group-hover:text-[#0a58ca]">Статистика</div>
-            <div class="text-[13px] text-[#666]">Аналитика и отчёты</div>
+        <a asp-controller="Admin" asp-action="Statistics" class="admin-card">
+            <div class="icon">📊</div>
+            <div class="card-title">Статистика</div>
+            <div class="card-desc">Аналитика и отчёты</div>
         </a>
 
     </div>
