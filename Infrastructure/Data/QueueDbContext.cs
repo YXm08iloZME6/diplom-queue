@@ -33,6 +33,8 @@ public class QueueDbContext : DbContext
         service.Property(s => s.Name).IsRequired().HasMaxLength(50);
         service.Property(s => s.Description).IsRequired().HasMaxLength(200);
         service.Property(s => s.Letter).HasMaxLength(1);
+        service.Property(s => s.IsActive).IsRequired().HasDefaultValue(true);
+        service.Property(s => s.IsNeedFacets).IsRequired().HasDefaultValue(true);
         service.Property(s => s.NeedMoreInfo).IsRequired().HasDefaultValue(false);
         service.HasOne(s => s.Parent).WithMany(s => s.Children).HasForeignKey(s => s.ParentId).IsRequired(false);
 
