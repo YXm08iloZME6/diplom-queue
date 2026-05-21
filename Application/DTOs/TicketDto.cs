@@ -11,7 +11,7 @@ public class TicketDto
 
     public string Status { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
     public DateTime? CalledAt { get; set; }
     public DateTime? StartedAt { get; set; }
@@ -25,8 +25,8 @@ public class TicketDto
     public TicketDto(Ticket ticket)
     {
        Id = ticket.Id;
-        CreatedAt = (DateTime)ticket.CreatedAt;
-        CompletedAt = (DateTime)ticket.CompletedAt;
+        CreatedAt = ticket.CreatedAt;
+        CompletedAt = ticket.CompletedAt;
        Status = ticket.Status.ToString();
         Number = ticket.Number;
     }

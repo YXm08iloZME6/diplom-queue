@@ -10,10 +10,12 @@ namespace Application.Services;
 public class TicketService : ITicketService
 {
     private readonly ITicketRepository _repository; 
+    private readonly IQueueNotifier _notifier;
     
-    public TicketService(ITicketRepository repository)
+    public TicketService(ITicketRepository repository, IQueueNotifier notifier)
     {
         _repository = repository;
+        _notifier = notifier;
     }
 
     public async Task<TicketDto> CreateAsync(Guid serviceId, string info, string letter)
@@ -30,7 +32,11 @@ public class TicketService : ITicketService
 
         await _repository.AddAsync(ticket);
 
-        return new TicketDto(ticket);
+        var dto = new TicketDto(ticket);
+
+        await _notifier.NotifyNewTicketAsync(dto);
+
+        return dto;
     }
 
     public async Task<TicketDto?> GetByIdAsync(Guid id)

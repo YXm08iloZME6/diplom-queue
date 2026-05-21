@@ -143,3 +143,17 @@
     </footer>
 
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/hubs/queue")
+        .withAutomaticReconnect()
+        .build();
+
+    connection.on("NewTicket", () => {
+        window.location.reload();
+    });
+
+    connection.start().catch(err => console.error(err));
+</script>
