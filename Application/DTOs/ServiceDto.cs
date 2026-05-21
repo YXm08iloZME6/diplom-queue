@@ -9,6 +9,7 @@ public class ServiceDto
     public string? Letter { get; set; }
     public string? Description { get; set; }
     public string? IconName { get; set; }
+
     public bool IsActive { get; set; }
     public bool IsNeedFacets { get; set; }
     public bool NeedMoreInfo { get; set; }
@@ -46,7 +47,3 @@ public class CreateServiceDto
     public string? Description { get; set; }
     public string? IconName { get; set; }
 }
-
-
-
-
