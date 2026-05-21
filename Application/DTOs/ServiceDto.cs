@@ -10,7 +10,7 @@ public class ServiceDto
     public List<ServiceDto> Children { get; set; }
     public string? Description { get; set; }
     public string? IconName { get; set; }
-    public ServiceDto() { }
+    public bool NeedMoreInfo { get; set; }
     public ServiceDto(Service service)
     {
        Id = service.Id;
@@ -19,6 +19,7 @@ public class ServiceDto
        Children = service.Children.Select(x => new ServiceDto(x)).ToList();
        Description = service.Description;
        IconName = service.IconName;
+       NeedMoreInfo = service.NeedMoreInfo;
     }
 }
 

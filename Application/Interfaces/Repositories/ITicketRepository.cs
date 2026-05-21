@@ -10,5 +10,5 @@ public interface ITicketRepository
     Task AddAsync(Ticket ticket);
     Task UpdateAsync(Ticket ticket);
     Task DeleteAsync(Ticket ticket);
-    Task<int> GetTicketCountAsync(string letter);
+    Task<int> GetTicketCountAsync(string? letter);
 }

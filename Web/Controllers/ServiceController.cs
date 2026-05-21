@@ -30,11 +30,18 @@ public class ServiceController : Controller
             return View("ChildServices", service);
         }
 
-        return View("Form", service);
+        if (service.NeedMoreInfo)
+        {
+            return View("Form", service);
+        }
+
+        var ticket = await _ticketService.CreateAsync(service.Id, null, service.Letter);
+        
+        return View("Ticket", ticket);
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetTicket(Guid serviceId, string letter, string phoneNumber, string fullName )
+    public async Task<IActionResult> GetTicket(Guid serviceId, string letter, string? phoneNumber, string? fullName )
     {
         var facets = System.Text.Json.JsonSerializer.Serialize(new {phoneNumber, fullName});
         var ticket = await _ticketService.CreateAsync(serviceId, facets, letter);

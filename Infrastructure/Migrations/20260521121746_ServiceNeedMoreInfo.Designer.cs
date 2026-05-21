@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260521121746_ServiceNeedMoreInfo")]
+    partial class ServiceNeedMoreInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,15 +127,6 @@ namespace Infrastructure.Migrations
                             IconName = "Lab",
                             Letter = "C",
                             Name = "Анализы"
-                        },
-                        new
-                        {
-                            Id = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                            Description = "Мне просто спросить",
-                            IconName = "Lab",
-                            Letter = "D",
-                            Name = "Просто спросить",
-                            NeedMoreInfo = true
                         },
                         new
                         {
