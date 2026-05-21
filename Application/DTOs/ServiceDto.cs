@@ -11,6 +11,7 @@ public class ServiceDto
     public string? IconName { get; set; }
     public bool IsActive { get; set; }
     public bool IsNeedFacets { get; set; }
+    public bool NeedMoreInfo { get; set; }
 
     public Guid? ParentId { get; set; }
 
@@ -28,6 +29,7 @@ public class ServiceDto
 
         IsActive = service.IsActive;
         IsNeedFacets = service.IsNeedFacets;
+        NeedMoreInfo = service.NeedMoreInfo;
 
         ParentId = service.ParentId;
 

@@ -1,7 +1,9 @@
 @model Application.DTOs.TicketDto
+
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+
     Dictionary<string, string> status = new Dictionary<string, string> { { "Waiting", "Ожидание" }, { "Processing", "Обслуживается" }, { "Completed", "Завершён" }, { "Cancelled", "Отменён" } };
 }
 <div class="flex flex-col items-center gap-8">
@@ -16,13 +18,14 @@
         </div>
         <div class="flex justify-between w-full text-lg text-muted-foreground">
             <span>Статус: <span class="font-semibold text-foreground">@status[@Model.Status]</span></span>
-            @* <span>@Model.CreatedAt.ToString("HH:mm")</span> *@
+            <span>@Model.CreatedAt</span>
         </div>
     </div>
     <div>
         <a class="text-gray-500" asp-area="" asp-controller="Home" asp-action="Index">Вернуться на главную</a>
     </div>
 </div>
+
 <script>
     setTimeout(() => {
         window.location.replace("https://localhost:7233/")
