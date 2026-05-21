@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Queue.Applications.Services
 {
@@ -10,13 +11,15 @@ namespace Queue.Applications.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IServiceRepository _serviceRepository;
+        private readonly ITicketRepository _ticketRepository;
 
-        public AdminService(
-            IUserRepository userRepository,
-            IRoleRepository roleRepository)
+        public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, IServiceRepository serviceRepository, ITicketRepository ticketRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _serviceRepository = serviceRepository;
+            _ticketRepository = ticketRepository;
         }
 
         public async Task<UserDto> GetUserById(Guid id)
@@ -147,6 +150,54 @@ namespace Queue.Applications.Services
             await _userRepository.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task ToggleServiceStatus(Guid serviceId)
+        {
+            var service = await _serviceRepository.GetServiceByIdAsync(serviceId);
+
+            if (service == null)
+            {
+                throw new InvalidOperationException("Такой услуги не существует");
+            }
+
+            service.IsActive = !service.IsActive;
+
+            await _serviceRepository.SaveChangeAsync();
+        }
+
+        public async Task ToggleServiceFacets(Guid serviceId)
+        {
+            var service = await _serviceRepository.GetServiceByIdAsync(serviceId);
+
+            if (service == null)
+            {
+                throw new InvalidOperationException("Такой услуги не существует");
+            }
+
+            service.IsNeedFacets = !service.IsNeedFacets;
+            await _serviceRepository.SaveChangeAsync();
+        }
+
+        public async Task QueueResetAsync()
+        {
+            var tickets = await _ticketRepository.GetAllActiveAsync();
+            foreach (var ticket in tickets)
+            {
+                ticket.Status = TicketStatus.Cancelled;
+                await _ticketRepository.UpdateAsync(ticket);
+            }
+
+            await _ticketRepository.SaveChangesAsync();
+        }
+
+        public async Task<List<TicketDto>> TicketStats(DateTime start, DateTime end)
+        {
+            var tickets = await _ticketRepository.GetByDateRangeAsync(start, end);
+
+            if (tickets == null) { return new List<TicketDto>(); }
+
+            return tickets.Select(t => new TicketDto(t)).ToList();
         }
 
         private UserDto MapToUserDto(User user)

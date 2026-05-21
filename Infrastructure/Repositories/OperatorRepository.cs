@@ -40,6 +40,7 @@ public class OperatorRepository : IOperatorRepository
     public async Task<Window?> GetWindowByUserIdAsync(Guid userId)
     {
         return await _context.Windows
+            .Include(w => w.Service)
             .Include(w => w.Operators)
             .FirstOrDefaultAsync(w => w.Operators.Any(o => o.Id == userId));
     }

@@ -1,7 +1,7 @@
 ﻿using Application.DTOs;
 using Domain.Enums;
 
-namespace Application.Interfaces;
+namespace Application.Interfaces.Services;
 
 public interface IWindowService
 {

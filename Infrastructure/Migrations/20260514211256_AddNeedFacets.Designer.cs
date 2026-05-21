@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260514211256_AddNeedFacets")]
+    partial class AddNeedFacets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,12 +97,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
 
-                    b.Property<bool>("NeedMoreInfo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("need_more_info");
-
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid")
                         .HasColumnName("parent_id");
@@ -146,15 +142,6 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                            Description = "Мне просто спросить",
-                            IconName = "Lab",
-                            Letter = "D",
-                            Name = "Просто спросить",
-                            NeedMoreInfo = true
-                        },
-                        new
-                        {
                             Id = new Guid("9d78a673-efa3-4af3-9828-55515d26e134"),
                             Description = "Выбор специалиста и бронирование подходящего времени визита.",
                             IconName = "Clock",
@@ -184,7 +171,7 @@ namespace Infrastructure.Migrations
                         .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<DateTime?>("CalledAt")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("called_at");
 
                     b.Property<Guid?>("ClientId")
@@ -192,11 +179,11 @@ namespace Infrastructure.Migrations
                         .HasColumnName("client_id");
 
                     b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("completed_at");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
                     b.Property<TimeSpan?>("EstimationTime")
@@ -221,7 +208,7 @@ namespace Infrastructure.Migrations
                         .HasColumnName("service_id");
 
                     b.Property<DateTime?>("StartedAt")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("started_at");
 
                     b.Property<string>("Status")
