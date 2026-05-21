@@ -10,5 +10,6 @@ public interface IOperatorRepository
     Task UpdateTicketAsync(Ticket ticket);
     Task<Window?> GetWindowByUserIdAsync(Guid userId);
     Task SaveChangesAsync();
+    Task UpdateWindowAsync(Window window);//добавил дэнчик
 
 }

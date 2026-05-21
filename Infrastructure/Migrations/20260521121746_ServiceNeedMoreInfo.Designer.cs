@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260521121746_ServiceNeedMoreInfo")]
+    partial class ServiceNeedMoreInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,18 +74,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("icon_name");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_active");
-
-                    b.Property<bool>("IsNeedFacets")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_need_facets");
-
                     b.Property<string>("Letter")
                         .HasMaxLength(1)
                         .HasColumnType("character varying(1)")
@@ -119,8 +109,6 @@ namespace Infrastructure.Migrations
                             Id = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"),
                             Description = "Запись на первичный прием, заведение медицинских карт и предоставление справочной информации о работе клиники.",
                             IconName = "Book",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Letter = "A",
                             Name = "Регистратура"
                         },
@@ -129,8 +117,6 @@ namespace Infrastructure.Migrations
                             Id = new Guid("99c48a22-122d-4821-afea-2b2b345e592c"),
                             Description = "Оформление и оплата медицинских услуг, не входящих в программу ОМС.",
                             IconName = "Ruble",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Letter = "B",
                             Name = "Платные услуги"
                         },
@@ -139,27 +125,14 @@ namespace Infrastructure.Migrations
                             Id = new Guid("7370aa38-cbb9-4220-915d-ce042194f24e"),
                             Description = "Лабораторная диагностика от общих анализов крови до генетических исследований.",
                             IconName = "Lab",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Letter = "C",
                             Name = "Анализы"
-                        },
-                        new
-                        {
-                            Id = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                            Description = "Мне просто спросить",
-                            IconName = "Lab",
-                            Letter = "D",
-                            Name = "Просто спросить",
-                            NeedMoreInfo = true
                         },
                         new
                         {
                             Id = new Guid("9d78a673-efa3-4af3-9828-55515d26e134"),
                             Description = "Выбор специалиста и бронирование подходящего времени визита.",
                             IconName = "Clock",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Name = "Запись на прием к врачу",
                             ParentId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc")
                         },
@@ -168,8 +141,6 @@ namespace Infrastructure.Migrations
                             Id = new Guid("d320728d-0a5e-490c-be3c-04bcf3a7a4c8"),
                             Description = "Официальное подтверждение временной нетрудоспособности.",
                             IconName = "CheckBook",
-                            IsActive = true,
-                            IsNeedFacets = true,
                             Name = "Оформление больничного",
                             ParentId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc")
                         });
@@ -184,7 +155,7 @@ namespace Infrastructure.Migrations
                         .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<DateTime?>("CalledAt")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("called_at");
 
                     b.Property<Guid?>("ClientId")
@@ -192,11 +163,11 @@ namespace Infrastructure.Migrations
                         .HasColumnName("client_id");
 
                     b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("completed_at");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
                     b.Property<TimeSpan?>("EstimationTime")
@@ -221,7 +192,7 @@ namespace Infrastructure.Migrations
                         .HasColumnName("service_id");
 
                     b.Property<DateTime?>("StartedAt")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("started_at");
 
                     b.Property<string>("Status")

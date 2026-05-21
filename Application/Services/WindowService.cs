@@ -2,6 +2,7 @@
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Services
 {
@@ -63,6 +64,26 @@ namespace Application.Services
                 Id = window.Id,
                 Title = window.Title,
                 Status = window.Status
+            };
+        }
+        
+        public async Task<WindowDto> UpdateWindowStatusAsync(Guid windowId, WindowStatus status)
+        {
+            var window = await _windowRepository.GetWindowTitleByIdAsync(windowId);
+
+            if (window == null)
+                throw new InvalidOperationException("Окно не найдено");
+
+            window.Status = status;
+            await _windowRepository.UpdateWindowAsync(window);
+            await _windowRepository.SaveChangeAsync();
+
+            return new WindowDto
+            {
+                Id = window.Id,
+                Title = window.Title,
+                Status = window.Status,
+                ServiceId = window.ServiceId
             };
         }
     }

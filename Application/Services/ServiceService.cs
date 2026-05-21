@@ -54,12 +54,6 @@ public class ServiceService : IServiceService
       await _repository.CreateServiceAsync(newService);
       await _repository.SaveChangeAsync();
 
-      return new ServiceDto
-      {
-         Name = serviceDto.Name,
-         Letter = serviceDto.Letter,
-         Description = serviceDto.Description,
-         IconName = serviceDto.IconName
-      };
+      return new ServiceDto(newService);
    }
 }

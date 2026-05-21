@@ -46,9 +46,13 @@ public class TicketRepository : ITicketRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<int> GetTicketCountAsync(string letter)
+    public async Task<int> GetTicketCountAsync(string? letter)
     {
-        return await _dbContext.Set<Ticket>().Where(t => t.Number.StartsWith(letter)).CountAsync();
+        if (letter == null)
+        {
+            return await _dbContext.Tickets!.Where(t => t.Status == TicketStatus.Waiting).CountAsync();
+        }
+        return await _dbContext.Tickets!.Where(t => t.Number.StartsWith(letter)).Where(t => t.Status == TicketStatus.Waiting).CountAsync();
     }
 
     public async Task<List<Ticket>> GetAllActiveAsync()
