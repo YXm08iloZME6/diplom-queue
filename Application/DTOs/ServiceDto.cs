@@ -12,18 +12,27 @@ public class ServiceDto
     public string? IconName { get; set; }
     public bool IsActive { get; set; }
     public bool IsNeedFacets { get; set; }
-    public bool NeedMoreInfo { get; set; }
+    public Guid? ParentId { get; set; }
+    //public bool NeedMoreInfo { get; set; }
+    public ServiceDto () { }
     public ServiceDto(Service service)
     {
         Id = service.Id;
         Name = service.Name;
         Letter = service.Letter;
-        Children = service.Children.Select(x => new ServiceDto(x)).ToList();
         Description = service.Description;
         IconName = service.IconName;
+
         IsActive = service.IsActive;
         IsNeedFacets = service.IsNeedFacets;
-        NeedMoreInfo = service.NeedMoreInfo;
+
+        //NeedMoreInfo = service.NeedMoreInfo;
+        ParentId = service.ParentId;
+
+        Children = service.Children?
+            .Select(x => new ServiceDto(x))
+            .ToList() ?? new List<ServiceDto>();
+
     }
 }
 

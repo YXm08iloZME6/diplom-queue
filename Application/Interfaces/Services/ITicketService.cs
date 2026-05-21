@@ -4,7 +4,7 @@ namespace Application.Interfaces.Services;
 
 public interface ITicketService
 {
-    Task<TicketDto> CreateAsync(Guid serviceId, string? info, string? letter);
+    Task<TicketDto> CreateAsync(Guid serviceId, string info, string letter);
     Task<TicketDto?> GetByIdAsync(Guid id);
     Task<List<TicketDto>> GetAllAsync();
     Task<TicketDto> UpdateAsync(Guid id, UpdateTicketDto dto);
