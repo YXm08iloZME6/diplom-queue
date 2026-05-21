@@ -4,7 +4,7 @@
     ViewBag.Title = "title";
     Layout = "_Layout";
 
-    Dictionary<string, string> status = new Dictionary<string, string> { { "Waiting", "Ожидание" }, {"Processing", "Обслуживается"}, {"Completed", "Завершён"}, {"Cancelled", "Отменён"} };
+    Dictionary<string, string> status = new Dictionary<string, string> { { "Waiting", "Ожидание" }, { "Processing", "Обслуживается" }, { "Completed", "Завершён" }, { "Cancelled", "Отменён" } };
 }
 
 <div class="flex h-fit flex-col items-center gap-8 w-full max-w-xl bg-white rounded-3xl p-12 shadow-lg text-center">
@@ -18,6 +18,7 @@
     </div>
     <div class="flex justify-between w-full text-lg text-muted-foreground">
         <span>Статус: <span class="font-semibold text-foreground">@status[@Model.Status]</span></span>
+        <span>@Model.CreatedAt.ToString("HH:mm")</span>
         @* <span>@Model.CreatedAt.ToString("HH:mm")</span> *@
     </div>
 </div>
