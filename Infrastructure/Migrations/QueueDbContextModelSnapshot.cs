@@ -72,6 +72,18 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("icon_name");
 
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsNeedFacets")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_need_facets");
+
                     b.Property<string>("Letter")
                         .HasMaxLength(1)
                         .HasColumnType("character varying(1)")
@@ -82,12 +94,6 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
-
-                    b.Property<bool>("NeedMoreInfo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("need_more_info");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid")
@@ -132,8 +138,7 @@ namespace Infrastructure.Migrations
                             Description = "Мне просто спросить",
                             IconName = "Lab",
                             Letter = "D",
-                            Name = "Просто спросить",
-                            NeedMoreInfo = true
+                            Name = "Просто спросить"
                         },
                         new
                         {
@@ -272,6 +277,22 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_users_window_id");
 
                     b.ToTable("users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Email = "admin@admin",
+                            PasswordHash = "$2a$11$GdhMx4Nz7sBW5fTGbctoje.5.3rMnxvKFzhs4SXZzgmzEO.wHq0ey",
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Email = "operator@operator",
+                            PasswordHash = "$2a$11$UqtE4ONQtrfShZcWj8ZINu0RI1QmvyDGuMgrjkJku68lH7GcReyAq",
+                            Status = 0
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
@@ -291,6 +312,23 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_user_roles_role_id");
 
                     b.ToTable("user_roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            RoleId = new Guid("22222222-2222-2222-2222-222222222222")
+                        },
+                        new
+                        {
+                            UserId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            RoleId = new Guid("11111111-1111-1111-1111-111111111111")
+                        },
+                        new
+                        {
+                            UserId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            RoleId = new Guid("11111111-1111-1111-1111-111111111111")
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Window", b =>

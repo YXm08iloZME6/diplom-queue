@@ -9,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using Queue.Applications.Services;
 using Queue.Infrastructure.Repositories;
 using System.Text;
-using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

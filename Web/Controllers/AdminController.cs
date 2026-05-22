@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
-using Application.Interfaces;
 using Application.Interfaces.Services;
+using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
@@ -26,9 +26,9 @@ namespace Queue.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ServiceListAsync()
+        public async Task<IActionResult> ServiceList()
         {
-            var services = await _serviceService.GetMainServicesAsync();
+            var services = await _serviceService.GetAllServicesAsync();
             return View(services);
         }
 
@@ -62,6 +62,20 @@ namespace Queue.Controllers
 
             await _serviceService.AddServiceAsync(service);
             return View(service);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleServiceStatus(Guid id)
+        {
+            await _adminService.ToggleServiceStatus(id);
+            return RedirectToAction(nameof(ServiceList));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleServiceFacets(Guid id)
+        {
+            await _adminService.ToggleServiceFacets(id);
+            return RedirectToAction(nameof(ServiceList));
         }
 
         public async Task<IActionResult> UserList()
@@ -206,6 +220,33 @@ namespace Queue.Controllers
 
             await _windowService.CreateWindowAsync(model.Window);
             return RedirectToAction(nameof(WindowsList));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> QueueReset()
+        {
+            await _adminService.QueueResetAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Statistics()
+        {
+            return View(new StatisticsViewModel
+            {
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Statistics(StatisticsViewModel model)
+        {
+            
+            model.Tickets = await _adminService.TicketStats(model.StartDate, model.EndDate);
+
+            return View(model);
         }
     }
 }

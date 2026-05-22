@@ -9,28 +9,34 @@ namespace Application.Services;
 
 public class TicketService : ITicketService
 {
-    private readonly ITicketRepository _repository; 
-    
-    public TicketService(ITicketRepository repository)
+    private readonly ITicketRepository _repository;
+    private readonly IQueueNotifier _notifier;
+
+    public TicketService(ITicketRepository repository, IQueueNotifier notifier)
     {
         _repository = repository;
+        _notifier = notifier;
     }
 
-    public async Task<TicketDto> CreateAsync(Guid serviceId, string? info, string? letter)
+    public async Task<TicketDto> CreateAsync(Guid serviceId, string info, string letter)
     {
         var count = await _repository.GetTicketCountAsync(letter);
 
         var ticket = new Ticket
         {
             ServiceId = serviceId,
-            CreatedAt = DateTime.UtcNow,
+            CreatedAt = DateTime.Now,
             Number = $"{letter}-{(count + 1):D3}",
             Facets = info
         };
 
         await _repository.AddAsync(ticket);
 
-        return new TicketDto(ticket);
+        var dto = new TicketDto(ticket);
+
+        await _notifier.NotifyNewTicketAsync(dto);
+
+        return dto;
     }
 
     public async Task<TicketDto?> GetByIdAsync(Guid id)
@@ -50,7 +56,7 @@ public class TicketService : ITicketService
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
-        
+
         if (dto.ServiceId.HasValue) ticket.ServiceId = dto.ServiceId;
         if (dto.WindowId.HasValue) ticket.WindowId = dto.WindowId;
         if (dto.Number != null) ticket.Number = dto.Number;
@@ -76,9 +82,9 @@ public class TicketService : ITicketService
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
-        
+
         ticket.WindowId = windowId;
-        ticket.CalledAt = DateTime.UtcNow;
+        ticket.CalledAt = DateTime.Now;
         ticket.Status = TicketStatus.Called;
 
         await _repository.UpdateAsync(ticket);
@@ -91,7 +97,7 @@ public class TicketService : ITicketService
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
 
-        ticket.CalledAt = DateTime.UtcNow;
+        ticket.CalledAt = DateTime.Now;
 
         await _repository.UpdateAsync(ticket);
         return new TicketDto(ticket);
@@ -102,8 +108,8 @@ public class TicketService : ITicketService
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
-        
-        ticket.StartedAt = DateTime.UtcNow;
+
+        ticket.StartedAt = DateTime.Now;
         ticket.Status = TicketStatus.Processing;
 
         await _repository.UpdateAsync(ticket);
@@ -115,8 +121,8 @@ public class TicketService : ITicketService
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
-        
-        ticket.CompletedAt = DateTime.UtcNow;
+
+        ticket.CompletedAt = DateTime.Now;
         ticket.Status = TicketStatus.Completed;
 
         await _repository.UpdateAsync(ticket);
@@ -128,9 +134,9 @@ public class TicketService : ITicketService
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
-        
 
-        ticket.CompletedAt = DateTime.UtcNow;
+
+        ticket.CompletedAt = DateTime.Now;
         ticket.Status = TicketStatus.Cancelled;
 
         await _repository.UpdateAsync(ticket);
@@ -142,7 +148,7 @@ public class TicketService : ITicketService
         var ticket = await _repository.GetByIdAsync(ticketId);
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
-        
+
         ticket.ServiceId = newServiceId;
         ticket.WindowId = null;
         ticket.CalledAt = null;

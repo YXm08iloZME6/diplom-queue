@@ -61,7 +61,7 @@ public class OperatorService: IOperatorService
         }
 
         ticket.WindowId = window.Id;
-        ticket.CalledAt = DateTime.UtcNow;
+        ticket.CalledAt = DateTime.Now;
         ticket.Status = TicketStatus.Called;
 
         await SaveAndReturnDto(ticket);
@@ -74,7 +74,7 @@ public class OperatorService: IOperatorService
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
-        currentTicket.CalledAt = DateTime.UtcNow;
+        currentTicket.CalledAt = DateTime.Now;
 
         await SaveAndReturnDto(currentTicket);
 
@@ -87,7 +87,7 @@ public class OperatorService: IOperatorService
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
         currentTicket.Status = TicketStatus.Cancelled;
-        currentTicket.CompletedAt = DateTime.UtcNow;
+        currentTicket.CompletedAt = DateTime.Now;
 
         await SaveAndReturnDto(currentTicket);
 
@@ -100,7 +100,7 @@ public class OperatorService: IOperatorService
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
         currentTicket.Status = TicketStatus.Completed;
-        currentTicket.CompletedAt = DateTime.UtcNow;
+        currentTicket.CompletedAt = DateTime.Now;
         
         await SaveAndReturnDto(currentTicket);
 
@@ -139,7 +139,8 @@ public class OperatorService: IOperatorService
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
         currentTicket.Status = TicketStatus.Processing;
-        
+        currentTicket.StartedAt = DateTime.Now;
+
         await SaveAndReturnDto(currentTicket);
 
         return new TicketDto(currentTicket);

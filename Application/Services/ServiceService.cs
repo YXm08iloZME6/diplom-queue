@@ -8,46 +8,58 @@ namespace Application.Services;
 
 public class ServiceService : IServiceService
 {
-   private readonly IServiceRepository _repository;
-   
-   public ServiceService(IServiceRepository repository)
-   {
-      _repository = repository;
-   }
+    private readonly IServiceRepository _repository;
 
-   public async Task<List<ServiceDto>> GetMainServicesAsync()
-   {
-      var services = await _repository.GetMainServicesAsync();
-      return services.Select(s => new ServiceDto(s)).ToList();
-   }
+    public ServiceService(IServiceRepository repository)
+    {
+        _repository = repository;
+    }
 
-   public async Task<ServiceDto> GetServiceByIdAsync(Guid id)
-   {
-      var service = await _repository.GetServiceByIdAsync(id);
-      var dto = new ServiceDto(service);
+    public async Task<List<ServiceDto>> GetMainServicesAsync()
+    {
+        var services = await _repository.GetMainServicesAsync();
+        return services.Select(s => new ServiceDto(s)).ToList();
+    }
 
-      if (dto.Letter == null)
-         dto.Letter = service.Parent?.Letter;
+    public async Task<List<ServiceDto>> GetAllServicesAsync()
+    {
+        var services = await _repository.GetAllServicesAsync();
+        return services.Select(s => new ServiceDto(s)).ToList();
+    }
 
-      foreach (var child in dto.Children)
-         child.Letter = dto.Letter;
+    public async Task<ServiceDto> GetServiceByIdAsync(Guid id)
+    {
+        var service = await _repository.GetServiceByIdAsync(id);
+        var dto = new ServiceDto(service);
 
-      return dto;
-   }
+        if (dto.Letter == null)
+            dto.Letter = service.Parent?.Letter;
 
-   public async Task<ServiceDto> AddServiceAsync(CreateServiceDto serviceDto)
-   {
-      var newService = new Service
-      {
-         Name = serviceDto.Name,
-         Letter = serviceDto.Letter,
-         Description = serviceDto.Description,
-         IconName = serviceDto.IconName
-      };
+        foreach (var child in dto.Children)
+            child.Letter = dto.Letter;
 
-      await _repository.CreateServiceAsync(newService);
-      await _repository.SaveChangeAsync();
+        return dto;
+    }
 
-      return new ServiceDto(newService);
-   }
+    public async Task<ServiceDto> AddServiceAsync(CreateServiceDto serviceDto)
+    {
+        var newService = new Service
+        {
+            Name = serviceDto.Name,
+            Letter = serviceDto.Letter,
+            Description = serviceDto.Description,
+            IconName = serviceDto.IconName
+        };
+
+        await _repository.CreateServiceAsync(newService);
+        await _repository.SaveChangeAsync();
+
+        return new ServiceDto
+        {
+            Name = serviceDto.Name,
+            Letter = serviceDto.Letter,
+            Description = serviceDto.Description,
+            IconName = serviceDto.IconName
+        };
+    }
 }
