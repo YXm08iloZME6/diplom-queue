@@ -18,7 +18,7 @@ public class TicketService : ITicketService
         _notifier = notifier;
     }
 
-    public async Task<TicketDto> CreateAsync(Guid serviceId, string info, string letter)
+    public async Task<TicketDto> CreateAsync(Guid serviceId, string? info, string? letter)
     {
         var count = await _repository.GetTicketCountAsync(letter);
 

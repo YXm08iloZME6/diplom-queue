@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260522134330_ChangeSettings")]
+    partial class ChangeSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,10 +137,10 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                            Description = "",
-                            IconName = "",
+                            Description = "Мне просто спросить",
+                            IconName = "Lab",
                             Letter = "D",
-                            Name = "Простой мод"
+                            Name = "Просто спросить"
                         },
                         new
                         {
@@ -314,14 +316,14 @@ namespace Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@admin",
-                            PasswordHash = "$2a$11$9SiLmIiX7ERk14tIpP/8I.MqcjsyVdzZ8yEUv/./q1jYjOAPn7PfG",
+                            PasswordHash = "$2a$11$/Jva2uGhVJUa21FnqkekYecmtJW/OHNBeCQtm0UzOPK0Hsa9n5NUy",
                             Status = 0
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             Email = "operator@operator",
-                            PasswordHash = "$2a$11$3iKW5cyyV4Dtfyj/5i2jdOIzygFseSV5b9IyiljDZt5oSAGrsblIO",
+                            PasswordHash = "$2a$11$t9.Xr6GxDSTMparOA5N6UOlKdlw2eF.1rQQ4tuM0bnZ.VaCAcij/G",
                             Status = 0
                         });
                 });

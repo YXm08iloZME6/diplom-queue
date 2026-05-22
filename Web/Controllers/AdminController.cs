@@ -1,6 +1,5 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
-using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;

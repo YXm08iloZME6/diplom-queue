@@ -13,7 +13,7 @@ public class ServiceDto
     public bool IsActive { get; set; }
     public bool IsNeedFacets { get; set; }
     public Guid? ParentId { get; set; }
-    //public bool NeedMoreInfo { get; set; }
+    
     public ServiceDto () { }
     public ServiceDto(Service service)
     {
@@ -26,7 +26,6 @@ public class ServiceDto
         IsActive = service.IsActive;
         IsNeedFacets = service.IsNeedFacets;
 
-        //NeedMoreInfo = service.NeedMoreInfo;
         ParentId = service.ParentId;
 
         Children = service.Children?

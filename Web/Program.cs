@@ -37,6 +37,8 @@ builder.Services.AddScoped<IDisplayRepository, DisplayRepository>();
 builder.Services.AddScoped<IDisplayService, DisplayService>();
 builder.Services.AddScoped<IWindowRepository, WindowRepository>();
 builder.Services.AddScoped<IWindowService, WindowService>();
+builder.Services.AddScoped<ISettingsRepository, SettingsRepository>();
+builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddScoped<IQueueNotifier, QueueNotifier>();
 builder.Services.AddSignalR();
 

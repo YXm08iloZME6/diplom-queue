@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260513195655_AddActiveServiceStatus")]
+    partial class AddActiveServiceStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,12 +80,6 @@ namespace Infrastructure.Migrations
                         .HasDefaultValue(true)
                         .HasColumnName("is_active");
 
-                    b.Property<bool>("IsNeedFacets")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("is_need_facets");
-
                     b.Property<string>("Letter")
                         .HasMaxLength(1)
                         .HasColumnType("character varying(1)")
@@ -113,6 +109,7 @@ namespace Infrastructure.Migrations
                             Id = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"),
                             Description = "Запись на первичный прием, заведение медицинских карт и предоставление справочной информации о работе клиники.",
                             IconName = "Book",
+                            IsActive = true,
                             Letter = "A",
                             Name = "Регистратура"
                         },
@@ -121,6 +118,7 @@ namespace Infrastructure.Migrations
                             Id = new Guid("99c48a22-122d-4821-afea-2b2b345e592c"),
                             Description = "Оформление и оплата медицинских услуг, не входящих в программу ОМС.",
                             IconName = "Ruble",
+                            IsActive = true,
                             Letter = "B",
                             Name = "Платные услуги"
                         },
@@ -129,22 +127,16 @@ namespace Infrastructure.Migrations
                             Id = new Guid("7370aa38-cbb9-4220-915d-ce042194f24e"),
                             Description = "Лабораторная диагностика от общих анализов крови до генетических исследований.",
                             IconName = "Lab",
+                            IsActive = true,
                             Letter = "C",
                             Name = "Анализы"
-                        },
-                        new
-                        {
-                            Id = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                            Description = "",
-                            IconName = "",
-                            Letter = "D",
-                            Name = "Простой мод"
                         },
                         new
                         {
                             Id = new Guid("9d78a673-efa3-4af3-9828-55515d26e134"),
                             Description = "Выбор специалиста и бронирование подходящего времени визита.",
                             IconName = "Clock",
+                            IsActive = true,
                             Name = "Запись на прием к врачу",
                             ParentId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc")
                         },
@@ -153,39 +145,9 @@ namespace Infrastructure.Migrations
                             Id = new Guid("d320728d-0a5e-490c-be3c-04bcf3a7a4c8"),
                             Description = "Официальное подтверждение временной нетрудоспособности.",
                             IconName = "CheckBook",
+                            IsActive = true,
                             Name = "Оформление больничного",
                             ParentId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc")
-                        });
-                });
-
-            modelBuilder.Entity("Domain.Entities.Settings", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<bool>("SimpleMode")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("simple_mode");
-
-                    b.Property<Guid?>("SimpleModeServiceId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("simple_mode_service_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_settings");
-
-                    b.ToTable("settings", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("a55d9913-f36a-43a4-8321-272d22f85a2a"),
-                            SimpleMode = false,
-                            SimpleModeServiceId = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313")
                         });
                 });
 
@@ -308,22 +270,6 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_users_window_id");
 
                     b.ToTable("users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Email = "admin@admin",
-                            PasswordHash = "$2a$11$9SiLmIiX7ERk14tIpP/8I.MqcjsyVdzZ8yEUv/./q1jYjOAPn7PfG",
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Email = "operator@operator",
-                            PasswordHash = "$2a$11$3iKW5cyyV4Dtfyj/5i2jdOIzygFseSV5b9IyiljDZt5oSAGrsblIO",
-                            Status = 0
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
@@ -343,23 +289,6 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_user_roles_role_id");
 
                     b.ToTable("user_roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            RoleId = new Guid("22222222-2222-2222-2222-222222222222")
-                        },
-                        new
-                        {
-                            UserId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            RoleId = new Guid("11111111-1111-1111-1111-111111111111")
-                        },
-                        new
-                        {
-                            UserId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            RoleId = new Guid("11111111-1111-1111-1111-111111111111")
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Window", b =>
