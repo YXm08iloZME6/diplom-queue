@@ -330,7 +330,7 @@ namespace Infrastructure.Migrations
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             Email = "operator@operator",
-                            PasswordHash = "$2a$11$1xlhnDiEh.C6fr1aJz8ipe6gbB4UVqsGsVjsnlS6UuvffE1OG36/y",
+                            PasswordHash = "$2a$11$euLqcNsX1OmJLmdasTs05OZiHhOpMMC.ble8hfovhT/gUn2ZcqkE2",
                             Status = 0
                         });
                 });

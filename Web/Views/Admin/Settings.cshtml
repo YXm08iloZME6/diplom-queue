@@ -1,0 +1,59 @@
+﻿@model List<Application.DTOs.SettingsDto>
+
+<div class="max-w-5xl mx-auto p-8">
+
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-slate-800">
+            Настройки системы
+        </h1>
+
+        <p class="text-slate-500 mt-2">
+            Управление поведением электронной очереди
+        </p>
+    </div>
+
+    <div class="space-y-5">
+
+        @foreach (var setting in Model)
+        {
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <div class="mb-4">
+                    <h2 class="text-lg font-semibold text-slate-800">@setting.Name</h2>
+                    @if (!string.IsNullOrWhiteSpace(setting.Description))
+                    {
+                        <p class="text-sm text-slate-500 mt-1">@setting.Description</p>
+                    }
+                </div>
+
+                <form asp-action="SaveSettings" method="post">
+                    <input type="hidden" name="id" value="@setting.Id" />
+
+                    @if (setting.TypeOfSettingsValue == Domain.Enums.TypeOfSettingsValue.Bool)
+                    {
+                        <input type="hidden" name="value" value="@(setting.Value == "true" ? "false" : "true")" />
+                        <button type="submit" class="relative inline-flex h-7 w-14 items-center rounded-full transition @(setting.Value == "true"? "bg-green-500": "bg-gray-300")">
+                            <span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition @(setting.Value == "true"? "translate-x-8": "translate-x-1")"></span>
+                        </button>
+                    }
+
+                    @if (setting.TypeOfSettingsValue == Domain.Enums.TypeOfSettingsValue.Int)
+                    {
+                        <div class="flex gap-3">
+                            <input type="number" name="value" value="@setting.Value" class="w-48 rounded-xl border border-slate-300 px-4 py-2" />
+                            <button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700">Сохранить</button>
+                        </div>
+                    }
+
+                    @if (setting.TypeOfSettingsValue == Domain.Enums.TypeOfSettingsValue.String)
+                    {
+                        <div class="flex gap-3">
+                            <input type="text" name="value" value="@setting.Value" class="w-72 rounded-xl border border-slate-300 px-4 py-2" />
+                            <button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700">Сохранить</button>
+                        </div>
+                    }
+                </form>
+            </div>
+        }
+
+    </div>
+</div>

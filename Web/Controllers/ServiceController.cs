@@ -22,8 +22,8 @@ public class ServiceController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var settingSimpleMode = await _settingsService.GetSettingByNameAsync("Простой мод");
-        var settingSimpleModeLetter = await _settingsService.GetSettingByNameAsync("Буква для простого мода");
+        var settingSimpleMode = await _settingsService.GetSettingByNameAsync("Простой режим");
+        var settingSimpleModeLetter = await _settingsService.GetSettingByNameAsync("Буква для простого режима");
         
         if (settingSimpleMode.Value == "true")
         {

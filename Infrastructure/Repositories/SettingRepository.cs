@@ -18,23 +18,41 @@ public class SettingsRepository : ISettingsRepository
 
     public async Task<List<Settings>> GetSettingsAsync()
     {
-        return await _dbContext.Settings!.ToListAsync();
+        return await _dbContext.Settings.ToListAsync();
     }
 
     public async Task<Settings?> GetSettingByIdAsync(Guid id)
     {
-        return await _dbContext.Settings!.Where(s => s.Id == id).FirstOrDefaultAsync();
+        return await _dbContext.Settings.Where(s => s.Id == id).FirstOrDefaultAsync();
         
     }
 
     public async Task<Settings?> GetSettingByNameAsync(string name)
     {
-        return await _dbContext.Settings!.Where(s => s.Name == name).FirstOrDefaultAsync();
+        return await _dbContext.Settings.Where(s => s.Name == name).FirstOrDefaultAsync();
     }
 
     public async Task UpdateSettingsAsync(Settings settings)
     {
-        _dbContext.Settings!.Update(settings);
+        _dbContext.Settings.Update(settings);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public Task AddSettingsAsync(Settings settings)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteSettingsAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task UpdateSettingValueAsync(Guid id, string value)
+    {
+        var setting = await _dbContext.Settings.FindAsync(id);
+        setting.Value = value;
+
         await _dbContext.SaveChangesAsync();
     }
 }

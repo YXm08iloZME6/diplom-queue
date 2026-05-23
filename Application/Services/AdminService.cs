@@ -217,5 +217,20 @@ namespace Queue.Applications.Services
                     .ToList()
             };
         }
+
+        public Task AddSettings(SettingsDto settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateSettings(SettingsDto settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteSettings(Guid settingsId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

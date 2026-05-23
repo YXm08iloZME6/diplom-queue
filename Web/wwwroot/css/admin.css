@@ -1,28 +1,28 @@
 ﻿/* Контейнер */
-.admin-container {
+/*.admin-container {
     max-width: 1000px;
     margin: 60px auto;
     padding: 0 20px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
+}*/
 
 /* Заголовок */
-.admin-title {
+/*.admin-title {
     text-align: center;
     margin-bottom: 40px;
     font-size: 28px;
     font-weight: 600;
-}
+}*/
 
 /* Сетка */
-.admin-grid {
+/*.admin-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
-}
+}*/
 
 /* Карточка */
-.admin-card {
+/*.admin-card {
     display: block;
     padding: 25px 20px;
     background: #ffffff;
@@ -32,35 +32,35 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
     transition: all 0.25s ease;
     text-align: center;
-}
+}*/
 
     /* Hover эффект */
-    .admin-card:hover {
+    /*.admin-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
-    }
+    }*/
 
     /* Иконка */
-    .admin-card .icon {
+    /*.admin-card .icon {
         font-size: 32px;
         margin-bottom: 15px;
-    }
+    }*/
 
 /* Заголовок карточки */
-.card-title {
+/*.card-title {
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 6px;
-}
+}*/
 
 /* Описание */
-.card-desc {
+/*.card-desc {
     font-size: 13px;
     color: #666;
-}
+}*/
 
 /* Акцент при наведении */
-.admin-card:hover .card-title {
+/*.admin-card:hover .card-title {
     color: #0a58ca;
 }
 
@@ -89,4 +89,4 @@
     .role-item input {
         width: 16px;
         height: 16px;
-    }
+    }*/

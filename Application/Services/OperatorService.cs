@@ -26,18 +26,18 @@ public class OperatorService: IOperatorService
 
     public async Task<OperatorDashboardDto> GetDashboardData(Guid userId)
     {
-        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой мод");
+        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой режим");
 
         if (settingSimpleMode.Value == "true")
         {
-            var newCurrentTicket = await _operatorRepository.GetCurrentTicketWithoutWindowId();
-            var newWaitingTickets = await _operatorRepository.GetWaitingTickets();
+            var simpleCurrentTicket = await _operatorRepository.GetCurrentTicketWithoutWindowId();
+            var simpleWaitingTickets = await _operatorRepository.GetWaitingTickets();
             
             return new OperatorDashboardDto
             {
-                CurrentTicket = newCurrentTicket != null ? new TicketDto(newCurrentTicket) : null,
-                WaitingCount = newWaitingTickets.Count,
-                WaitingTickets = newWaitingTickets.Select(t => new TicketDto(t)).ToList(),
+                CurrentTicket = simpleCurrentTicket != null ? new TicketDto(simpleCurrentTicket) : null,
+                WaitingCount = simpleWaitingTickets.Count,
+                WaitingTickets = simpleWaitingTickets.Select(t => new TicketDto(t)).ToList(),
             };
         }
         
@@ -62,17 +62,19 @@ public class OperatorService: IOperatorService
 
     public async Task<TicketDto> CallNextTicket(Guid userId)
     {
-        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой мод");
+        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой режим");
         
         if (settingSimpleMode.Value == "true")
         {
-            var newTicket = await _operatorRepository.GetNextWaitingTicketWithoutServiceId();
+            var simpleTicket = await _operatorRepository.GetNextWaitingTicketWithoutServiceId();
+
+            if (simpleTicket == null) throw new Exception("Нет ожидающих билетов");
+
+            simpleTicket!.Status = TicketStatus.Called;
+            simpleTicket.CalledAt = DateTime.UtcNow;
             
-            newTicket!.Status = TicketStatus.Called;
-            newTicket.CalledAt = DateTime.UtcNow;
-            
-            await SaveAndReturnDto(newTicket);
-            return new TicketDto(newTicket);
+            await SaveAndReturnDto(simpleTicket);
+            return new TicketDto(simpleTicket);
         }
         
         var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
@@ -101,6 +103,21 @@ public class OperatorService: IOperatorService
 
     public async Task<TicketDto> RecallTicket(Guid userId)
     {
+        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой режим");
+
+        if (settingSimpleMode.Value == "true")
+        {
+            var simpleTicket = await _operatorRepository.GetCurrentTicketWithoutWindowId();
+
+            if (simpleTicket == null) throw new Exception("Нет текущего билета");
+
+            simpleTicket.CalledAt = DateTime.UtcNow;
+
+            await SaveAndReturnDto(simpleTicket);
+
+            return new TicketDto(simpleTicket);
+        }
+
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
@@ -113,6 +130,23 @@ public class OperatorService: IOperatorService
 
     public async Task<TicketDto> CancelTicket(Guid userId)
     {
+        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой режим");
+
+        if (settingSimpleMode.Value == "true")
+        {
+            var simpleTicket = await _operatorRepository.GetCurrentTicketWithoutWindowId();
+
+            if (simpleTicket == null)
+                throw new Exception("Нет текущего билета");
+
+            simpleTicket.Status = TicketStatus.Cancelled;
+            simpleTicket.CompletedAt = DateTime.Now;
+
+            await SaveAndReturnDto(simpleTicket);
+
+            return new TicketDto(simpleTicket);
+        }
+
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
@@ -126,6 +160,23 @@ public class OperatorService: IOperatorService
 
     public async Task<TicketDto> CompleteTicket(Guid userId)
     {
+        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой режим");
+
+        if (settingSimpleMode.Value == "true")
+        {
+            var simpleTicket = await _operatorRepository.GetCurrentTicketWithoutWindowId();
+
+            if (simpleTicket == null)
+                throw new Exception("Нет текущего билета");
+
+            simpleTicket.Status = TicketStatus.Completed;
+            simpleTicket.CompletedAt = DateTime.Now;
+
+            await SaveAndReturnDto(simpleTicket);
+
+            return new TicketDto(simpleTicket);
+        }
+
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
@@ -165,6 +216,22 @@ public class OperatorService: IOperatorService
 
     public async Task<TicketDto> StartProcessingTicket(Guid userId)
     {
+        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой режим");
+
+        if (settingSimpleMode.Value == "true")
+        {
+            var simpleTicket = await _operatorRepository.GetCurrentTicketWithoutWindowId();
+
+            if (simpleTicket == null) throw new Exception("Нет текущего билета");
+
+            simpleTicket.Status = TicketStatus.Processing;
+            simpleTicket.StartedAt = DateTime.Now;
+
+            await SaveAndReturnDto(simpleTicket);
+
+            return new TicketDto(simpleTicket);
+        }
+
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 

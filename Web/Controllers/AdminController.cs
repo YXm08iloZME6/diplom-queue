@@ -12,12 +12,14 @@ namespace Queue.Controllers
         private readonly IAdminService _adminService;
         private readonly IWindowService _windowService;
         private readonly IServiceService _serviceService;
+        private readonly ISettingsService _settingsService;
 
-        public AdminController(IAdminService adminService, IWindowService windowService, IServiceService serviceService)
+        public AdminController(IAdminService adminService, IWindowService windowService, IServiceService serviceService, ISettingsService settingsService)
         {
             _adminService = adminService;
             _windowService = windowService;
             _serviceService = serviceService;
+            _settingsService = settingsService;
         }
 
         public IActionResult Index()
@@ -227,6 +229,7 @@ namespace Queue.Controllers
         {
             await _adminService.QueueResetAsync();
             return RedirectToAction(nameof(Index));
+            
         }
 
         [HttpGet]
@@ -246,6 +249,20 @@ namespace Queue.Controllers
             model.Tickets = await _adminService.TicketStats(model.StartDate, model.EndDate);
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Settings()
+        {
+            var settings = await _settingsService.GetSettingsAsync();
+            return View(settings);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveSettings(Guid id, string value)
+        {
+            await _settingsService.UpdateSettingValueAsync(id, value);
+            return RedirectToAction(nameof(Settings));
         }
     }
 }

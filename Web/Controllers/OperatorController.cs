@@ -26,13 +26,15 @@ namespace Web.Controllers
         {
             var userId = GetUserId();
             var dto = await _operatorService.GetDashboardData(userId);
-            var simpleMode = await _settingsService.GetSettingByNameAsync("Простой мод");
+            var simpleMode = await _settingsService.GetSettingByNameAsync("Простой режим");
 
             if (simpleMode.Value == "true")
             {
                 var svm = new OperatorDashboardViewModel
                 {
                     dashboard = dto,
+                    windowName = "0",
+                    serviceName = "Общая очередь"
                 };
                 
                 return View(svm);

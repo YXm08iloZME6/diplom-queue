@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    [Migration("20260522134330_ChangeSettings")]
-    partial class ChangeSettings
+    [Migration("20260522141926_UpdateSettings")]
+    partial class UpdateSettings
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -137,10 +137,10 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                            Description = "Мне просто спросить",
-                            IconName = "Lab",
+                            Description = "",
+                            IconName = "",
                             Letter = "D",
-                            Name = "Просто спросить"
+                            Name = "Простой мод"
                         },
                         new
                         {
@@ -316,14 +316,14 @@ namespace Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@admin",
-                            PasswordHash = "$2a$11$/Jva2uGhVJUa21FnqkekYecmtJW/OHNBeCQtm0UzOPK0Hsa9n5NUy",
+                            PasswordHash = "$2a$11$bCnXxt2KGEYyV3gdD6wFi.2oGmbQskuQ2SnMefX7sKPgS9xvSqCnG",
                             Status = 0
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             Email = "operator@operator",
-                            PasswordHash = "$2a$11$t9.Xr6GxDSTMparOA5N6UOlKdlw2eF.1rQQ4tuM0bnZ.VaCAcij/G",
+                            PasswordHash = "$2a$11$euLqcNsX1OmJLmdasTs05OZiHhOpMMC.ble8hfovhT/gUn2ZcqkE2",
                             Status = 0
                         });
                 });
