@@ -185,6 +185,7 @@ namespace Queue.Applications.Services
             foreach (var ticket in tickets)
             {
                 ticket.Status = TicketStatus.Cancelled;
+                ticket.CompletedAt = DateTime.Now;
                 await _ticketRepository.UpdateAsync(ticket);
             }
 

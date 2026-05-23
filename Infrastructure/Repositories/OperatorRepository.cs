@@ -20,6 +20,21 @@ public class OperatorRepository : IOperatorRepository
     {
         return await _context.Tickets.FirstOrDefaultAsync(t => t.WindowId == windowId && (t.Status == TicketStatus.Called || t.Status == TicketStatus.Processing));
     }
+    
+    public async Task<List<Ticket>?> GetWaitingTickets()
+    {
+        return await _context.Tickets.Where(t => t.Status == TicketStatus.Waiting).ToListAsync();
+    }
+
+    public async Task<Ticket?> GetNextWaitingTicketWithoutServiceId()
+    {
+        return await _context.Tickets.FirstOrDefaultAsync(t => t.Status == TicketStatus.Waiting);
+    }
+    
+    public async Task<Ticket?> GetCurrentTicketWithoutWindowId()
+    {
+        return await _context.Tickets.FirstOrDefaultAsync(t => t.Status == TicketStatus.Called || t.Status == TicketStatus.Processing);
+    }
 
     public async Task<Ticket?> GetNextWaitingTicketAsync(List<Guid> serviceIds)
     {

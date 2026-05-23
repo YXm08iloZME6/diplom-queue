@@ -1,4 +1,4 @@
-@model Application.DTOs.ServiceDto
+@model Application.DTOs.SettingsDto
 
 @{
     ViewBag.Title = "title";
@@ -6,7 +6,7 @@
 }
 
 <div class="flex flex-col items-center justify-center">
-    <form asp-controller="Service" asp-action="GetTicket" method="post" asp-route-serviceId="@Model.Id" asp-route-letter="@Model.Letter">
+    <form asp-controller="Service" asp-action="GetTicket" asp-route-letter="@Model.Value" method="post">
         <button type="submit" class="h-28 px-24 bg-primary text-primary-foreground rounded-3xl text-3xl font-semibold tracking-wide cursor-pointer active:opacity-80 transition-opacity shadow-lg">
             Получить талон
         </button>

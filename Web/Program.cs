@@ -2,6 +2,7 @@
 using Application.Interfaces.Services;
 using Application.Services;
 using Infrastructure.Data;
+using Infrastructure.Hubs;
 using Infrastructure.Notifications;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -45,6 +46,7 @@ builder.Services.AddSignalR();
 
 
 var app = builder.Build();
+app.MapHub<QueueHub>("/hubs/queue");
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

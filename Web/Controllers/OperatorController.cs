@@ -13,10 +13,12 @@ namespace Web.Controllers
     public class OperatorController : Controller
     {
         private readonly IOperatorService _operatorService;
+        private readonly ISettingsService _settingsService;
 
-        public OperatorController(IOperatorService operatorService)
+        public OperatorController(IOperatorService operatorService, ISettingsService settingsService)
         {
             _operatorService = operatorService;
+            _settingsService = settingsService;
         }
 
         [HttpGet]
@@ -24,6 +26,18 @@ namespace Web.Controllers
         {
             var userId = GetUserId();
             var dto = await _operatorService.GetDashboardData(userId);
+            var simpleMode = await _settingsService.GetSettingByNameAsync("Простой мод");
+
+            if (simpleMode.Value == "true")
+            {
+                var svm = new OperatorDashboardViewModel
+                {
+                    dashboard = dto,
+                };
+                
+                return View(svm);
+            }
+            
             var vm = new OperatorDashboardViewModel
             {
                 dashboard = dto,

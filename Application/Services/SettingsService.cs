@@ -12,15 +12,30 @@ public class SettingsService : ISettingsService
     {
         _repository = repository;
     }
-
-    public async Task<SettingsDto> GetAsync()
+    
+    public async Task<List<SettingsDto>> GetSettingsAsync()
     {
-        var settings = await _repository.GetAsync();
-        return new SettingsDto
-        {
-            Id = settings.Id,
-            SimpleMode = settings.SimpleMode,
-            SimpleModeServiceId = settings.SimpleModeServiceId
-        };
+        var settings = await _repository.GetSettingsAsync();
+        
+        return settings.Select(s => new SettingsDto(s)).ToList();
+    }
+
+    public async Task<SettingsDto?> GetSettingByIdAsync(Guid id)
+    {
+        var settings = await _repository.GetSettingByIdAsync(id);
+        
+        return settings != null ? new SettingsDto(settings) : null;
+    }
+
+    public async Task<SettingsDto?> GetSettingByNameAsync(string name)
+    {
+        var settings = await _repository.GetSettingByNameAsync(name);
+        return settings != null ? new SettingsDto(settings) : null;
+    }
+
+    public async Task UpdateSettingsAsync(SettingsDto settings)
+    {
+        var setting = await _repository.GetSettingByIdAsync(settings.Id);
+        _repository.UpdateSettingsAsync(setting!); 
     }
 }

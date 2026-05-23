@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    partial class QueueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260523074037_NewSettings")]
+    partial class NewSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,21 +160,14 @@ namespace Infrastructure.Migrations
                         .HasColumnName("id")
                         .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
 
-                    b.Property<int>("TypeOfSettingsValue")
-                        .HasColumnType("integer")
-                        .HasColumnName("type_of_settings_value");
-
                     b.Property<string>("Value")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("value");
 
@@ -185,15 +180,13 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("b442d4a8-6b6d-42c6-b769-8c3dd4eb5147"),
-                            Name = "Простой режим",
-                            TypeOfSettingsValue = 0,
+                            Name = "Простой мод",
                             Value = "false"
                         },
                         new
                         {
                             Id = new Guid("aaca4ae5-734e-48ad-a34a-5b12f6c64212"),
-                            Name = "Буква для простого режима",
-                            TypeOfSettingsValue = 2,
+                            Name = "Буква для простого мода",
                             Value = "D"
                         });
                 });
@@ -323,14 +316,14 @@ namespace Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@admin",
-                            PasswordHash = "$2a$11$16O/zr/ECtdbSviwgnOaE.BHaazvr0NgxpYTOKfRjey15SEsvmuOa",
+                            PasswordHash = "$2a$11$QAzWzsZHuqanj15vg5iGcuU/eF1TPdkX4k3Z1LwnNudFCySKl9R7u",
                             Status = 0
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             Email = "operator@operator",
-                            PasswordHash = "$2a$11$1xlhnDiEh.C6fr1aJz8ipe6gbB4UVqsGsVjsnlS6UuvffE1OG36/y",
+                            PasswordHash = "$2a$11$vtKvi1936qU8J81D40e31.SUgdI6BMdvxM3zZnmOJOL4mUBnjFzuy",
                             Status = 0
                         });
                 });

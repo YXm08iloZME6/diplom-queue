@@ -13,17 +13,34 @@ public class OperatorService: IOperatorService
     private readonly IOperatorRepository _operatorRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly ITicketRepository _ticketRepository;
+    private readonly ISettingsRepository _settingsRepository;
 
-
-    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository, ITicketRepository ticketRepository)
+    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository, 
+        ITicketRepository ticketRepository, ISettingsRepository settingsRepository)
     {
         _operatorRepository = operatorRepository;
         _serviceRepository = serviceRepository;
         _ticketRepository = ticketRepository;
+        _settingsRepository = settingsRepository;
     }
 
     public async Task<OperatorDashboardDto> GetDashboardData(Guid userId)
     {
+        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой мод");
+
+        if (settingSimpleMode.Value == "true")
+        {
+            var newCurrentTicket = await _operatorRepository.GetCurrentTicketWithoutWindowId();
+            var newWaitingTickets = await _operatorRepository.GetWaitingTickets();
+            
+            return new OperatorDashboardDto
+            {
+                CurrentTicket = newCurrentTicket != null ? new TicketDto(newCurrentTicket) : null,
+                WaitingCount = newWaitingTickets.Count,
+                WaitingTickets = newWaitingTickets.Select(t => new TicketDto(t)).ToList(),
+            };
+        }
+        
         var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
         if (window == null) throw new Exception("Окно не найдено");
 
@@ -45,6 +62,19 @@ public class OperatorService: IOperatorService
 
     public async Task<TicketDto> CallNextTicket(Guid userId)
     {
+        var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой мод");
+        
+        if (settingSimpleMode.Value == "true")
+        {
+            var newTicket = await _operatorRepository.GetNextWaitingTicketWithoutServiceId();
+            
+            newTicket!.Status = TicketStatus.Called;
+            newTicket.CalledAt = DateTime.UtcNow;
+            
+            await SaveAndReturnDto(newTicket);
+            return new TicketDto(newTicket);
+        }
+        
         var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
 
         if (window == null || window.ServiceId == null)

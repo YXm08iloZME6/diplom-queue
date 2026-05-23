@@ -42,7 +42,6 @@ public class QueueDbContext : DbContext
             new {Id = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"), Name = "Регистратура", Description = "Запись на первичный прием, заведение медицинских карт и предоставление справочной информации о работе клиники.", IconName="Book", Letter = "A", ParentId = (Guid?)null },
             new {Id = Guid.Parse("99c48a22-122d-4821-afea-2b2b345e592c"), Name = "Платные услуги", Description = "Оформление и оплата медицинских услуг, не входящих в программу ОМС.", IconName="Ruble", Letter = "B", ParentId = (Guid?)null },
             new {Id = Guid.Parse("7370aa38-cbb9-4220-915d-ce042194f24e"), Name = "Анализы", Description = "Лабораторная диагностика от общих анализов крови до генетических исследований.", IconName="Lab", Letter = "C", ParentId = (Guid?)null },
-            new {Id = Guid.Parse("ef30bd6a-f192-4b25-8885-f7d679c6b313"), Name = "Простой мод", Description = "", IconName="", Letter = "D", ParentId = (Guid?)null },
             new {Id = Guid.Parse("9d78a673-efa3-4af3-9828-55515d26e134"), Name = "Запись на прием к врачу", Description = "Выбор специалиста и бронирование подходящего времени визита.", IconName="Clock", ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") },
             new {Id = Guid.Parse("d320728d-0a5e-490c-be3c-04bcf3a7a4c8"), Name = "Оформление больничного", Description = "Официальное подтверждение временной нетрудоспособности.", IconName="CheckBook", ParentId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc") }
         );
@@ -111,12 +110,25 @@ public class QueueDbContext : DbContext
         var settings = builder.Entity<Settings>();
         settings.ToTable("settings");
         settings.HasKey(s => s.Id);
-        settings.Property(s => s.SimpleMode).IsRequired().HasDefaultValue(false);
+        settings.Property(s => s.Id).HasDefaultValueSql("gen_random_uuid()");
+        settings.Property(s => s.Name).IsRequired().HasMaxLength(50);
+        settings.Property(s => s.Value);
+        settings.Property(s => s.TypeOfSettingsValue).IsRequired();
+        settings.Property(s => s.Description);
+
         settings.HasData(new
         {
-            Id = Guid.Parse("a55d9913-f36a-43a4-8321-272d22f85a2a"),
-            SimpleMode = false,
-            SimpleModeServiceId = Guid.Parse("ef30bd6a-f192-4b25-8885-f7d679c6b313")
+            Id = Guid.Parse("b442d4a8-6b6d-42c6-b769-8c3dd4eb5147"),
+            Name = "Простой режим",
+            Value = "false",
+            TypeOfSettingsValue = TypeOfSettingsValue.Bool,
+            
+        }, new
+        {
+            Id = Guid.Parse("aaca4ae5-734e-48ad-a34a-5b12f6c64212"),
+            Name = "Буква для простого режима",
+            Value = "D",
+            TypeOfSettingsValue = TypeOfSettingsValue.String,
         });
 
     }

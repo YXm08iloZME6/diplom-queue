@@ -1,5 +1,6 @@
 using System.Diagnostics.Metrics;
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -21,19 +22,16 @@ public class ServiceController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var settings = await _settingsService.GetAsync();
-
-        if (settings.SimpleMode && settings.SimpleModeServiceId.HasValue)
+        var settingSimpleMode = await _settingsService.GetSettingByNameAsync("Простой мод");
+        var settingSimpleModeLetter = await _settingsService.GetSettingByNameAsync("Буква для простого мода");
+        
+        if (settingSimpleMode.Value == "true")
         {
-            var simpleService = await _serviceService.GetServiceByIdAsync(settings.SimpleModeServiceId.Value);
-            return View("SimpleIndex", simpleService);
+            
+            return View("SimpleIndex", settingSimpleModeLetter);
         }
 
         var services = await _serviceService.GetMainServicesAsync();
-        if (settings.SimpleModeServiceId.HasValue)
-        {
-            services = services.Where(s => s.Id != settings.SimpleModeServiceId.Value).ToList();
-        }
         return View(services);
     }
 
