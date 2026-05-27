@@ -116,18 +116,27 @@ public class QueueDbContext : DbContext
         settings.Property(s => s.TypeOfSettingsValue).IsRequired();
         settings.Property(s => s.Description);
 
-        settings.HasData(new
+        settings.HasData(
+        new
         {
             Id = Guid.Parse("b442d4a8-6b6d-42c6-b769-8c3dd4eb5147"),
             Name = "Простой режим",
             Value = "false",
             TypeOfSettingsValue = TypeOfSettingsValue.Bool,
             
-        }, new
+        }, 
+        new
         {
             Id = Guid.Parse("aaca4ae5-734e-48ad-a34a-5b12f6c64212"),
             Name = "Буква для простого режима",
             Value = "D",
+            TypeOfSettingsValue = TypeOfSettingsValue.String,
+        },
+        new
+        {
+            Id = Guid.Parse("c7dfb95f-9192-48c6-8c40-a92050dc4f4e"),
+            Name = "Часовой пояс",
+            Value = "+4",
             TypeOfSettingsValue = TypeOfSettingsValue.String,
         });
 

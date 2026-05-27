@@ -36,7 +36,8 @@ namespace Web.Controllers
                 {
                     dashboard = dto,
                     windowName = "0",
-                    serviceName = "Общая очередь"
+                    serviceName = "Общая очередь",
+                    IsSimpleMode = true
                 };
                 
                 return View(svm);
@@ -47,6 +48,7 @@ namespace Web.Controllers
                 dashboard = dto,
                 windowName = dto.Window.Title,
                 serviceName = dto.Window.ServiceName,
+                IsSimpleMode = false
             };
             
             return View(vm);
@@ -108,6 +110,12 @@ namespace Web.Controllers
         public async Task<IActionResult> Redirect(Guid serviceId, string comment)
         {
             var userId = GetUserId();
+            var simpleMode = await _settingsService.GetSettingByNameAsync("Простой режим");
+            if (simpleMode.Value == "true")
+            {
+                throw new InvalidOperationException("Перенаправление недоступно в простом режиме");
+            }
+
 
             await _operatorService.RedirectTicket(userId, serviceId, comment);
 

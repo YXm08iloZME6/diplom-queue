@@ -34,9 +34,24 @@
                             <td>@(user.Email ?? "-")</td>
 
                             <td>
-                                <span class="status-badge">
-                                    @(user.Status)
-                                </span>
+                                @if (user.Status.ToString() == "Waiting")
+                                {
+                                    <span class="status-badge">
+                                        🟢 Ожидает
+                                    </span>
+                                }
+                                else if (user.Status.ToString() == "Away")
+                                {
+                                    <span class="status-badge">
+                                        🟡 Отошёл
+                                    </span>
+                                }
+                                else if (user.Status.ToString() == "Busy")
+                                {
+                                    <span class="status-badge">
+                                        🔴 Занят
+                                    </span>
+                                }
                             </td>
 
                             <td class="roles">

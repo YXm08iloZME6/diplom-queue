@@ -34,14 +34,14 @@ namespace Queue.Applications.Services
                 throw new InvalidOperationException("Такого пользователя не существует");
             }
 
-            return MapToUserDto(user);
+            return new UserDto(user);
         }
 
         public async Task<List<UserDto>> GetAllUsers()
         {
             var users = await _userRepository.GetAllAsync();
 
-            return users.Select(MapToUserDto).ToList();
+            return users.Select(u => new UserDto(u)).ToList();
         }
 
         public async Task<UserDto> AddUser(CreateUserDto dto, List<string> roleNames)
@@ -89,7 +89,7 @@ namespace Queue.Applications.Services
                 throw new InvalidOperationException("Ошибка создания пользователя");
             }
 
-            return MapToUserDto(createdUser);
+            return new UserDto(createdUser);
         }
 
         public async Task<UserDto> EditUser(EditUserDto dto, List<string> roleNames)
@@ -106,6 +106,7 @@ namespace Queue.Applications.Services
             user.MiddleName = dto.MiddleName;
             user.Email = dto.Email;
             user.WindowId = dto.WindowId;
+            user.Status = dto.Status;
 
             if (!string.IsNullOrWhiteSpace(dto.Password))
             {
@@ -138,7 +139,7 @@ namespace Queue.Applications.Services
                 throw new InvalidOperationException("Ошибка обновления пользователя");
             }
 
-            return MapToUserDto(updatedUser);
+            return new UserDto(updatedUser);
         }
 
         public async Task<bool> RemoveUser(Guid id)
@@ -244,22 +245,6 @@ namespace Queue.Applications.Services
             throw new NotImplementedException();
         }
 
-        private UserDto MapToUserDto(User user)
-        {
-            return new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                MiddleName = user.MiddleName,
-                Status = user.Status,
-                Email = user.Email,
-                WindowId = user.WindowId,
-                Roles = user.UserRoles
-                    .Select(ur => ur.Role.Title)
-                    .ToList()
-            };
-        }
         private async Task<int> GetUtcOffset()
         {
             var setting = await _settingsRepository.GetSettingByNameAsync("Часовой пояс");

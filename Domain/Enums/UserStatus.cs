@@ -4,7 +4,6 @@ public enum UserStatus
 {
     Waiting,
     Away,
-    Busy,
-    Deleted
+    Busy
 }
 

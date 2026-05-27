@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.DTOs;
 
@@ -12,6 +13,17 @@ public class UserDto
     public string Email { get; set; }
     public Guid? WindowId { get; set; }
     public List<string> Roles { get; set; }
+    public UserDto(User user)
+    {
+        Id = user.Id;
+        Name = user.Name;
+        Surname = user.Surname;
+        MiddleName = user.MiddleName;
+        Status = user.Status;
+        Email = user.Email;
+        WindowId = user.WindowId;
+        Roles = user.UserRoles.Select(ur => ur.Role.Title).ToList();
+    }
 }
 
 public class RegisterUserDto

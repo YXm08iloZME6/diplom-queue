@@ -14,14 +14,16 @@ public class OperatorService : IOperatorService
     private readonly IServiceRepository _serviceRepository;
     private readonly ITicketRepository _ticketRepository;
     private readonly ISettingsRepository _settingsRepository;
+    private readonly IUserRepository _userRepository;
 
     public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository,
-        ITicketRepository ticketRepository, ISettingsRepository settingsRepository)
+        ITicketRepository ticketRepository, ISettingsRepository settingsRepository, IUserRepository userRepository)
     {
         _operatorRepository = operatorRepository;
         _serviceRepository = serviceRepository;
         _ticketRepository = ticketRepository;
         _settingsRepository = settingsRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<OperatorDashboardDto> GetDashboardData(Guid userId)
@@ -50,13 +52,15 @@ public class OperatorService : IOperatorService
 
         var allServices = await _serviceRepository.GetMainServicesAsync();
 
+        var filteredServices = allServices.Where(s => s.Id != window.ServiceId).ToList();
+
         return new OperatorDashboardDto
         {
             Window = new WindowDto(window),
             CurrentTicket = currentTicket != null ? new TicketDto(currentTicket) : null,
             WaitingCount = waitingTickets.Count,
             WaitingTickets = waitingTickets.Select(t => new TicketDto(t)).ToList(),
-            AllServices = allServices.Select(s => new ServiceDto(s)).ToList()
+            AllServices = filteredServices.Select(s => new ServiceDto(s)).ToList()
         };
     }
 
@@ -78,6 +82,7 @@ public class OperatorService : IOperatorService
         }
 
         var window = await _operatorRepository.GetWindowByUserIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(userId);
 
         if (window == null || window.ServiceId == null)
         {
@@ -96,6 +101,7 @@ public class OperatorService : IOperatorService
         ticket.WindowId = window.Id;
         ticket.CalledAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Called;
+        user.Status = UserStatus.Busy;
 
         await SaveAndReturnDto(ticket);
 
@@ -149,12 +155,14 @@ public class OperatorService : IOperatorService
             return new TicketDto(simpleTicket);
         }
 
+        var user = await _userRepository.GetByIdAsync(userId);
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
         var offset = await GetUtcOffset();
 
         currentTicket.Status = TicketStatus.Cancelled;
         currentTicket.CompletedAt = DateTime.UtcNow;
+        user.Status = UserStatus.Waiting;
 
         await SaveAndReturnDto(currentTicket);
 
@@ -180,12 +188,14 @@ public class OperatorService : IOperatorService
             return new TicketDto(simpleTicket);
         }
 
+        var user = await _userRepository.GetByIdAsync(userId);
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
         var offset = await GetUtcOffset();
 
         currentTicket.Status = TicketStatus.Completed;
         currentTicket.CompletedAt = DateTime.UtcNow;
+        user.Status = UserStatus.Waiting;
 
         await SaveAndReturnDto(currentTicket);
 
@@ -194,6 +204,7 @@ public class OperatorService : IOperatorService
 
     public async Task<TicketDto> RedirectTicket(Guid userId, Guid targetServiceId, string comment)
     {
+        var user = await _userRepository.GetByIdAsync(userId);
         var window = await GetActiveWindowAsync(userId);
         var currentTicket = await GetCurrentTicketAsync(window.Id);
 
@@ -212,6 +223,7 @@ public class OperatorService : IOperatorService
         currentTicket.WindowId = null;
         currentTicket.CalledAt = null;
         currentTicket.RedirectComment = comment;
+        user.Status = UserStatus.Waiting;
 
         await SaveAndReturnDto(currentTicket);
 
