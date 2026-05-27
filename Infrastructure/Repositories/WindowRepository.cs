@@ -21,7 +21,9 @@ public class WindowRepository : IWindowRepository
 
     public async Task<List<Window>> GetAllWindowsAsync()
     {
-        return await _context.Windows.ToListAsync();
+        return await _context.Windows
+            .Include(w => w.Service)
+            .ToListAsync();
     }
 
     public async Task<Window> GetWindowTitleByIdAsync(Guid windowId)

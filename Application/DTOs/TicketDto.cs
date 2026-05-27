@@ -30,6 +30,19 @@ public class TicketDto
         Status = ticket.Status.ToString();
         Number = ticket.Number;
     }
+
+    public TicketDto(Ticket ticket, int utcOffset)
+    {
+        Id = ticket.Id;
+        Number = ticket.Number;
+        Status = ticket.Status.ToString();
+
+        CreatedAt = ticket.CreatedAt?.AddHours(utcOffset);
+
+        StartedAt = ticket.StartedAt?.AddHours(utcOffset);
+
+        CompletedAt = ticket.CompletedAt?.AddHours(utcOffset);
+    }
 }
 
 public class UpdateTicketDto

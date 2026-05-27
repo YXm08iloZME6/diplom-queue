@@ -34,35 +34,27 @@ namespace Queue.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddService()
+        public async Task<IActionResult> AddService()
         {
-            return View();
+            var services = await _serviceService.GetMainServicesAsync();
+            return View(new CreateServiceViewModel
+            {
+                AvailableParents = services
+            });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddService(CreateServiceDto service)
+        public async Task<IActionResult> AddService(CreateServiceViewModel model)
         {
             if (!ModelState.IsValid) 
             {
-                foreach (var key in ModelState.Keys)
-                {
-                    var errors = ModelState[key].Errors;
-                    if (errors.Any())
-                    {
-                        Console.WriteLine($"Key: {key}");
-                        foreach (var error in errors)
-                        {
-                            Console.WriteLine($"  Error: {error.ErrorMessage}");
-                            Console.WriteLine($"  Exception: {error.Exception?.Message}");
-                        }
-                    }
-                }
-                return View(service); 
+                model.AvailableParents = await _serviceService.GetMainServicesAsync();
+                return View(model); 
             }
 
-            await _serviceService.AddServiceAsync(service);
-            return View(service);
+            await _adminService.AddServiceAsync(model.Service);
+            return RedirectToAction(nameof(ServiceList));
         }
 
         [HttpPost]
@@ -228,6 +220,8 @@ namespace Queue.Controllers
         public async Task<IActionResult> QueueReset()
         {
             await _adminService.QueueResetAsync();
+
+            TempData["Toast"] = "Очередь успешно сброшена";
             return RedirectToAction(nameof(Index));
             
         }

@@ -13,13 +13,16 @@ namespace Queue.Applications.Services
         private readonly IRoleRepository _roleRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly ISettingsRepository _settingsRepository;
 
-        public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, IServiceRepository serviceRepository, ITicketRepository ticketRepository)
+        public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, 
+            IServiceRepository serviceRepository, ITicketRepository ticketRepository, ISettingsRepository settingsRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _serviceRepository = serviceRepository;
             _ticketRepository = ticketRepository;
+            _settingsRepository = settingsRepository;
         }
 
         public async Task<UserDto> GetUserById(Guid id)
@@ -151,7 +154,29 @@ namespace Queue.Applications.Services
 
             return true;
         }
+        public async Task<ServiceDto> AddServiceAsync(CreateServiceDto serviceDto)
+        {
+            var newService = new Service
+            {
+                Name = serviceDto.Name,
+                Description = serviceDto.Description,
+                IconName = serviceDto.IconName,
+                ParentId = serviceDto.ParentId,
+                Letter = serviceDto.ParentId == null ? serviceDto.Letter : null
+            };
 
+            await _serviceRepository.CreateServiceAsync(newService);
+            await _serviceRepository.SaveChangeAsync();
+
+            return new ServiceDto
+            {
+                Name = serviceDto.Name,
+                Letter = serviceDto.Letter,
+                Description = serviceDto.Description,
+                IconName = serviceDto.IconName,
+                ParentId = serviceDto.ParentId
+            };
+        }
         public async Task ToggleServiceStatus(Guid serviceId)
         {
             var service = await _serviceRepository.GetServiceByIdAsync(serviceId);
@@ -182,10 +207,11 @@ namespace Queue.Applications.Services
         public async Task QueueResetAsync()
         {
             var tickets = await _ticketRepository.GetAllActiveAsync();
+
             foreach (var ticket in tickets)
             {
                 ticket.Status = TicketStatus.Cancelled;
-                ticket.CompletedAt = DateTime.Now;
+                ticket.CompletedAt = DateTime.UtcNow;
                 await _ticketRepository.UpdateAsync(ticket);
             }
 
@@ -195,10 +221,27 @@ namespace Queue.Applications.Services
         public async Task<List<TicketDto>> TicketStats(DateTime start, DateTime end)
         {
             var tickets = await _ticketRepository.GetByDateRangeAsync(start, end);
+            var offset = await GetUtcOffset();
 
             if (tickets == null) { return new List<TicketDto>(); }
 
-            return tickets.Select(t => new TicketDto(t)).ToList();
+            return tickets.Select(t => new TicketDto(t, offset)).ToList();
+        }
+
+
+        public Task AddSettings(SettingsDto settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateSettings(SettingsDto settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteSettings(Guid settingsId)
+        {
+            throw new NotImplementedException();
         }
 
         private UserDto MapToUserDto(User user)
@@ -217,20 +260,14 @@ namespace Queue.Applications.Services
                     .ToList()
             };
         }
-
-        public Task AddSettings(SettingsDto settings)
+        private async Task<int> GetUtcOffset()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateSettings(SettingsDto settings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteSettings(Guid settingsId)
-        {
-            throw new NotImplementedException();
+            var setting = await _settingsRepository.GetSettingByNameAsync("Часовой пояс");
+            if (setting == null || !int.TryParse(setting.Value, out int offset))
+            {
+                return 0;
+            }
+            return offset;
         }
     }
 }

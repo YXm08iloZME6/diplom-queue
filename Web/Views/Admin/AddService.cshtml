@@ -1,4 +1,4 @@
-﻿@model Application.DTOs.CreateServiceDto
+﻿@model Web.Models.CreateServiceViewModel
 
 <h2>Добавить услугу</h2>
 
@@ -6,28 +6,36 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <label asp-for="Service.Name"></label>
+        <input asp-for="Service.Name" class="form-control" />
+        <span asp-validation-for="Service.Name" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Letter"></label>
-        <input asp-for="Letter" class="form-control" />
-        <span asp-validation-for="Letter" class="text-danger"></span>
+        <label asp-for="Service.Letter"></label>
+        <input asp-for="Service.Letter" class="form-control" />
+        <span asp-validation-for="Service.Letter" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
+        <label asp-for="Service.Description"></label>
+        <textarea asp-for="Service.Description" class="form-control"></textarea>
+        <span asp-validation-for="Service.Description" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="IconName"></label>
-        <input asp-for="IconName" class="form-control" />
-        <span asp-validation-for="IconName" class="text-danger"></span>
+        <label asp-for="Service.IconName"></label>
+        <input asp-for="Service.IconName" class="form-control" />
+        <span asp-validation-for="Service.IconName" class="text-danger"></span>
     </div>
+
+    <select asp-for="Service.ParentId" class="...">
+        <option value="">Нет родителя</option>
+        @foreach (var service in Model.AvailableParents)
+        {
+            <option value="@service.Id">@service.Name</option>
+        }
+    </select>
 
     <button type="submit" class="btn btn-primary">Добавить</button>
     <a asp-action="ServiceList">Отмена</a>

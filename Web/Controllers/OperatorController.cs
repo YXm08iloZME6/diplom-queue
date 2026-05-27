@@ -14,11 +14,13 @@ namespace Web.Controllers
     {
         private readonly IOperatorService _operatorService;
         private readonly ISettingsService _settingsService;
+        private readonly ITicketService _ticketService;
 
-        public OperatorController(IOperatorService operatorService, ISettingsService settingsService)
+        public OperatorController(IOperatorService operatorService, ISettingsService settingsService, ITicketService ticketService)
         {
             _operatorService = operatorService;
             _settingsService = settingsService;
+            _ticketService = ticketService;
         }
 
         [HttpGet]

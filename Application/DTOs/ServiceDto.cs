@@ -38,9 +38,10 @@ public class ServiceDto
 public class CreateServiceDto
 {
     public string Name { get; set; }
-    public string Letter { get; set; }
+    public string? Letter { get; set; }
     public string? Description { get; set; }
     public string? IconName { get; set; }
+    public Guid? ParentId { get; set; }
 }
 
 

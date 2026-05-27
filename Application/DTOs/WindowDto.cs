@@ -17,7 +17,7 @@ public class WindowDto
         Title = window.Title;
         Status = window.Status;
         ServiceId = window.ServiceId;
-        ServiceName = window.Service?.Name;
+        ServiceName = window.Service.Name;
     }
 }
 
