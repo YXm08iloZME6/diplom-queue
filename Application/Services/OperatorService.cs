@@ -102,6 +102,7 @@ public class OperatorService : IOperatorService
         ticket.CalledAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Called;
         user.Status = UserStatus.Busy;
+        window.Status = WindowStatus.Busy;
 
         await SaveAndReturnDto(ticket);
 
@@ -163,6 +164,7 @@ public class OperatorService : IOperatorService
         currentTicket.Status = TicketStatus.Cancelled;
         currentTicket.CompletedAt = DateTime.UtcNow;
         user.Status = UserStatus.Waiting;
+        window.Status = WindowStatus.Open;
 
         await SaveAndReturnDto(currentTicket);
 
@@ -196,6 +198,7 @@ public class OperatorService : IOperatorService
         currentTicket.Status = TicketStatus.Completed;
         currentTicket.CompletedAt = DateTime.UtcNow;
         user.Status = UserStatus.Waiting;
+        window.Status = WindowStatus.Open;
 
         await SaveAndReturnDto(currentTicket);
 
@@ -224,6 +227,7 @@ public class OperatorService : IOperatorService
         currentTicket.CalledAt = null;
         currentTicket.RedirectComment = comment;
         user.Status = UserStatus.Waiting;
+        window.Status = WindowStatus.Open;
 
         await SaveAndReturnDto(currentTicket);
 

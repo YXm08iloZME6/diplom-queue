@@ -36,6 +36,7 @@ namespace Queue.Infrastructure.Repositories
         public async Task<List<User>> GetAllAsync()
         {
             return await _context.Users
+                .Include(u => u.Window)
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
                 .ToListAsync();
