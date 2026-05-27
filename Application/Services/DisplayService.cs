@@ -8,16 +8,19 @@ namespace Application.Services;
 public class DisplayService : IDisplayService
 {
     private readonly IDisplayRepository _repository;
+    private readonly ISettingsService _settingsService;
 
-    public DisplayService(IDisplayRepository repository)
+    public DisplayService(IDisplayRepository repository, ISettingsService settingsService)
     {
         _repository = repository;
+        _settingsService = settingsService;
     }
 
-    public async Task<DisplayDto> GetDisplayDataAsync(int waitingCount = 5)
+    public async Task<DisplayDto> GetDisplayDataAsync()
     {
+        var waitingCount = await _settingsService.GetSettingByNameAsync("Кол-во билетов на экране");
         var calls = await _repository.GetActiveTicketsAsync();
-        var waiting = await _repository.GetWaitingTicketsAsync(waitingCount);
+        var waiting = await _repository.GetWaitingTicketsAsync(Int32.Parse(waitingCount!.Value));
 
         return new DisplayDto
         {
