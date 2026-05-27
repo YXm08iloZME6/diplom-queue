@@ -25,9 +25,8 @@ public class ServiceController : Controller
         var settingSimpleMode = await _settingsService.GetSettingByNameAsync("Простой режим");
         var settingSimpleModeLetter = await _settingsService.GetSettingByNameAsync("Буква для простого режима");
         
-        if (settingSimpleMode.Value == "true")
+        if (settingSimpleMode?.Value == "true")
         {
-            
             return View("SimpleIndex", settingSimpleModeLetter);
         }
 

@@ -13,54 +13,49 @@
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true"/>
 </head>
 <body class="min-h-screen bg-accent border-4 border-blue-500">
-        <div class="p-10 flex flex-col">
-            <header class="flex items-start justify-between mb-8">
-                <div>
-                    <h2 class="text-3xl font-extrabold mt-1 tracking-wide">Текущие вызовы</h2>
-                </div>
-            </header>
-
-        <div id="active-grid" class="grid grid-cols-2 gap-6">
-            @if (!Model.ActiveTickets.Any())
-            {
-                <div class="col-span-2 text-center py-16 text-3xl text-slate-500">Нет окон</div>
-            }
-            else
-            {
-                @foreach (var call in Model.ActiveTickets)
-                {
-                    <div id="window-@call.WindowId"
-                         data-window-title="@call.Title"
-                         data-window-number="@call.WindowNumber"
-                         class="bg-white rounded-2xl py-10 px-6 text-center shadow-lg">
-                        <div class="text-2xl font-semibold text-sky-400 tracking-widest uppercase">@call.Title</div>
-                        <div class="window-number text-8xl font-extrabold text-black mt-4 tabular-nums">
-                            @(string.IsNullOrEmpty(call.TicketNumber) ? "—" : call.TicketNumber)
-                        </div>
-                    </div>
-                }
-            }
+<div class="p-10 flex flex-col">
+    <header class="flex items-start justify-between mb-8">
+        <div>
+            <h2 class="text-3xl font-extrabold mt-1 tracking-wide">Текущие вызовы</h2>
         </div>
+    </header>
 
-        <div class="mt-12">
-            <h3 class="text-4xl font-extrabold tracking-wide mb-6">Следующие</h3>
+    <div id="active-list" class="grid grid-cols-2 gap-6">
+        @await Html.PartialAsync("ActiveList", Model)
+    </div>
 
-            <div id="waiting-list" class="flex flex-wrap gap-4">
-                @if (!Model.WaitingTickets.Any())
-                {
-                    <div class="text-2xl text-slate-500 py-4">Очередь пуста</div>
-                }
-                else
-                {
-                    @foreach (var t in Model.WaitingTickets)
-                    {
-                        <div class="bg-white px-10 rounded-xl py-5 text-4xl font-extrabold tabular-nums">
-                            @t.Number
-                        </div>
-                    }
-                }
-            </div>
+    <div class="mt-12">
+        <h3 class="text-4xl font-extrabold tracking-wide mb-6">Следующие</h3>
+
+        <div id="waiting-list" class="flex flex-wrap gap-4">
+            @await Html.PartialAsync("WaitingList", Model)
         </div>
     </div>
+</div>
+
+<script src="~/lib/microsoft-signalr/signalr.min.js" asp-append-version="true"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/hubs/queue")
+        .withAutomaticReconnect()
+        .build();
+
+    async function updateList(id, action) {
+        const res = await fetch(action);
+        document.getElementById(id).innerHTML = await res.text();
+    }
+
+    connection.on("NewTicket", () => {
+        updateList("waiting-list", "@Url.Action("WaitingList", "Display") 
+    });
+    connection.on("UpdateTicket", () => {
+        updateList("waiting-list", "@Url.Action("WaitingList", "Display") 
+        updateList("active-list", "@Url.Action("ActiveList", "Display") 
+    });
+
+    connection.start();
+</script>
+
 </body>
 </html>
+

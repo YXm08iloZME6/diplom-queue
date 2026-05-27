@@ -19,4 +19,16 @@ public class DisplayController : Controller
         
         return View(data);
     }
+
+    public async Task<IActionResult> ActiveList()
+    {
+        var data = await _displayService.GetDisplayDataAsync();
+        return PartialView("WaitingList", data);
+    }
+
+    public async Task<IActionResult> WaitingList()
+    {
+        var data = await _displayService.GetDisplayDataAsync();
+        return PartialView("WaitingList", data);
+    }
 }
