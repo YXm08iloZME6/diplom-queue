@@ -46,11 +46,11 @@
     }
 
     connection.on("NewTicket", () => {
-        updateList("waiting-list", "@Url.Action("WaitingList", "Display") 
+        updateList("waiting-list", "@Url.Action("WaitingList", "Display")") 
     });
     connection.on("UpdateTicket", () => {
-        updateList("waiting-list", "@Url.Action("WaitingList", "Display") 
-        updateList("active-list", "@Url.Action("ActiveList", "Display") 
+        updateList("waiting-list", "@Url.Action("WaitingList", "Display")") 
+        updateList("active-list", "@Url.Action("ActiveList", "Display")") 
     });
 
     connection.start();

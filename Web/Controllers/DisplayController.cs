@@ -23,7 +23,7 @@ public class DisplayController : Controller
     public async Task<IActionResult> ActiveList()
     {
         var data = await _displayService.GetDisplayDataAsync();
-        return PartialView("WaitingList", data);
+        return PartialView("ActiveList", data);
     }
 
     public async Task<IActionResult> WaitingList()

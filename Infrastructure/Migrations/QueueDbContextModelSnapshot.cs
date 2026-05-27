@@ -330,14 +330,14 @@ namespace Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@admin",
-                            PasswordHash = "$2a$11$beeOi21r2/b.OgSWybbG9.biwGC5WSbqgvnbyIxDnRHcpQ/QVFHN6",
+                            PasswordHash = "$2a$11$zCkxC.Po3uZOGDOFfC4Qw.Yd6i4y2G6CpcguDFnG7foYe.E3EcOdG",
                             Status = 0
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             Email = "operator@operator",
-                            PasswordHash = "$2a$11$dXueE.gdo8Li6xAVW.YliOLaVja38rRTcKbOpjmKOoRKIW.KxP.bW",
+                            PasswordHash = "$2a$11$fSgPDOAMuNa4QtM5WDxC7OcAU7cV2R.AKUaPDGyetQS7QcZ5xFh3G",
                             Status = 0
                         });
                 });
