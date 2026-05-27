@@ -19,4 +19,9 @@ public class QueueNotifier : IQueueNotifier
     {
         await _hubContext.Clients.All.SendAsync("NewTicket", ticket, ct);
     }
+
+    public async Task NotifyUpdateTicketAsync(TicketDto ticket, CancellationToken ct = default)
+    {
+        await _hubContext.Clients.All.SendAsync("UpdateTicket", ticket, ct);
+    }
 }

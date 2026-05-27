@@ -14,15 +14,17 @@ public class OperatorService : IOperatorService
     private readonly IServiceRepository _serviceRepository;
     private readonly ITicketRepository _ticketRepository;
     private readonly ISettingsRepository _settingsRepository;
+    private readonly IQueueNotifier _queueNotifier;
     private readonly IUserRepository _userRepository;
 
-    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository,
-        ITicketRepository ticketRepository, ISettingsRepository settingsRepository, IUserRepository userRepository)
+    public OperatorService(IOperatorRepository operatorRepository, IServiceRepository serviceRepository, 
+        ITicketRepository ticketRepository, ISettingsRepository settingsRepository, IQueueNotifier queueNotifier, IUserRepository userRepository)
     {
         _operatorRepository = operatorRepository;
         _serviceRepository = serviceRepository;
         _ticketRepository = ticketRepository;
         _settingsRepository = settingsRepository;
+        _queueNotifier = queueNotifier;
         _userRepository = userRepository;
     }
 
@@ -67,7 +69,7 @@ public class OperatorService : IOperatorService
     public async Task<TicketDto> CallNextTicket(Guid userId)
     {
         var settingSimpleMode = await _settingsRepository.GetSettingByNameAsync("Простой режим");
-
+        
         if (settingSimpleMode.Value == "true")
         {
             var simpleTicket = await _operatorRepository.GetNextWaitingTicketWithoutServiceId();
@@ -78,6 +80,7 @@ public class OperatorService : IOperatorService
             simpleTicket.CalledAt = DateTime.UtcNow;
 
             await SaveAndReturnDto(simpleTicket);
+            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
             return new TicketDto(simpleTicket);
         }
 
@@ -105,6 +108,7 @@ public class OperatorService : IOperatorService
         window.Status = WindowStatus.Busy;
 
         await SaveAndReturnDto(ticket);
+        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(ticket));
 
         return new TicketDto(ticket, offset);
     }
@@ -122,6 +126,7 @@ public class OperatorService : IOperatorService
             simpleTicket.CalledAt = DateTime.UtcNow;
 
             await SaveAndReturnDto(simpleTicket);
+            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
 
             return new TicketDto(simpleTicket);
         }
@@ -133,6 +138,7 @@ public class OperatorService : IOperatorService
         currentTicket.CalledAt = DateTime.UtcNow;
 
         await SaveAndReturnDto(currentTicket);
+        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(currentTicket));
 
         return new TicketDto(currentTicket, offset);
     }
@@ -152,6 +158,7 @@ public class OperatorService : IOperatorService
             simpleTicket.CompletedAt = DateTime.UtcNow;
 
             await SaveAndReturnDto(simpleTicket);
+            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
 
             return new TicketDto(simpleTicket);
         }
@@ -167,6 +174,7 @@ public class OperatorService : IOperatorService
         window.Status = WindowStatus.Open;
 
         await SaveAndReturnDto(currentTicket);
+        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(currentTicket));
 
         return new TicketDto(currentTicket, offset);
     }
@@ -186,6 +194,7 @@ public class OperatorService : IOperatorService
             simpleTicket.CompletedAt = DateTime.UtcNow;
 
             await SaveAndReturnDto(simpleTicket);
+            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
 
             return new TicketDto(simpleTicket);
         }
@@ -201,6 +210,7 @@ public class OperatorService : IOperatorService
         window.Status = WindowStatus.Open;
 
         await SaveAndReturnDto(currentTicket);
+        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(currentTicket));
 
         return new TicketDto(currentTicket, offset);
     }
@@ -230,6 +240,7 @@ public class OperatorService : IOperatorService
         window.Status = WindowStatus.Open;
 
         await SaveAndReturnDto(currentTicket);
+        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(currentTicket));
 
         return new TicketDto(currentTicket);
     }
@@ -248,6 +259,7 @@ public class OperatorService : IOperatorService
             simpleTicket.StartedAt = DateTime.UtcNow;
 
             await SaveAndReturnDto(simpleTicket);
+            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
 
             return new TicketDto(simpleTicket);
         }
@@ -260,6 +272,7 @@ public class OperatorService : IOperatorService
         currentTicket.StartedAt = DateTime.UtcNow;
 
         await SaveAndReturnDto(currentTicket);
+        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(currentTicket));
 
         return new TicketDto(currentTicket, offset);
     }

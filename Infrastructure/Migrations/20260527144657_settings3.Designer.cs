@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(QueueDbContext))]
-    [Migration("20260522141926_UpdateSettings")]
-    partial class UpdateSettings
+    [Migration("20260527144657_settings3")]
+    partial class settings3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -136,14 +136,6 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                            Description = "",
-                            IconName = "",
-                            Letter = "D",
-                            Name = "Простой мод"
-                        },
-                        new
-                        {
                             Id = new Guid("9d78a673-efa3-4af3-9828-55515d26e134"),
                             Description = "Выбор специалиста и бронирование подходящего времени визита.",
                             IconName = "Clock",
@@ -165,17 +157,26 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<bool>("SimpleMode")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("simple_mode");
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
-                    b.Property<Guid?>("SimpleModeServiceId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("simple_mode_service_id");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("TypeOfSettingsValue")
+                        .HasColumnType("integer")
+                        .HasColumnName("type_of_settings_value");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text")
+                        .HasColumnName("value");
 
                     b.HasKey("Id")
                         .HasName("pk_settings");
@@ -185,9 +186,17 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a55d9913-f36a-43a4-8321-272d22f85a2a"),
-                            SimpleMode = false,
-                            SimpleModeServiceId = new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313")
+                            Id = new Guid("b442d4a8-6b6d-42c6-b769-8c3dd4eb5147"),
+                            Name = "Простой режим",
+                            TypeOfSettingsValue = 0,
+                            Value = "false"
+                        },
+                        new
+                        {
+                            Id = new Guid("aaca4ae5-734e-48ad-a34a-5b12f6c64212"),
+                            Name = "Буква для простого режима",
+                            TypeOfSettingsValue = 2,
+                            Value = "D"
                         });
                 });
 
@@ -316,14 +325,14 @@ namespace Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@admin",
-                            PasswordHash = "$2a$11$bCnXxt2KGEYyV3gdD6wFi.2oGmbQskuQ2SnMefX7sKPgS9xvSqCnG",
+                            PasswordHash = "$2a$11$mRztWmw7kyjZzT1c1xw9VOwOs897R1EDuByS4WG6Qkw8wga3GpRhS",
                             Status = 0
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             Email = "operator@operator",
-                            PasswordHash = "$2a$11$euLqcNsX1OmJLmdasTs05OZiHhOpMMC.ble8hfovhT/gUn2ZcqkE2",
+                            PasswordHash = "$2a$11$MsiFcOfP.SPXS8xAHu8v2OG9BBGFWSKQXQ7NIF41v7PazYuubi.Nq",
                             Status = 0
                         });
                 });
