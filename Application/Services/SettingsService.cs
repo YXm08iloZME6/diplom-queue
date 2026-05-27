@@ -1,3 +1,4 @@
+using System;
 using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -37,5 +38,10 @@ public class SettingsService : ISettingsService
     {
         var setting = await _repository.GetSettingByIdAsync(settings.Id);
         _repository.UpdateSettingsAsync(setting!); 
+    }
+
+    public async Task UpdateSettingValueAsync(Guid id, string value)
+    {
+        await _repository.UpdateSettingValueAsync(id, value);
     }
 }

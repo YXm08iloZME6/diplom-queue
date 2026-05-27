@@ -25,7 +25,7 @@ public class TicketService : ITicketService
         var ticket = new Ticket
         {
             ServiceId = serviceId,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Number = $"{letter}-{(count + 1):D3}",
             Facets = info
         };
@@ -84,7 +84,7 @@ public class TicketService : ITicketService
             throw new Exception($"Талон {ticketId} не найден");
 
         ticket.WindowId = windowId;
-        ticket.CalledAt = DateTime.Now;
+        ticket.CalledAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Called;
 
         await _repository.UpdateAsync(ticket);
@@ -97,7 +97,7 @@ public class TicketService : ITicketService
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
 
-        ticket.CalledAt = DateTime.Now;
+        ticket.CalledAt = DateTime.UtcNow;
 
         await _repository.UpdateAsync(ticket);
         return new TicketDto(ticket);
@@ -109,7 +109,7 @@ public class TicketService : ITicketService
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
 
-        ticket.StartedAt = DateTime.Now;
+        ticket.StartedAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Processing;
 
         await _repository.UpdateAsync(ticket);
@@ -122,7 +122,7 @@ public class TicketService : ITicketService
         if (ticket == null)
             throw new Exception($"Талон {ticketId} не найден");
 
-        ticket.CompletedAt = DateTime.Now;
+        ticket.CompletedAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Completed;
 
         await _repository.UpdateAsync(ticket);
@@ -136,7 +136,7 @@ public class TicketService : ITicketService
             throw new Exception($"Талон {ticketId} не найден");
 
 
-        ticket.CompletedAt = DateTime.Now;
+        ticket.CompletedAt = DateTime.UtcNow;
         ticket.Status = TicketStatus.Cancelled;
 
         await _repository.UpdateAsync(ticket);

@@ -1,14 +1,7 @@
 ﻿<div class="mx-auto my-[60px] max-w-[1000px] px-5 font-sans">
     <h1 class="text-center text-[28px] font-semibold mb-10 text-slate-800">Панель администратора</h1>
 
-    <div class="grid grid-cols-2 gap-5">
-        <a asp-controller="Admin" asp-action="UserList"
-           class="group block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)]">
-            <div class="text-[32px] mb-[15px]">👥</div>
-            <div class="text-xl font-semibold mb-1.5 transition-colors duration-250 group-hover:text-[#0a58ca]">Сотрудники</div>
-            <div class="text-[13px] text-[#666]">Управление пользователями</div>
-        </a>
-
+    <div class="grid grid-cols-3 gap-5">
         <a asp-controller="Admin" asp-action="ServiceList"
            class="group block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)]">
             <div class="text-[32px] mb-[15px]">🛠</div>
@@ -16,15 +9,25 @@
             <div class="text-[13px] text-[#666]">Настройка услуг</div>
         </a>
 
-        <form asp-controller="Admin" asp-action="QueueReset" method="post" class="inline-block w-full">
-            @Html.AntiForgeryToken()
-            <button type="submit"
-                    class="group w-full block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)] cursor-pointer">
-                <div class="text-[32px] mb-[15px]">🔄</div>
-                <div class="text-xl font-semibold mb-1.5 transition-colors duration-250 group-hover:text-[#0a58ca]">Сброс очереди</div>
-                <div class="text-[13px] text-[#666]">Очистка текущей очереди</div>
-            </button>
-        </form>
+        <a asp-controller="Admin" asp-action="UserList"
+           class="group block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)]">
+            <div class="text-[32px] mb-[15px]">👥</div>
+            <div class="text-xl font-semibold mb-1.5 transition-colors duration-250 group-hover:text-[#0a58ca]">Сотрудники</div>
+            <div class="text-[13px] text-[#666]">Управление пользователями</div>
+        </a>
+
+        <a asp-controller="Admin" asp-action="Settings"
+           class="group block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)]">
+            <div class="text-[32px] mb-[15px]">⚙️</div>
+            <div class="text-xl font-semibold mb-1.5 transition-colors duration-250 group-hover:text-[#0a58ca]">Настройки</div>
+            <div class="text-[13px] text-[#666]">Изменение глобальных настроек</div>
+        </a>
+
+        <a asp-controller="Operator" asp-action="Index" class="group block text-center px-5 py-6 bg-white rounded-2xl text-inherit shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div class="text-4xl mb-4">🖥️</div>
+            <div class="text-xl font-semibold mb-2 transition-colors duration-300 group-hover:text-blue-600">Рабочее место</div>
+            <div class="text-sm text-slate-500">Обслуживание клиентов и работа с очередью</div>
+        </a>
 
         <a asp-controller="Admin" asp-action="Statistics"
            class="group block text-center px-5 py-[25px] bg-white rounded-[14px] text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-250 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)]">
@@ -33,5 +36,37 @@
             <div class="text-[13px] text-[#666]">Аналитика и отчёты</div>
         </a>
 
+        <form asp-controller="Admin" asp-action="QueueReset" method="post" class="w-full">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="group w-full h-full flex flex-col items-center justify-center text-center px-5 py-6 bg-white rounded-2xl text-inherit shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.1)] cursor-pointer">
+                <div class="text-4xl mb-4">🔄</div>
+                <div class="text-xl font-semibold mb-2 transition-colors duration-300 group-hover:text-[#0a58ca]">Сброс очереди</div>
+                <div class="text-sm text-[#666]">Очистка текущей очереди</div>
+            </button>
+        </form>
+
     </div>
 </div>
+
+@if (TempData["Toast"] != null)
+{
+    <div id="toast"
+         class="fixed top-6 right-6 bg-green-500 text-white px-6 py-4 rounded-2xl shadow-lg
+                transition-all duration-300 opacity-0 translate-y-[-10px]">
+
+        @TempData["Toast"]
+    </div>
+
+    <script>
+        const toast = document.getElementById("toast");
+
+        setTimeout(() => {
+            toast.classList.remove("opacity-0", "translate-y-[-10px]");
+            toast.classList.add("opacity-100", "translate-y-0");
+        }, 100);
+
+        setTimeout(() => {
+            toast.classList.add("opacity-0", "translate-y-[-10px]");
+        }, 3000);
+    </script>
+}

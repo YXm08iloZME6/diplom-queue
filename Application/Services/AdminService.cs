@@ -13,13 +13,16 @@ namespace Queue.Applications.Services
         private readonly IRoleRepository _roleRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly ISettingsRepository _settingsRepository;
 
-        public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, IServiceRepository serviceRepository, ITicketRepository ticketRepository)
+        public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, 
+            IServiceRepository serviceRepository, ITicketRepository ticketRepository, ISettingsRepository settingsRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _serviceRepository = serviceRepository;
             _ticketRepository = ticketRepository;
+            _settingsRepository = settingsRepository;
         }
 
         public async Task<UserDto> GetUserById(Guid id)
@@ -31,14 +34,14 @@ namespace Queue.Applications.Services
                 throw new InvalidOperationException("Такого пользователя не существует");
             }
 
-            return MapToUserDto(user);
+            return new UserDto(user);
         }
 
         public async Task<List<UserDto>> GetAllUsers()
         {
             var users = await _userRepository.GetAllAsync();
 
-            return users.Select(MapToUserDto).ToList();
+            return users.Select(u => new UserDto(u)).ToList();
         }
 
         public async Task<UserDto> AddUser(CreateUserDto dto, List<string> roleNames)
@@ -86,7 +89,7 @@ namespace Queue.Applications.Services
                 throw new InvalidOperationException("Ошибка создания пользователя");
             }
 
-            return MapToUserDto(createdUser);
+            return new UserDto(createdUser);
         }
 
         public async Task<UserDto> EditUser(EditUserDto dto, List<string> roleNames)
@@ -103,6 +106,7 @@ namespace Queue.Applications.Services
             user.MiddleName = dto.MiddleName;
             user.Email = dto.Email;
             user.WindowId = dto.WindowId;
+            user.Status = dto.Status;
 
             if (!string.IsNullOrWhiteSpace(dto.Password))
             {
@@ -135,7 +139,7 @@ namespace Queue.Applications.Services
                 throw new InvalidOperationException("Ошибка обновления пользователя");
             }
 
-            return MapToUserDto(updatedUser);
+            return new UserDto(updatedUser);
         }
 
         public async Task<bool> RemoveUser(Guid id)
@@ -151,7 +155,29 @@ namespace Queue.Applications.Services
 
             return true;
         }
+        public async Task<ServiceDto> AddServiceAsync(CreateServiceDto serviceDto)
+        {
+            var newService = new Service
+            {
+                Name = serviceDto.Name,
+                Description = serviceDto.Description,
+                IconName = serviceDto.IconName,
+                ParentId = serviceDto.ParentId,
+                Letter = serviceDto.ParentId == null ? serviceDto.Letter : null
+            };
 
+            await _serviceRepository.CreateServiceAsync(newService);
+            await _serviceRepository.SaveChangeAsync();
+
+            return new ServiceDto
+            {
+                Name = serviceDto.Name,
+                Letter = serviceDto.Letter,
+                Description = serviceDto.Description,
+                IconName = serviceDto.IconName,
+                ParentId = serviceDto.ParentId
+            };
+        }
         public async Task ToggleServiceStatus(Guid serviceId)
         {
             var service = await _serviceRepository.GetServiceByIdAsync(serviceId);
@@ -182,10 +208,11 @@ namespace Queue.Applications.Services
         public async Task QueueResetAsync()
         {
             var tickets = await _ticketRepository.GetAllActiveAsync();
+
             foreach (var ticket in tickets)
             {
                 ticket.Status = TicketStatus.Cancelled;
-                ticket.CompletedAt = DateTime.Now;
+                ticket.CompletedAt = DateTime.UtcNow;
                 await _ticketRepository.UpdateAsync(ticket);
             }
 
@@ -195,27 +222,37 @@ namespace Queue.Applications.Services
         public async Task<List<TicketDto>> TicketStats(DateTime start, DateTime end)
         {
             var tickets = await _ticketRepository.GetByDateRangeAsync(start, end);
+            var offset = await GetUtcOffset();
 
             if (tickets == null) { return new List<TicketDto>(); }
 
-            return tickets.Select(t => new TicketDto(t)).ToList();
+            return tickets.Select(t => new TicketDto(t, offset)).ToList();
         }
 
-        private UserDto MapToUserDto(User user)
+
+        public Task AddSettings(SettingsDto settings)
         {
-            return new UserDto
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateSettings(SettingsDto settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteSettings(Guid settingsId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<int> GetUtcOffset()
+        {
+            var setting = await _settingsRepository.GetSettingByNameAsync("Часовой пояс");
+            if (setting == null || !int.TryParse(setting.Value, out int offset))
             {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                MiddleName = user.MiddleName,
-                Status = user.Status,
-                Email = user.Email,
-                WindowId = user.WindowId,
-                Roles = user.UserRoles
-                    .Select(ur => ur.Role.Title)
-                    .ToList()
-            };
+                return 0;
+            }
+            return offset;
         }
     }
 }

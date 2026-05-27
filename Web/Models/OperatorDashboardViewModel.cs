@@ -8,5 +8,6 @@ public class OperatorDashboardViewModel
     public OperatorDashboardDto dashboard {  get; set; }
     public string? serviceName { get; set; }
     public string? windowName { get; set; }
+    public bool IsSimpleMode { get; set; }
 
 }

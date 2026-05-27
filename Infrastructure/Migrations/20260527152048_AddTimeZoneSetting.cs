@@ -5,54 +5,50 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class Settings2 : Migration
+    public partial class AddTimeZoneSetting : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.UpdateData(
-                table: "services",
-                keyColumn: "id",
-                keyValue: new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                columns: new[] { "description", "icon_name", "name" },
-                values: new object[] { "", "", "Простой мод" });
+            migrationBuilder.InsertData(
+                table: "settings",
+                columns: new[] { "id", "description", "name", "type_of_settings_value", "value" },
+                values: new object[] { new Guid("c7dfb95f-9192-48c6-8c40-a92050dc4f4e"), null, "Часовой пояс", 2, "+4" });
 
             migrationBuilder.UpdateData(
                 table: "users",
                 keyColumn: "id",
                 keyValue: new Guid("11111111-1111-1111-1111-111111111111"),
                 column: "password_hash",
-                value: "$2a$11$9SiLmIiX7ERk14tIpP/8I.MqcjsyVdzZ8yEUv/./q1jYjOAPn7PfG");
+                value: "$2a$11$beeOi21r2/b.OgSWybbG9.biwGC5WSbqgvnbyIxDnRHcpQ/QVFHN6");
 
             migrationBuilder.UpdateData(
                 table: "users",
                 keyColumn: "id",
                 keyValue: new Guid("22222222-2222-2222-2222-222222222222"),
                 column: "password_hash",
-                value: "$2a$11$3iKW5cyyV4Dtfyj/5i2jdOIzygFseSV5b9IyiljDZt5oSAGrsblIO");
+                value: "$2a$11$dXueE.gdo8Li6xAVW.YliOLaVja38rRTcKbOpjmKOoRKIW.KxP.bW");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.UpdateData(
-                table: "services",
+            migrationBuilder.DeleteData(
+                table: "settings",
                 keyColumn: "id",
-                keyValue: new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"),
-                columns: new[] { "description", "icon_name", "name" },
-                values: new object[] { "Мне просто спросить", "Lab", "Просто спросить" });
+                keyValue: new Guid("c7dfb95f-9192-48c6-8c40-a92050dc4f4e"));
 
             migrationBuilder.UpdateData(
                 table: "users",
                 keyColumn: "id",
                 keyValue: new Guid("11111111-1111-1111-1111-111111111111"),
                 column: "password_hash",
-                value: "$2a$11$/Jva2uGhVJUa21FnqkekYecmtJW/OHNBeCQtm0UzOPK0Hsa9n5NUy");
+                value: "$2a$11$16O/zr/ECtdbSviwgnOaE.BHaazvr0NgxpYTOKfRjey15SEsvmuOa");
 
             migrationBuilder.UpdateData(
                 table: "users",
                 keyColumn: "id",
                 keyValue: new Guid("22222222-2222-2222-2222-222222222222"),
                 column: "password_hash",
-                value: "$2a$11$t9.Xr6GxDSTMparOA5N6UOlKdlw2eF.1rQQ4tuM0bnZ.VaCAcij/G");
+                value: "$2a$11$euLqcNsX1OmJLmdasTs05OZiHhOpMMC.ble8hfovhT/gUn2ZcqkE2");
         }
     }
 }

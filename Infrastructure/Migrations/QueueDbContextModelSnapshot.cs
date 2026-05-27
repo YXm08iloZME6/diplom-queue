@@ -195,6 +195,13 @@ namespace Infrastructure.Migrations
                             Name = "Буква для простого режима",
                             TypeOfSettingsValue = 2,
                             Value = "D"
+                        },
+                        new
+                        {
+                            Id = new Guid("c7dfb95f-9192-48c6-8c40-a92050dc4f4e"),
+                            Name = "Часовой пояс",
+                            TypeOfSettingsValue = 2,
+                            Value = "+4"
                         });
                 });
 
@@ -323,14 +330,14 @@ namespace Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@admin",
-                            PasswordHash = "$2a$11$16O/zr/ECtdbSviwgnOaE.BHaazvr0NgxpYTOKfRjey15SEsvmuOa",
+                            PasswordHash = "$2a$11$beeOi21r2/b.OgSWybbG9.biwGC5WSbqgvnbyIxDnRHcpQ/QVFHN6",
                             Status = 0
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             Email = "operator@operator",
-                            PasswordHash = "$2a$11$1xlhnDiEh.C6fr1aJz8ipe6gbB4UVqsGsVjsnlS6UuvffE1OG36/y",
+                            PasswordHash = "$2a$11$dXueE.gdo8Li6xAVW.YliOLaVja38rRTcKbOpjmKOoRKIW.KxP.bW",
                             Status = 0
                         });
                 });

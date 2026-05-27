@@ -46,7 +46,8 @@ namespace Application.Services
                 Id = w.Id,
                 Title = w.Title,
                 Status = w.Status,
-                ServiceId = w.ServiceId
+                ServiceId = w.ServiceId,
+                ServiceName = w.Service.Name
             }).ToList();
         }
 

@@ -14,11 +14,13 @@ namespace Web.Controllers
     {
         private readonly IOperatorService _operatorService;
         private readonly ISettingsService _settingsService;
+        private readonly ITicketService _ticketService;
 
-        public OperatorController(IOperatorService operatorService, ISettingsService settingsService)
+        public OperatorController(IOperatorService operatorService, ISettingsService settingsService, ITicketService ticketService)
         {
             _operatorService = operatorService;
             _settingsService = settingsService;
+            _ticketService = ticketService;
         }
 
         [HttpGet]
@@ -26,13 +28,16 @@ namespace Web.Controllers
         {
             var userId = GetUserId();
             var dto = await _operatorService.GetDashboardData(userId);
-            var simpleMode = await _settingsService.GetSettingByNameAsync("Простой мод");
+            var simpleMode = await _settingsService.GetSettingByNameAsync("Простой режим");
 
             if (simpleMode.Value == "true")
             {
                 var svm = new OperatorDashboardViewModel
                 {
                     dashboard = dto,
+                    windowName = "0",
+                    serviceName = "Общая очередь",
+                    IsSimpleMode = true
                 };
                 
                 return View(svm);
@@ -43,6 +48,7 @@ namespace Web.Controllers
                 dashboard = dto,
                 windowName = dto.Window.Title,
                 serviceName = dto.Window.ServiceName,
+                IsSimpleMode = false
             };
             
             return View(vm);
@@ -104,6 +110,12 @@ namespace Web.Controllers
         public async Task<IActionResult> Redirect(Guid serviceId, string comment)
         {
             var userId = GetUserId();
+            var simpleMode = await _settingsService.GetSettingByNameAsync("Простой режим");
+            if (simpleMode.Value == "true")
+            {
+                throw new InvalidOperationException("Перенаправление недоступно в простом режиме");
+            }
+
 
             await _operatorService.RedirectTicket(userId, serviceId, comment);
 

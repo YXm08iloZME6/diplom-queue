@@ -27,19 +27,17 @@ namespace Queue.Applications.Services
             if (user == null)
                 return null;
 
-            return new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Surname = user.Surname,
-                MiddleName = user.MiddleName,
-                Status = user.Status,
-                Email = user.Email,
-                WindowId = user.WindowId,
-                Roles = user.UserRoles
-                    .Select(ur => ur.Role.Title)
-                    .ToList()
-            };
+            return new UserDto(user);
+        }
+
+        public async Task<UserDto> GetUserByIdAsync(Guid id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            
+            if (user == null)
+                return null;
+
+            return new UserDto(user);
         }
 
         public async Task<bool> ValidateUser(LoginUserDto dto)
@@ -88,15 +86,9 @@ namespace Queue.Applications.Services
                 await _userRepository.SaveChangesAsync();
                 await _userRepository.CommitTransactionAsync();
 
-                var created = await _userRepository.GetByIdAsync(user.Id);
+                var createdUser = await _userRepository.GetByIdAsync(user.Id);
 
-                return new UserDto
-                {
-                    Id = created.Id,
-                    Email = created.Email,
-                    Status = created.Status,
-                    Roles = created.UserRoles.Select(r => r.Role.Title).ToList()
-                };
+                return new UserDto(createdUser);
             }
             catch
             {
