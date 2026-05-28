@@ -17,14 +17,11 @@ public class DisplayRepository : IDisplayRepository
     }
 
 
-    public async Task<List<(Window Window, Ticket? Ticket)>> GetActiveTicketsAsync()
+    public async Task<List<(Window window, Ticket? ticket)>> GetActiveTicketsAsync()
     {
         var windows = await _dbContext.Windows!.ToListAsync();
-        var windowIds = windows.Select(w => w.Id).ToList();
-
         var tickets = await _dbContext.Tickets!
             .Where(t => t.WindowId.HasValue
-                        && windowIds.Contains(t.WindowId.Value)
                         && (t.Status == TicketStatus.Called || t.Status == TicketStatus.Processing))
             .ToListAsync();
 
@@ -33,12 +30,16 @@ public class DisplayRepository : IDisplayRepository
             .ToList();
     }
 
-    public async Task<List<Ticket>> GetWaitingTicketsAsync(int count)
+    public async Task<List<(Ticket ticket, Service? service)>> GetWaitingTicketsAsync(int count)
     {
-        return await _dbContext.Tickets!
+        var services = await _dbContext.Services!.ToListAsync();
+        var tickets = await _dbContext.Tickets!
             .Where(t => t.Status == TicketStatus.Waiting)
             .OrderBy(t => t.CreatedAt)
             .Take(count)
-            .ToListAsync();
+            .ToListAsync(); 
+        
+        return tickets.Select(t => (Ticket: t, Service: services.FirstOrDefault(s => s.Id == t.ServiceId)))
+            .ToList();
     }
 }

@@ -1,4 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 @import "tailwindcss";
+@source "../../Views/**/*.cshtml";
+
+@theme {
+    --color-primary: #0077ff;
+    --color-secondary: #282828;
+    --color-tertiary: #fff7f1;
+    --color-dark: #474238;
+    --font-display: "Source Sans 3", sans-serif;
+}
 
 @theme inline {
     --font-heading: var(--font-sans);
@@ -25,9 +35,7 @@
     --color-muted-foreground: var(--muted-foreground);
     --color-muted: var(--muted);
     --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
     --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
     --color-popover-foreground: var(--popover-foreground);
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);

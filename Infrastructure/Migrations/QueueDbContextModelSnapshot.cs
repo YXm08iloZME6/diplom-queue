@@ -337,14 +337,14 @@ namespace Infrastructure.Migrations
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             Email = "admin@admin",
-                            PasswordHash = "$2a$11$Jd0inSInLeHPGyMTLkF1ROpyeb6dNjhgBoQ1byWnSQSdbYm0pNE52",
+                            PasswordHash = "$2a$11$7TnDM4XHRML300CIyfP1p.vpjzTQ.aDiWtN0/Ff0hnVHtJRPsT5Wi",
                             Status = 0
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             Email = "operator@operator",
-                            PasswordHash = "$2a$11$M7oan6rhhUb.E.7syqkQgeu.KJYWBWQeD9iWizsbcbX1CpWorQ1X6",
+                            PasswordHash = "$2a$11$2dH1C40o84BlOXX1oYS/Du3f4aTMccOzURYtKg.cxD7IsHCPy.y0S",
                             Status = 0
                         });
                 });
@@ -425,8 +425,25 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            Id = new Guid("2b040596-6b16-492b-922b-3a2662594b6f"),
+                            Number = "1",
                             ServiceId = new Guid("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc"),
+                            Status = "Open",
+                            Title = "Регистратура"
+                        },
+                        new
+                        {
+                            Id = new Guid("d26ebc52-2b3a-42e7-95c1-b927ff1d1e4a"),
+                            Number = "2",
+                            ServiceId = new Guid("99c48a22-122d-4821-afea-2b2b345e592c"),
+                            Status = "Open",
+                            Title = "Регистратура"
+                        },
+                        new
+                        {
+                            Id = new Guid("76033f8f-0688-4ee8-805a-b1dac8c6f469"),
+                            Number = "3",
+                            ServiceId = new Guid("7370aa38-cbb9-4220-915d-ce042194f24e"),
                             Status = "Open",
                             Title = "Регистратура"
                         });

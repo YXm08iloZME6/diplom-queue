@@ -1,33 +1,22 @@
 @model Application.DTOs.DisplayDto
 
 @{
-    Layout = null;
+    ViewBag.Title = "Экран ожидания";
+    Layout = "_KioskLayout";
 }
 
-<!DOCTYPE html>
 
-<html lang="ru">
-<head>
-    <meta charset="utf-8"/>
-    <title>Экран ожидания</title>
-    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true"/>
-</head>
-<body class="min-h-screen bg-accent border-4 border-blue-500">
-<div class="p-10 flex flex-col">
-    <header class="flex items-start justify-between mb-8">
-        <div>
-            <h2 class="text-3xl font-extrabold mt-1 tracking-wide">Текущие вызовы</h2>
+<div class="grid grid-cols-3 gap-8 p-10">
+    <div class="col-span-2 bg-white rounded-3xl p-6 border shadow-sm flex flex-col gap-4">
+        <h2 class="text-3xl font-bold">Обслуживаются</h2>
+        <div id="active-list" class="grid grid-cols-2 gap-4">
+            @await Html.PartialAsync("ActiveList", Model)
         </div>
-    </header>
-
-    <div id="active-list" class="grid grid-cols-2 gap-6">
-        @await Html.PartialAsync("ActiveList", Model)
     </div>
-
-    <div class="mt-12">
-        <h3 class="text-4xl font-extrabold tracking-wide mb-6">Следующие</h3>
-
-        <div id="waiting-list" class="flex flex-wrap gap-4">
+    
+    <div class="bg-white rounded-3xl p-6 border shadow-sm flex flex-col gap-4 overflow-y-scroll">
+        <h2 class="text-3xl font-bold">Очередь</h2>
+        <div id="waiting-list" class="flex flex-col gap-4">
             @await Html.PartialAsync("WaitingList", Model)
         </div>
     </div>
@@ -56,6 +45,4 @@
     connection.start();
 </script>
 
-</body>
-</html>
 

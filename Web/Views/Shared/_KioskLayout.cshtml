@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
+</head>
+<body class="font-display">
+<header>
+    <div class="flex justify-between items-center px-10 py-7 border-b border-b-dark" >
+        <div class="flex gap-4 items-center">
+            <div class="bg-primary/50 text-2xl text-secondary rounded-lg px-3 py-1.5 font-bold">О</div>
+            <div class="flex flex-col tracking-wide">
+                <div class="font-bold uppercase text-secondary">Лекон</div> 
+                <div class="text-sm text-dark">Димитровград · Гоголя 21</div>
+            </div>
+        </div>
+
+        <div class="flex gap-6 text-dark text-lg">
+            <span id="time" class="tracking-widest"></span>
+            <span id="date" class="tracking-wide"></span>
+        </div>
+        
+    </div>
+</header>
+
+<main>
+    @RenderBody()
+</main>
+
+<script>
+    const timeEl = document.getElementById('time');
+    const dateEl = document.getElementById('date');
+    
+    setInterval(() => {
+        timeEl.innerHTML = new Date().toLocaleTimeString([], {
+            hour12: false
+        });
+    }, 1000)
+    
+    const format = {weekday: "long", month: "long", day: "numeric"};
+    dateEl.innerHTML =  new Intl.DateTimeFormat('ru-RU', format).format(new Date())
+</script>
+</body>
+</html>

@@ -1,22 +1,30 @@
 @model Application.DTOs.ServiceDto
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewBag.Title = "Сервисы";
+    Layout = "_KioskLayout";
 }
 
-<form class="flex flex-col gap-8 h-fit w-full max-w-xl bg-white rounded-3xl p-12 shadow-lg" name="info-form" asp-controller="Service" asp-action="GetTicket" method="post" asp-route-serviceId="@Model.Id" asp-route-letter="@Model.Letter">
-    <div>
-        <h1 class="text-3xl font-extrabold tracking-tight mb-1">@Model.Name</h1>
-        <p class="text-muted-foreground text-lg">Введите данные для получения талона</p>
+<div class="container mx-auto flex grow justify-center pt-10">
+    <div class="flex flex-col items-center gap-8">
+        <div class="text-center">
+            <h1 class="text-3xl tracking-wide uppercase font-bold">@Model.Name</h1>
+            <p class="mt-2 tracking-wide text-lg text-dark">Введите данные для получения талона</p>
+        </div> 
+        
+        <form class="flex flex-col gap-8  w-full bg-white rounded-3xl py-12 px-6 border shadow-sm" id="info-form" name="info-form" asp-controller="Service" asp-action="GetTicket" method="post" asp-route-serviceId="@Model.Id" asp-route-letter="@Model.Letter">
+            <div class="flex flex-col gap-2">
+                <label for="phoneNumber" class="text-xl text-secondary">Номер телефона</label>
+                <input id="phoneNumber" name="phoneNumber" placeholder="+7 (995) 335 78-78" class="h-16 w-full rounded-2xl border border-dark bg-primary/10 px-5 text-2xl outline-none focus:border-primary placeholder:text-muted-foreground"/>
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="fullName" class="text-xl text-secondary">Имя</label>
+                <input id="fullName" name="fullName" placeholder="Введите имя" class="h-16 w-full rounded-2xl border border-dark bg-primary/10 px-5 text-2xl outline-none focus:border-primary placeholder:text-muted-foreground"/>
+            </div>
+        </form>
+        <div class="flex gap-4">
+            <a class="text-dark text-xl rounded-3xl p-4 border shadow-sm" asp-area="" asp-controller="Service" asp-action="Index">Вернуться на главную</a>
+            <button type="submit" form="info-form" class="bg-primary/20 text-secondary text-xl rounded-3xl p-4 border border-primary">Получить талон</button>
+        </div>
     </div>
-    <div class="flex flex-col gap-2">
-        <label for="phoneNumber" class="text-xl font-semibold">Номер телефона</label>
-        <input id="phoneNumber" name="phoneNumber" placeholder="+79953357878" class="h-16 w-full rounded-2xl border-2 border-input bg-transparent px-5 text-2xl transition-colors outline-none focus:border-ring placeholder:text-muted-foreground"/>
-    </div>
-    <div class="flex flex-col gap-2">
-        <label for="fullName" class="text-xl font-semibold">Имя</label>
-        <input id="fullName" name="fullName" placeholder="Введите имя" class="h-16 w-full rounded-2xl border-2 border-input bg-transparent px-5 text-2xl transition-colors outline-none focus:border-ring placeholder:text-muted-foreground"/>
-    </div>
-    <button type="submit" class="h-16 bg-primary text-primary-foreground rounded-2xl text-2xl font-semibold tracking-wide mt-2 cursor-pointer active:opacity-80 transition-opacity">Получить талон</button>
-</form>
+</div>
