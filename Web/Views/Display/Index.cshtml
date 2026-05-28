@@ -22,8 +22,11 @@
     </div>
 </div>
 
+<audio id="recall-sound" src="~/sounds/recall.mp3" preload="auto"></audio>
 <script src="~/lib/microsoft-signalr/signalr.min.js" asp-append-version="true"></script>
+
 <script>
+    const recallSound = document.getElementById("recall-sound");
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/hubs/queue")
         .withAutomaticReconnect()
@@ -37,9 +40,27 @@
     connection.on("NewTicket", () => {
         updateList("waiting-list", "@Url.Action("WaitingList", "Display")") 
     });
+    
     connection.on("UpdateTicket", () => {
         updateList("waiting-list", "@Url.Action("WaitingList", "Display")") 
         updateList("active-list", "@Url.Action("ActiveList", "Display")") 
+    });
+
+    connection.on("CallTicket", () => {
+        recallSound.play()
+        
+        updateList("waiting-list", "@Url.Action("WaitingList", "Display")")
+        updateList("active-list", "@Url.Action("ActiveList", "Display")")
+    });
+    
+    connection.on("RecallTicket", (ticket) => {
+        recallSound.play()
+        const el = document.getElementById("window-" + ticket.windowId);
+
+        el.classList.add("ring-4", "ring-amber-400", "animate-pulse");
+        setTimeout(() => {
+            el.classList.remove("ring-4", "ring-amber-400", "animate-pulse");
+        }, 4000);
     });
 
     connection.start();

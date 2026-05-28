@@ -80,7 +80,7 @@ public class OperatorService : IOperatorService
             simpleTicket.CalledAt = DateTime.UtcNow;
 
             await SaveAndReturnDto(simpleTicket);
-            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
+            await _queueNotifier.NotifyCallTicketAsync(new TicketDto(simpleTicket));
             return new TicketDto(simpleTicket);
         }
 
@@ -107,7 +107,7 @@ public class OperatorService : IOperatorService
         user.Status = UserStatus.Busy;
 
         await SaveAndReturnDto(ticket);
-        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(ticket));
+        await _queueNotifier.NotifyCallTicketAsync(new TicketDto(ticket));
 
         return new TicketDto(ticket, offset);
     }
@@ -125,7 +125,7 @@ public class OperatorService : IOperatorService
             simpleTicket.CalledAt = DateTime.UtcNow;
 
             await SaveAndReturnDto(simpleTicket);
-            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
+            await _queueNotifier.NotifyRecallTicketAsync(new TicketDto(simpleTicket));
 
             return new TicketDto(simpleTicket);
         }
@@ -137,7 +137,7 @@ public class OperatorService : IOperatorService
         currentTicket.CalledAt = DateTime.UtcNow;
 
         await SaveAndReturnDto(currentTicket);
-        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(currentTicket));
+        await _queueNotifier.NotifyRecallTicketAsync(new TicketDto(currentTicket));
 
         return new TicketDto(currentTicket, offset);
     }

@@ -29,6 +29,7 @@ public class TicketDto
         CompletedAt = ticket.CompletedAt;
         Status = ticket.Status.ToString();
         Number = ticket.Number;
+        WindowId = ticket.WindowId;
     }
 
     public TicketDto(Ticket ticket, int utcOffset)
