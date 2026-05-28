@@ -6,8 +6,8 @@ namespace Application.Interfaces.Repositories;
 public interface IWindowRepository
 {
     Task<List<Window>> GetAllWindowsAsync();
-    Task<Window> GetWindowTitleByIdAsync(Guid windowId);
+    Task<Window> GetWindowByIdAsync(Guid windowId);
     Task CreateWindowAsync(Window window);
-    Task SaveChangeAsync();
     Task UpdateWindowAsync(Window window);//добавил дэнчик
+    Task DeleteWindowAsync(Window window);
 }

@@ -12,7 +12,6 @@ public interface IOperatorRepository
     Task<Ticket?> GetCurrentTicketWithoutWindowId();
     Task UpdateTicketAsync(Ticket ticket);
     Task<Window?> GetWindowByUserIdAsync(Guid userId);
-    Task SaveChangesAsync();
     Task UpdateWindowAsync(Window window);//добавил дэнчик
 
 }

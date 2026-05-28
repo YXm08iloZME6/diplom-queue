@@ -34,12 +34,6 @@ public class SettingsService : ISettingsService
         return settings != null ? new SettingsDto(settings) : null;
     }
 
-    public async Task UpdateSettingsAsync(SettingsDto settings)
-    {
-        var setting = await _repository.GetSettingByIdAsync(settings.Id);
-        _repository.UpdateSettingsAsync(setting!); 
-    }
-
     public async Task UpdateSettingValueAsync(Guid id, string value)
     {
         await _repository.UpdateSettingValueAsync(id, value);

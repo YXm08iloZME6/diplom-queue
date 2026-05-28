@@ -52,32 +52,28 @@ namespace Queue.Infrastructure.Repositories
             await _context.Users.AddAsync(user);
         }
 
-        public Task UpdateAsync(User user)
+        public async Task UpdateAsync(User user)
         {
             _context.Users.Update(user);
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(User user)
+        public async Task DeleteAsync(User user)
         {
             _context.Users.Remove(user);
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
 
         public async Task RemoveUserRolesAsync(Guid userId)
         {
             var roles = _context.UserRoles.Where(x => x.UserId == userId);
             _context.UserRoles.RemoveRange(roles);
-            await Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
 
         public async Task AddUserRoleAsync(UserRole userRole)
         {
             await _context.UserRoles.AddAsync(userRole);
-        }
-
-        public async Task SaveChangesAsync()
-        {
             await _context.SaveChangesAsync();
         }
 

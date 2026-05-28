@@ -10,10 +10,9 @@ namespace Application.Interfaces.Services;
     Task<bool> RemoveUser(Guid id);
     Task<List<TicketDto>> TicketStats(DateTime start, DateTime end);
     Task<ServiceDto> AddServiceAsync(CreateServiceDto serviceDto);
+    Task UpdateServiceAsync(UpdateServiceDto serviceDto);
+    Task DeleteServiceAsync(Guid serviceId);
     Task ToggleServiceStatus(Guid serviceId);
     Task ToggleServiceFacets(Guid serviceId);
-    Task AddSettings(SettingsDto settings);
-    Task UpdateSettings(SettingsDto settings);
-    Task DeleteSettings(Guid settingsId);
     Task QueueResetAsync();
 }

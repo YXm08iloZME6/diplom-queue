@@ -25,7 +25,6 @@ namespace Application.Services
             };
 
             await _windowRepository.CreateWindowAsync(newWindow);
-            await _windowRepository.SaveChangeAsync();
 
             return new WindowDto
             {
@@ -35,6 +34,29 @@ namespace Application.Services
                 ServiceId = newWindow.ServiceId
             };
 
+        }
+
+        public async Task UpdateWindowAsync(UpdateWindowDto dto)
+        {
+            var window = await _windowRepository.GetWindowByIdAsync(dto.Id);
+
+            if (window == null)
+                throw new Exception("Окно не найдено");
+
+            window.Title = dto.Title;
+            window.ServiceId = dto.ServiceId;
+
+            await _windowRepository.UpdateWindowAsync(window);
+        }
+
+        public async Task DeleteWindowAsync(Guid id)
+        {
+            var window = await _windowRepository.GetWindowByIdAsync(id);
+
+            if (window == null)
+                throw new Exception("Окно не найдено");
+
+            await _windowRepository.DeleteWindowAsync(window);
         }
 
         public async Task<List<WindowDto>> GetAllWindows()
@@ -53,7 +75,7 @@ namespace Application.Services
 
         public async Task<WindowDto> GetWindowById(Guid windowId)
         {
-            var window = await _windowRepository.GetWindowTitleByIdAsync(windowId);
+            var window = await _windowRepository.GetWindowByIdAsync(windowId);
 
             if (window == null)
             {
@@ -70,14 +92,13 @@ namespace Application.Services
         
         public async Task<WindowDto> UpdateWindowStatusAsync(Guid windowId, WindowStatus status)
         {
-            var window = await _windowRepository.GetWindowTitleByIdAsync(windowId);
+            var window = await _windowRepository.GetWindowByIdAsync(windowId);
 
             if (window == null)
                 throw new InvalidOperationException("Окно не найдено");
 
             window.Status = status;
             await _windowRepository.UpdateWindowAsync(window);
-            await _windowRepository.SaveChangeAsync();
 
             return new WindowDto
             {

@@ -63,16 +63,23 @@ public class ServiceRepository : IServiceRepository
     public async Task CreateServiceAsync(Service service)
     {
         await _dbContext.AddAsync(service);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task SaveChangeAsync()
-    {
-        return _dbContext.SaveChangesAsync();
-    }
-
-    public Task UpdateAsync(Service service)
+    public Task UpdateServiceAsync(Service service)
     {
         _dbContext.Services.Update(service);
         return _dbContext.SaveChangesAsync();
+    }
+    
+    public async Task DeleteServiceAsync(Service service)
+    {
+        _dbContext.Services.Remove(service);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task SaveChangeAsync()
+    {
+        await _dbContext.SaveChangesAsync();
     }
 }

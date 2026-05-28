@@ -13,7 +13,6 @@ public interface IUserRepository
     Task DeleteAsync(User user);
     Task RemoveUserRolesAsync(Guid userId);
     Task AddUserRoleAsync(UserRole userRole);
-    Task SaveChangesAsync();
 
     Task BeginTransactionAsync();
     Task CommitTransactionAsync();

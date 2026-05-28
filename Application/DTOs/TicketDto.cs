@@ -29,6 +29,7 @@ public class TicketDto
         CompletedAt = ticket.CompletedAt;
         Status = ticket.Status.ToString();
         Number = ticket.Number;
+        RedirectComment = ticket.RedirectComment;
     }
 
     public TicketDto(Ticket ticket, int utcOffset)

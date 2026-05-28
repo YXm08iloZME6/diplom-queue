@@ -27,3 +27,10 @@ public class CreateWindowDto
     public WindowStatus Status { get; set; }
     public Guid? ServiceId { get; set; }
 }
+
+public class UpdateWindowDto
+{
+    public Guid Id { get; set; }
+    public string Title { get; set; }
+    public Guid? ServiceId { get; set; }
+}

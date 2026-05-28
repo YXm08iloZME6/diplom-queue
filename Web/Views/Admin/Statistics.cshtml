@@ -3,82 +3,72 @@
 <div class="max-w-7xl mx-auto p-8">
 
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-slate-800">
-            Статистика талонов
-        </h1>
-
-        <p class="text-slate-500 mt-2">
-            Просмотр завершённых талонов по диапазону дат
-        </p>
+        <h1 class="text-3xl font-bold text-slate-800">Статистика талонов</h1>
+        <p class="text-slate-500 mt-2">Просмотр завершённых талонов по диапазону дат</p>
     </div>
 
     <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 mb-8">
-
-        <form asp-action="Statistics"
-              method="post"
-              class="grid grid-cols-1 md:grid-cols-3 gap-5 items-end">
-
+        <form asp-action="Statistics" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-5 items-end">
+ 
             <div>
-                <label asp-for="StartDate"
-                       class="block text-sm font-medium text-slate-700 mb-2">
-                    Начальная дата
-                </label>
-
-                <input asp-for="StartDate"
-                       type="datetime-local"
-                       class="w-full rounded-2xl border border-slate-300 px-4 py-3
-                              focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label asp-for="StartDate" class="block text-sm font-medium text-slate-700 mb-2">Начальная дата</label>
+                <input asp-for="StartDate" type="datetime-local" class="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
             <div>
-                <label asp-for="EndDate"
-                       class="block text-sm font-medium text-slate-700 mb-2">
-                    Конечная дата
-                </label>
-
-                <input asp-for="EndDate"
-                       type="datetime-local"
-                       class="w-full rounded-2xl border border-slate-300 px-4 py-3
-                              focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <label asp-for="EndDate" class="block text-sm font-medium text-slate-700 mb-2">Конечная дата</label>
+                <input asp-for="EndDate" type="datetime-local" class="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
-            <button type="submit"
-                    class="h-12 rounded-2xl bg-blue-600 text-white font-semibold
-                           hover:bg-blue-700 transition">
-                Показать
-            </button>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Статус</label>
+
+                <select asp-for="Status" class="w-full rounded-2xl border border-slate-300 px-4 py-3">
+                    <option value="">Все статусы</option>
+                    <option value="Waiting">Ожидает</option>
+                    <option value="Called">Вызван</option>
+                    <option value="Processing">В обработке</option>
+                    <option value="Completed">Завершен</option>
+                    <option value="Cancelled">Отменен</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Услуга</label>
+
+                <select asp-for="ServiceId"class="w-full rounded-2xl border border-slate-300 px-4 py-3">
+                    <option value="">Все услуги</option>
+                    @foreach (var service in Model.Services)
+                    {
+                        <option value="@service.Id">@service.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="flex gap-3 mt-4">
+                <button type="submit" name="Today" value="true" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition">Сегодня</button>
+                <button type="submit" name="Yesterday" value="true" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition">Вчера</button>
+            </div>
+
+            <button type="submit" class="h-12 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Показать</button>
         </form>
     </div>
 
     <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
 
         <div class="px-6 py-5 border-b border-slate-200">
-            <h2 class="text-xl font-semibold text-slate-800">
-                Найдено талонов: @Model.Tickets.Count
-            </h2>
+            <h2 class="text-xl font-semibold text-slate-800">Найдено талонов: @Model.Tickets.Count</h2>
         </div>
 
         @if (Model.Tickets.Any())
         {
             <table class="w-full">
-
                 <thead class="bg-slate-100">
                     <tr>
-                        <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                            Номер
-                        </th>
-
-                        <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                            Статус
-                        </th>
-
-                        <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                            Создан
-                        </th>
-
-                        <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                            Завершён
-                        </th>
+                        <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">Номер</th>
+                        <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">Статус</th>
+                        <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">Создан</th>
+                        <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">Завершён</th>
                     </tr>
                 </thead>
 
@@ -87,22 +77,17 @@
                     @foreach (var ticket in Model.Tickets)
                     {
                         <tr class="border-t border-slate-100 hover:bg-slate-50 transition">
-
-                            <td class="px-6 py-4 font-semibold text-slate-800">
-                                @ticket.Number
-                            </td>
-
+                            <td class="px-6 py-4 font-semibold text-slate-800">@ticket.Number</td>
                             <td class="px-6 py-4 text-slate-600">
-                                @ticket.Status
+                                @(ticket.Status == "Waiting" ? "Ожидает" :
+                                    ticket.Status == "Called" ? "Вызван" :
+                                    ticket.Status == "Processing" ? "В обработке" :
+                                    ticket.Status == "Completed" ? "Завершен" :
+                                    ticket.Status == "Cancelled" ? "Отменен" :
+                                    ticket.Status)
                             </td>
-
-                            <td class="px-6 py-4 text-slate-600">
-                                @ticket.CreatedAt
-                            </td>
-
-                            <td class="px-6 py-4 text-slate-600">
-                                @ticket.CompletedAt
-                            </td>
+                            <td class="px-6 py-4 text-slate-600">@ticket.CreatedAt</td>
+                            <td class="px-6 py-4 text-slate-600">@ticket.CompletedAt</td>
                         </tr>
                     }
 
@@ -112,18 +97,9 @@
         else
         {
             <div class="p-12 text-center">
-
-                <div class="text-5xl mb-4">
-                    📊
-                </div>
-
-                <h3 class="text-xl font-semibold text-slate-700 mb-2">
-                    Нет данных
-                </h3>
-
-                <p class="text-slate-500">
-                    За выбранный период талонов не найдено
-                </p>
+                <div class="text-5xl mb-4">📊</div>
+                <h3 class="text-xl font-semibold text-slate-700 mb-2">Нет данных</h3>
+                <p class="text-slate-500">За выбранный период талонов не найдено</p>
             </div>
         }
     </div>
