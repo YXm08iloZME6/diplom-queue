@@ -46,7 +46,7 @@ namespace Web.Controllers
             var vm = new OperatorDashboardViewModel
             {
                 dashboard = dto,
-                windowName = dto.Window.Title,
+                windowName = dto.Window.Number,
                 serviceName = dto.Window.ServiceName,
                 IsSimpleMode = false
             };

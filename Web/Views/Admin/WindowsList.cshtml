@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Список окон";
+    var sortedWindows = Model?.OrderBy(w => w.Number).ToList();
 }
 
 <div class="min-h-screen w-full bg-slate-50 px-10 py-8">
@@ -43,7 +44,7 @@
                     <thead class="bg-slate-100">
                         <tr>
                             <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">
-                                Название
+                                Номер
                             </th>
 
                             <th class="text-left px-6 py-4 text-sm font-semibold text-slate-700">
@@ -62,10 +63,10 @@
 
                     <tbody>
 
-                        @foreach (var window in Model)
+                        @foreach (var window in sortedWindows)
                         {
                             <tr class="border-t border-slate-100 hover:bg-slate-50 transition">
-                                <td class="px-6 py-4 font-semibold text-slate-800">@window.Title</td>
+                                <td class="px-6 py-4 font-semibold text-slate-800">@window.Number</td>
 
                                 <td class="px-6 py-4">
                                     @if (window.Status.ToString() == "Open")

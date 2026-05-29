@@ -236,7 +236,7 @@ public class OperatorService : IOperatorService
         currentTicket.Status = TicketStatus.Waiting;
         currentTicket.WindowId = null;
         currentTicket.CalledAt = null;
-        // currentTicket.RedirectComment = $"Перенаправлен из окна номер {window.Title} с комментарием:" + comment;
+        currentTicket.RedirectComment = $"Перенаправлен из окна номер {window.Number} с комментарием:" + comment;
         user.Status = UserStatus.Waiting;
         window.Status = WindowStatus.Open;
 

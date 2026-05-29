@@ -19,6 +19,7 @@ namespace Application.Services
         {
             var newWindow = new Window
             {
+                Number = window.Number,
                 Status = window.Status,
                 ServiceId = window.ServiceId
             };
@@ -28,6 +29,7 @@ namespace Application.Services
             return new WindowDto
             {
                 Id = newWindow.Id,
+                Number = newWindow.Number,
                 Status = newWindow.Status,
                 ServiceId = newWindow.ServiceId
             };
@@ -42,6 +44,7 @@ namespace Application.Services
                 throw new Exception("Окно не найдено");
 
             window.ServiceId = dto.ServiceId;
+            window.Number = dto.Number;
 
             await _windowRepository.UpdateWindowAsync(window);
         }
@@ -63,6 +66,7 @@ namespace Application.Services
             return windows.Select(w => new WindowDto
             {
                 Id = w.Id,
+                Number = w.Number,
                 Status = w.Status,
                 ServiceId = w.ServiceId,
                 ServiceName = w.Service.Name
@@ -81,7 +85,10 @@ namespace Application.Services
             return new WindowDto
             {
                 Id = window.Id,
-                Status = window.Status
+                Number = window.Number,
+                Status = window.Status,
+                ServiceId = window.ServiceId,
+                ServiceName = window.Service?.Name ?? "Не указано"
             };
         }
         
