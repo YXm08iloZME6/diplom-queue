@@ -33,6 +33,27 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Tickets\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Display\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\.DS_Store" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\OFL.txt" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\README.txt" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\SourceSans3-Italic-VariableFont_wght.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\SourceSans3-VariableFont_wght.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-Black.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-BlackItalic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-Bold.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-BoldItalic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-ExtraBold.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-ExtraBoldItalic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-ExtraLight.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-ExtraLightItalic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-Italic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-Light.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-LightItalic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-Medium.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-MediumItalic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-Regular.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-SemiBold.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\fonts\Source_Sans_3\static\SourceSans3-SemiBoldItalic.ttf" />
     </ItemGroup>
 
     <ItemGroup>

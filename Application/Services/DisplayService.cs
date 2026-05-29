@@ -26,13 +26,19 @@ public class DisplayService : IDisplayService
         {
             ActiveTickets = calls.Select(c => new DisplayTicketDto()
             {
-                WindowId = c.Window.Id,
-                Title = c.Window.Title ?? "",
-                TicketNumber = c.Ticket?.Number,
-                WindowNumber = c.Window.Number,
+                WindowId = c.window.Id,
+                TicketNumber = c.ticket?.Number,
+                WindowNumber = c.window.Number,
+                Status = c.ticket?.Status,
+                ServiceName = c.window?.Service?.Name,
             }).ToList(),
             
-            WaitingTickets = waiting.Select(t => new TicketDto(t)).ToList()
+            WaitingTickets = waiting.Select(t => new DisplayTicketDto()
+            {
+                TicketNumber = t.ticket.Number,
+                Status = t.ticket.Status, 
+                ServiceName = t.service?.Name,
+            }).ToList()
         };
     }
 }

@@ -81,7 +81,7 @@ public class OperatorService : IOperatorService
             simpleTicket.CalledAt = DateTime.UtcNow;
 
             await _operatorRepository.UpdateTicketAsync(simpleTicket);
-            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
+            await _queueNotifier.NotifyCallTicketAsync(new TicketDto(simpleTicket));
             return new TicketDto(simpleTicket);
         }
 
@@ -109,7 +109,7 @@ public class OperatorService : IOperatorService
         window.Status = WindowStatus.Busy;
 
         await _operatorRepository.UpdateTicketAsync(ticket);
-        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(ticket));
+        await _queueNotifier.NotifyCallTicketAsync(new TicketDto(ticket));
 
         return new TicketDto(ticket, offset);
     }
@@ -127,7 +127,7 @@ public class OperatorService : IOperatorService
             simpleTicket.CalledAt = DateTime.UtcNow;
 
             await _operatorRepository.UpdateTicketAsync(simpleTicket);
-            await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(simpleTicket));
+            await _queueNotifier.NotifyRecallTicketAsync(new TicketDto(simpleTicket));
 
             return new TicketDto(simpleTicket);
         }
@@ -139,7 +139,7 @@ public class OperatorService : IOperatorService
         currentTicket.CalledAt = DateTime.UtcNow;
 
         await _operatorRepository.UpdateTicketAsync(currentTicket);
-        await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(currentTicket));
+        await _queueNotifier.NotifyRecallTicketAsync(new TicketDto(currentTicket));
 
         return new TicketDto(currentTicket, offset);
     }
@@ -236,7 +236,7 @@ public class OperatorService : IOperatorService
         currentTicket.Status = TicketStatus.Waiting;
         currentTicket.WindowId = null;
         currentTicket.CalledAt = null;
-        currentTicket.RedirectComment = $"Перенаправлен из окна номер {window.Title} с комментарием:" + comment;
+        currentTicket.RedirectComment = $"Перенаправлен из окна номер {window.Number} с комментарием:" + comment;
         user.Status = UserStatus.Waiting;
         window.Status = WindowStatus.Open;
 

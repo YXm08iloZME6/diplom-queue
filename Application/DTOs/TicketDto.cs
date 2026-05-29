@@ -30,6 +30,7 @@ public class TicketDto
         Status = ticket.Status.ToString();
         Number = ticket.Number;
         RedirectComment = ticket.RedirectComment;
+        WindowId = ticket.WindowId;
     }
 
     public TicketDto(Ticket ticket, int utcOffset)

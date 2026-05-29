@@ -85,27 +85,14 @@ public class QueueDbContext : DbContext
             new { UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"), RoleId = Guid.Parse("11111111-1111-1111-1111-111111111111") },
             new { UserId = Guid.Parse("22222222-2222-2222-2222-222222222222"), RoleId = Guid.Parse("11111111-1111-1111-1111-111111111111") }
             );
-
         
         var window = builder.Entity<Window>();
         window.ToTable("windows");
         window.HasKey(w => w.Id);
         window.Property(w => w.Id).HasDefaultValueSql("gen_random_uuid()");
-        window.Property(w => w.Title).IsRequired().HasMaxLength(50);
         window.Property(w => w.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
         window.HasOne(w => w.Service).WithMany().HasForeignKey(w => w.ServiceId).IsRequired();
         window.HasMany(w => w.Operators).WithOne(u => u.Window).HasForeignKey(u => u.WindowId);
-
-        var testWindowId = Guid.Parse("33333333-3333-3333-3333-333333333333");
-        var serviceId = Guid.Parse("dfc3d5c0-69fc-4ac1-a593-473b945dd3bc");
-
-        window.HasData(new
-        {
-            Id = testWindowId,
-            Title = "Регистратура",
-            Status = WindowStatus.Open,
-            ServiceId = serviceId
-        });
 
         var settings = builder.Entity<Settings>();
         settings.ToTable("settings");

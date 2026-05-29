@@ -24,4 +24,14 @@ public class QueueNotifier : IQueueNotifier
     {
         await _hubContext.Clients.All.SendAsync("UpdateTicket", ticket, ct);
     }
+
+    public async Task NotifyCallTicketAsync(TicketDto ticket, CancellationToken ct = default)
+    {
+        await _hubContext.Clients.All.SendAsync("CallTicket", ticket, ct);
+    }
+
+    public async Task NotifyRecallTicketAsync(TicketDto ticket, CancellationToken ct = default)
+    {
+        await _hubContext.Clients.All.SendAsync("RecallTicket", ticket, ct);
+    }
 }

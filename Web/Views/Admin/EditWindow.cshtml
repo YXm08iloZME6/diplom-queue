@@ -26,9 +26,9 @@
                 </div>
 
                 <div>
-                    <label asp-for="Window.Title" class="block mb-2 text-sm font-semibold text-slate-700">Название окна</label>
-                    <input asp-for="Window.Title" class="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
-                    <span asp-validation-for="Window.Title" class="text-sm text-red-500 mt-1 block"></span>
+                    <label asp-for="Window.Number" class="block mb-2 text-sm font-semibold text-slate-700">Название окна</label>
+                    <input asp-for="Window.Number" class="w-full rounded-2xl border border-slate-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+                    <span asp-validation-for="Window.Number" class="text-sm text-red-500 mt-1 block"></span>
                 </div>
 
                 <div>
@@ -47,7 +47,7 @@
 
                 <div class="flex items-center gap-4 pt-4">
                     <button type="submit" class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition shadow-sm">Сохранить изменения</button>
-                    <a asp-action="WindowList" class="px-6 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">Назад</a>
+                    <a asp-action="WindowsList" class="px-6 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">Назад</a>
                 </div>
             </form>
         </div>

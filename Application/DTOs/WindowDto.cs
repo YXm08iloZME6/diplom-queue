@@ -6,7 +6,7 @@ namespace Application.DTOs;
 public class WindowDto
 {
     public Guid Id { get; set; }
-    public string? Title { get; set; }
+    public string? Number { get; set; }
     public WindowStatus Status { get; set; }
     public Guid? ServiceId { get; set; }
     public string ServiceName { get; set; }
@@ -14,16 +14,16 @@ public class WindowDto
     public WindowDto(Window window)
     {
         Id = window.Id;
-        Title = window.Title;
+        Number = window.Number;
         Status = window.Status;
         ServiceId = window.ServiceId;
-        ServiceName = window.Service.Name;
+        ServiceName = window.Service?.Name ?? "Не указано";
     }
 }
 
 public class CreateWindowDto
 {
-    public string? Title { get; set; }
+    public string? Number { get; set; }
     public WindowStatus Status { get; set; }
     public Guid? ServiceId { get; set; }
 }
@@ -31,6 +31,6 @@ public class CreateWindowDto
 public class UpdateWindowDto
 {
     public Guid Id { get; set; }
-    public string Title { get; set; }
+    public string Number { get; set; }
     public Guid? ServiceId { get; set; }
 }

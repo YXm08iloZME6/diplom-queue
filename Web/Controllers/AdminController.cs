@@ -263,7 +263,7 @@ namespace Queue.Controllers
                 Window = new UpdateWindowDto
                 {
                     Id = window.Id,
-                    Title = window.Title,
+                    Number = window.Number,
                     ServiceId = window.ServiceId
                 },
 

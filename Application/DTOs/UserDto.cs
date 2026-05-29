@@ -23,7 +23,7 @@ public class UserDto
         Status = user.Status;
         Email = user.Email;
         WindowId = user.WindowId;
-        WindowName = user.Window?.Title;
+         WindowName = user.Window?.Number;
         Roles = user.UserRoles.Select(ur => ur.Role.Title).ToList();
     }
 }
