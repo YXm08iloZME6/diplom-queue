@@ -70,7 +70,6 @@ namespace Queue.Applications.Services
                 };
 
                 await _userRepository.AddAsync(user);
-                await _userRepository.SaveChangesAsync();
 
                 var role = await _roleRepository.GetByTitleAsync("operator");
 
@@ -83,7 +82,6 @@ namespace Queue.Applications.Services
                     RoleId = role.Id
                 });
 
-                await _userRepository.SaveChangesAsync();
                 await _userRepository.CommitTransactionAsync();
 
                 var createdUser = await _userRepository.GetByIdAsync(user.Id);

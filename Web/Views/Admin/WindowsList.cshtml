@@ -5,8 +5,6 @@
 }
 
 <div class="min-h-screen w-full bg-slate-50 px-10 py-8">
-
-    <!-- HEADER -->
     <div class="flex justify-between items-center mb-10">
 
         <div>
@@ -67,36 +65,36 @@
                         @foreach (var window in Model)
                         {
                             <tr class="border-t border-slate-100 hover:bg-slate-50 transition">
-
-                                <td class="px-6 py-4 font-semibold text-slate-800">
-                                    @window.Title
-                                </td>
+                                <td class="px-6 py-4 font-semibold text-slate-800">@window.Title</td>
 
                                 <td class="px-6 py-4">
-
                                     @if (window.Status.ToString() == "Open")
                                     {
                                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
                                             🟢 Открыто
                                         </span>
                                     }
-                                    else if (window.Status.ToString() == "Offline")
+                                    else if (window.Status.ToString() == "Busy")
                                     {
                                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                                            🔴 Закрыто
+                                            🔴 Занято
                                         </span>
                                     }
                                     else
                                     {
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
-                                            @window.Status
-                                        </span>
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">@window.Status</span>
                                     }
 
                                 </td>
-
-                                <td class="px-6 py-4 text-slate-600">
-                                    @window.ServiceName
+                                <td class="px-6 py-4 text-slate-600">@window.ServiceName</td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        <a asp-action="EditWindow" asp-route-id="@window.Id" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200">✏️</a>
+                                        <form asp-action="DeleteWindow" method="post">
+                                            <input type="hidden" name="id" value="@window.Id" />
+                                            <button type="submit" class="px-4 py-2 rounded-xl bg-red-100 hover:bg-red-200 text-red-600">🗑</button>
+                                        </form>
+                                    </div>
                                 </td>
 
                             </tr>

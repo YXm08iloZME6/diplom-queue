@@ -60,20 +60,16 @@ public class OperatorRepository : IOperatorRepository
             .FirstOrDefaultAsync(w => w.Operators.Any(o => o.Id == userId));
     }
 
-    public async Task SaveChangesAsync()
+
+    public async Task UpdateTicketAsync(Ticket ticket)
     {
+        _context.Tickets.Update(ticket);
         await _context.SaveChangesAsync();
     }
 
-    public Task UpdateTicketAsync(Ticket ticket)
-    {
-        _context.Tickets.Update(ticket);
-        return Task.CompletedTask;
-    }
-
-    public Task UpdateWindowAsync(Window window) //дэнчик
+    public async Task UpdateWindowAsync(Window window) //дэнчик
     {
         _context.Windows.Update(window);
-        return Task.CompletedTask;
+        await _context.SaveChangesAsync();
     }
 }

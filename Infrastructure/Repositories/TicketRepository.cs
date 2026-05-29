@@ -58,10 +58,6 @@ public class TicketRepository : ITicketRepository
         return await _dbContext.Tickets.Where(t => targetStatus.Contains(t.Status)).ToListAsync();
     }
 
-    public Task SaveChangesAsync()
-    {
-        return _dbContext.SaveChangesAsync();
-    }
 
     public async Task<List<Ticket>> GetByDateRangeAsync(DateTime start, DateTime end)
     {

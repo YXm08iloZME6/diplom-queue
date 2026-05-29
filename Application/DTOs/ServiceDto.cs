@@ -44,6 +44,15 @@ public class CreateServiceDto
     public Guid? ParentId { get; set; }
 }
 
+public class UpdateServiceDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string? Letter { get; set; }
+    public string? Description { get; set; }
+    public string? IconName { get; set; }
+}
+
 
 
 

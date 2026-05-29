@@ -56,6 +56,43 @@ namespace Queue.Controllers
             await _adminService.AddServiceAsync(model.Service);
             return RedirectToAction(nameof(ServiceList));
         }
+        [HttpGet]
+        public async Task<IActionResult> EditService(Guid id)
+        {
+            var service = await _serviceService.GetServiceByIdAsync(id);
+            return View(service);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditService(UpdateServiceDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+                
+
+            await _adminService.UpdateServiceAsync(new UpdateServiceDto
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                IconName = model.IconName,
+                Letter = model.Letter
+            });
+
+            return RedirectToAction(nameof(ServiceList));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteService(Guid id)
+        {
+            await _adminService.DeleteServiceAsync(id);
+
+            return RedirectToAction(nameof(ServiceList));
+        }
 
         [HttpPost]
         public async Task<IActionResult> ToggleServiceStatus(Guid id)
@@ -215,6 +252,49 @@ namespace Queue.Controllers
             return RedirectToAction(nameof(WindowsList));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditWindow(Guid id)
+        {
+            var window = await _windowService.GetWindowById(id);
+            var services = await _serviceService.GetAllServicesAsync();
+
+            var model = new EditWindowViewModel
+            {
+                Window = new UpdateWindowDto
+                {
+                    Id = window.Id,
+                    Title = window.Title,
+                    ServiceId = window.ServiceId
+                },
+
+                Services = services.ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditWindow(EditWindowViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Services = (await _serviceService.GetAllServicesAsync()).ToList();
+                return View(model);
+            }
+
+            await _windowService.UpdateWindowAsync(model.Window);
+
+            return RedirectToAction(nameof(WindowsList));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteWindow(Guid id)
+        {
+            await _windowService.DeleteWindowAsync(id);
+            return RedirectToAction(nameof(WindowsList));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> QueueReset()
@@ -227,20 +307,23 @@ namespace Queue.Controllers
         }
 
         [HttpGet]
-        public IActionResult Statistics()
+        public async Task<IActionResult> Statistics()
         {
-            return View(new StatisticsViewModel
-            {
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Today
-            });
+            var model = new StatisticsViewModel();
+
+            var services = await _serviceService.GetAllServicesAsync();
+            model.Services = services;
+            model.StartDate = DateTime.Today;
+            model.EndDate = DateTime.Today;
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Statistics(StatisticsViewModel model)
         {
             
-            model.Tickets = await _adminService.TicketStats(model.StartDate, model.EndDate);
+            model.Tickets = await _adminService.TicketStats(model.StartDate, model.EndDate); /// добавить фильтры
 
             return View(model);
         }

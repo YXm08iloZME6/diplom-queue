@@ -69,6 +69,17 @@
                                 </button>
                             </form>
                         </td>
+
+                        <td class="px-4 py-4">
+                            <div class="flex gap-2">
+                                <a asp-action="EditService"asp-route-id="@service.Id" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">✏️</a>
+
+                                <form asp-action="DeleteService" method="post">
+                                    <input type="hidden" name="id" value="@service.Id" />
+                                    <button type="submit"class="px-4 py-2 rounded-xl bg-red-100 hover:bg-red-200 text-sm text-red-600">🗑</button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
 
                     @foreach (var child in service.Children)
@@ -115,6 +126,17 @@
                                         </span>
                                     </button>
                                 </form>
+                            </td>
+
+                            <td class="px-4 py-4">
+                                <div class="flex gap-2">
+                                    <a asp-action="EditService" asp-route-id="@child.Id" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm">✏️</a>
+
+                                    <form asp-action="DeleteService" method="post">
+                                        <input type="hidden" name="id" value="@child.Id" />
+                                        <button type="submit" class="px-4 py-2 rounded-xl bg-red-100 hover:bg-red-200 text-sm text-red-600">🗑</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }

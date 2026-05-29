@@ -10,6 +10,8 @@ public interface IServiceRepository
     Task<Service> GetServiceByIdAsync(Guid id);
     Task<List<Guid>> GetServiceTreeByIdAsync(Guid parentId);
     Task CreateServiceAsync(Service service);
+    Task UpdateServiceAsync(Service service);
+    Task DeleteServiceAsync(Service service);
     Task SaveChangeAsync();
-    Task UpdateAsync(Service service);
+
 }

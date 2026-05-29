@@ -64,7 +64,6 @@ namespace Queue.Applications.Services
             };
 
             await _userRepository.AddAsync(user);
-            await _userRepository.SaveChangesAsync();
 
             foreach (var roleName in roleNames)
             {
@@ -79,8 +78,6 @@ namespace Queue.Applications.Services
                     });
                 }
             }
-
-            await _userRepository.SaveChangesAsync();
 
             var createdUser = await _userRepository.GetByIdAsync(user.Id);
 
@@ -130,7 +127,6 @@ namespace Queue.Applications.Services
             }
 
             await _userRepository.UpdateAsync(user);
-            await _userRepository.SaveChangesAsync();
 
             var updatedUser = await _userRepository.GetByIdAsync(user.Id);
 
@@ -151,10 +147,10 @@ namespace Queue.Applications.Services
 
             await _userRepository.RemoveUserRolesAsync(id);
             await _userRepository.DeleteAsync(user);
-            await _userRepository.SaveChangesAsync();
 
             return true;
         }
+
         public async Task<ServiceDto> AddServiceAsync(CreateServiceDto serviceDto)
         {
             var newService = new Service
@@ -167,7 +163,6 @@ namespace Queue.Applications.Services
             };
 
             await _serviceRepository.CreateServiceAsync(newService);
-            await _serviceRepository.SaveChangeAsync();
 
             return new ServiceDto
             {
@@ -178,6 +173,36 @@ namespace Queue.Applications.Services
                 ParentId = serviceDto.ParentId
             };
         }
+
+        public async Task UpdateServiceAsync(UpdateServiceDto dto)
+        {
+            var service = await _serviceRepository.GetServiceByIdAsync(dto.Id);
+
+            if (service == null)
+                throw new Exception("Услуга не найдена");
+
+            service.Name = dto.Name;
+            service.Description = dto.Description;
+            service.IconName = dto.IconName;
+
+            if (service.ParentId == null)
+            {
+                service.Letter = dto.Letter;
+            }
+
+            await _serviceRepository.UpdateServiceAsync(service);
+        }
+
+        public async Task DeleteServiceAsync(Guid id)
+        {
+            var service = await _serviceRepository.GetServiceByIdAsync(id);
+
+            if (service == null)
+                throw new Exception("Услуга не найдена");
+
+            await _serviceRepository.DeleteServiceAsync(service);
+        }
+
         public async Task ToggleServiceStatus(Guid serviceId)
         {
             var service = await _serviceRepository.GetServiceByIdAsync(serviceId);
@@ -216,7 +241,6 @@ namespace Queue.Applications.Services
                 await _ticketRepository.UpdateAsync(ticket);
             }
 
-            await _ticketRepository.SaveChangesAsync();
         }
 
         public async Task<List<TicketDto>> TicketStats(DateTime start, DateTime end)
@@ -230,21 +254,6 @@ namespace Queue.Applications.Services
         }
 
 
-        public Task AddSettings(SettingsDto settings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateSettings(SettingsDto settings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteSettings(Guid settingsId)
-        {
-            throw new NotImplementedException();
-        }
-
         private async Task<int> GetUtcOffset()
         {
             var setting = await _settingsRepository.GetSettingByNameAsync("Часовой пояс");
@@ -254,5 +263,6 @@ namespace Queue.Applications.Services
             }
             return offset;
         }
+
     }
 }
