@@ -1,21 +1,35 @@
 @model Application.DTOs.DisplayDto
 
-@if (!Model.ActiveTickets.Any())
-{
-    <div class="col-span-2 text-center py-16 text-3xl text-slate-500">Нет окон</div>
-}
-else
-{
-    @foreach (var call in Model.ActiveTickets)
+@{
+    Dictionary<string, string> status = new Dictionary<string, string>
     {
-        <div id="window-@call.WindowId"
-             data-window-title="@call.Title"
-             data-window-number="@call.WindowNumber"
-             class="bg-white rounded-2xl py-10 px-6 text-center shadow-lg">
-            <div class="text-2xl font-semibold text-sky-400 tracking-widest uppercase">@call.Title</div>
-            <div class="window-number text-8xl font-extrabold text-black mt-4 tabular-nums">
+        { "Waiting", "Ожидание" }, 
+        { "Processing", "Обслуживается" }, 
+        { "Called", "Вызван" },
+        { "Completed", "Завершён" }, 
+        { "Cancelled", "Отменён" }
+    };
+}
+
+@foreach (var call in Model.ActiveTickets)
+{
+    <div id="window-@call.WindowId" class="bg-primary/10 rounded-3xl p-6 flex flex-col">
+        <div class="flex items-end justify-between">
+            <div class="text-2xl font-bold text-secondary tracking-widest uppercase">Окно №@call.WindowNumber</div>
+            <div class="text-lg font-semibold text-dark tracking-widest uppercase">@call.Title</div>
+        </div>
+
+        <div class="flex items-end gap-4">
+            <div class="text-6xl font-extrabold text-secondary mt-4">
                 @(string.IsNullOrEmpty(call.TicketNumber) ? "—" : call.TicketNumber)
             </div>
+            <div class="pb-1 text-lg text-dark">
+                @(string.IsNullOrEmpty(call.Status.ToString()) ? "" : status[call.Status.ToString()])
+            </div>
         </div>
-    }
+    </div>
 }
+
+
+
+
