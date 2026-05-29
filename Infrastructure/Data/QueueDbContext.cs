@@ -90,7 +90,6 @@ public class QueueDbContext : DbContext
         window.ToTable("windows");
         window.HasKey(w => w.Id);
         window.Property(w => w.Id).HasDefaultValueSql("gen_random_uuid()");
-        window.Property(w => w.Title).IsRequired().HasMaxLength(50);
         window.Property(w => w.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
         window.HasOne(w => w.Service).WithMany().HasForeignKey(w => w.ServiceId).IsRequired();
         window.HasMany(w => w.Operators).WithOne(u => u.Window).HasForeignKey(u => u.WindowId);

@@ -11,7 +11,6 @@ public class DisplayDto
 public class DisplayTicketDto
 {
     public Guid? WindowId { get; set; }
-    public string? Title { get; set; }
     public string? TicketNumber { get; set; }
     public string? WindowNumber { get; set; }
     public TicketStatus? Status { get; set; }

@@ -14,7 +14,6 @@ public class WindowDto
     public WindowDto(Window window)
     {
         Id = window.Id;
-        Title = window.Title;
         Status = window.Status;
         ServiceId = window.ServiceId;
         ServiceName = window.Service.Name;
