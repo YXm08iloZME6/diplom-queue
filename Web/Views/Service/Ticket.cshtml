@@ -21,7 +21,7 @@
             </div>
             <div class="flex justify-between w-full text-lg text-muted-foreground">
                 <span>Статус: <span class="font-semibold text-foreground">@status[@Model.Status]</span></span>
-                <span id="date">@Model.CreatedAt?.ToString("HH:mm")</span>
+                <span id="date">@Model.CreatedAt?.ToLocalTime().ToString("HH:mm")</span>
             </div>
         </div>
         <a class="text-dark text-xl rounded-3xl p-4 border shadow-sm" asp-area="" asp-controller="Service" asp-action="Index">Вернуться на главную</a>
