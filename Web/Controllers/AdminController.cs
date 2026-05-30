@@ -310,21 +310,29 @@ namespace Queue.Controllers
         public async Task<IActionResult> Statistics()
         {
             var model = new StatisticsViewModel();
-
-            var services = await _serviceService.GetAllServicesAsync();
-            model.Services = services;
+            model.Services = await _serviceService.GetAllServicesAsync();
             model.StartDate = DateTime.Today;
             model.EndDate = DateTime.Today;
-
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Statistics(StatisticsViewModel model)
         {
+            if (model.Today)
+            {
+                model.StartDate = DateTime.Today;
+                model.EndDate = DateTime.Today;
+            }
             
-            model.Tickets = await _adminService.TicketStats(model.StartDate, model.EndDate); /// добавить фильтры
+            if (model.Yesterday)
+            {
+                model.StartDate = DateTime.Today.AddDays(-1);
+                model.EndDate = model.StartDate.AddDays(1);
+            }
 
+            model.Tickets = await _adminService.TicketStats(model.StartDate, model.EndDate, model.Status, model.ServiceId);
+            model.Services = await _serviceService.GetAllServicesAsync();
             return View(model);
         }
 

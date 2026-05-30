@@ -243,13 +243,11 @@ namespace Queue.Applications.Services
 
         }
 
-        public async Task<List<TicketDto>> TicketStats(DateTime start, DateTime end)
+        public async Task<List<TicketDto>> TicketStats(DateTime start, DateTime end, string? status = null, Guid? serviceId = null)
         {
-            var tickets = await _ticketRepository.GetByDateRangeAsync(start, end);
+            var tickets = await _ticketRepository.GetFilteredTicketsAsync(start, end, status, serviceId);
             var offset = await GetUtcOffset();
-
             if (tickets == null) { return new List<TicketDto>(); }
-
             return tickets.Select(t => new TicketDto(t, offset)).ToList();
         }
 
@@ -263,6 +261,5 @@ namespace Queue.Applications.Services
             }
             return offset;
         }
-
     }
 }

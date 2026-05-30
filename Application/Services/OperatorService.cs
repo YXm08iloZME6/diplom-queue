@@ -77,7 +77,7 @@ public class OperatorService : IOperatorService
 
             if (simpleTicket == null) throw new Exception("Нет ожидающих билетов");
 
-            simpleTicket!.Status = TicketStatus.Called;
+            simpleTicket.Status = TicketStatus.Called;
             simpleTicket.CalledAt = DateTime.UtcNow;
 
             await _operatorRepository.UpdateTicketAsync(simpleTicket);
@@ -236,7 +236,7 @@ public class OperatorService : IOperatorService
         currentTicket.Status = TicketStatus.Waiting;
         currentTicket.WindowId = null;
         currentTicket.CalledAt = null;
-        currentTicket.RedirectComment = $"Перенаправлен из окна номер {window.Number} с комментарием:" + comment;
+        currentTicket.RedirectComment = $"Перенаправлен из окна номер {window.Number} с комментарием: {comment}";
         user.Status = UserStatus.Waiting;
         window.Status = WindowStatus.Open;
 
