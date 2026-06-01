@@ -58,11 +58,14 @@ public class TicketRepository : ITicketRepository
         return await _dbContext.Tickets.Where(t => targetStatus.Contains(t.Status)).ToListAsync();
     }
 
-
-    public async Task<List<Ticket>> GetByDateRangeAsync(DateTime start, DateTime end)
+    public async Task<List<Ticket>> GetFilteredTicketsAsync(DateTime start, DateTime end, string? status = null, Guid? serviceId = null)
     {
+        Enum.TryParse<TicketStatus>(status, out var statusEnum);
+
         return await _dbContext.Tickets
             .Where(t => t.CompletedAt >= start && t.CompletedAt <= end)
+            .Where(t => status == null || t.Status == statusEnum)
+            .Where(t => serviceId == null || t.ServiceId == serviceId)
             .ToListAsync();
     }
 }
