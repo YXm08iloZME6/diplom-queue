@@ -1,19 +1,16 @@
 ﻿@model List<Application.DTOs.SettingsDto>
 
-<div class="max-w-5xl mx-auto p-8">
+@{
+    ViewData["Title"] = "Настройки системы";
+}
 
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-slate-800">
-            Настройки системы
-        </h1>
-
-        <p class="text-slate-500 mt-2">
-            Управление поведением электронной очереди
-        </p>
+<div class="mx-auto">
+    <div class="mb-10">
+        <h1 class="text-3xl font-bold text-slate-800">Настройки системы</h1>
+        <p class="text-slate-500 mt-2">Управление поведением электронной очереди</p>
     </div>
 
-    <div class="space-y-5">
-
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         @foreach (var setting in Model)
         {
             <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
@@ -54,9 +51,5 @@
                 </form>
             </div>
         }
-
-    </div>
-    <div class="back-link">
-        <a href="@Url.Action("Index", "Admin")">← Назад в панель</a>
     </div>
 </div>

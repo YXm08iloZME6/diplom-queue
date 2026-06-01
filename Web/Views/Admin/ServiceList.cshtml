@@ -1,22 +1,28 @@
 ﻿@model List<Application.DTOs.ServiceDto>
 
+@{
+    ViewData["Title"] = "Список услуг";
+}
+
 <div class="flex flex-col">
-    <a asp-controller="Admin" asp-action="WindowsList" class="inline-block mb-6 text-blue-600 hover:text-blue-800 font-medium"> Окна</a>
-    <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-gray-800"> Список услуг</h2>
-        <a asp-controller="Admin" asp-action="AddService" class="px-4 py-2 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"> Добавить</a>
+    <div class="flex justify-between items-center mb-10">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-800">Список услуг</h1>
+            <p class="text-slate-500 mt-2">Управление услугами</p>
+        </div>
+        <a asp-controller="Admin" asp-action="CreateWindow" class="px-6 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition">+ Добавить услугу</a>
     </div>
 
     <div class="overflow-x-auto rounded-2xl shadow border border-gray-200 bg-white">
-        <table class="min-w-full text-sm text-left">
+        <table class="min-w-full text-left">
             <thead class="bg-gray-100 text-gray-700">
                 <tr>
                     <th class="px-5 py-4 font-semibold">Название</th>
                     <th class="px-5 py-4 font-semibold">Буква</th>
                     <th class="px-5 py-4 font-semibold">Описание</th>
-                    <th class="px-5 py-4 font-semibold">Иконка</th>
                     <th class="px-5 py-4 font-semibold">Активный?</th>
                     <th class="px-5 py-4 font-semibold">Доп. информация</th>
+                    <th class="px-5 py-4 font-semibold">Действия</th>
                 </tr>
             </thead>
 
@@ -24,22 +30,10 @@
                 @foreach (var service in Model)
                 {
                     <tr class="bg-white hover:bg-gray-50 transition">
-                        <td class="px-5 py-4 font-semibold text-gray-800">
-                            @service.Name
-                        </td>
-
-                        <td class="px-5 py-4 text-gray-600">
-                            @service.Letter
-                        </td>
-
-                        <td class="px-5 py-4 text-gray-600 max-w-md">
-                            @service.Description
-                        </td>
-
-                        <td class="px-5 py-4 text-gray-600">
-                            @service.IconName
-                        </td>
-
+                        <td class="px-5 py-4 font-semibold text-gray-800">@service.Name</td>
+                        <td class="px-5 py-4 text-gray-600">@service.Letter</td>
+                        <td class="px-5 py-4 text-gray-600 max-w-md">@service.Description</td>
+                        
                         <td class="px-5 py-4">
                             <form asp-action="ToggleServiceStatus" method="post">
                                 <input type="hidden" name="id" value="@service.Id" />
@@ -76,7 +70,7 @@
 
                                 <form asp-action="DeleteService" method="post">
                                     <input type="hidden" name="id" value="@service.Id" />
-                                    <button type="submit"class="px-4 py-2 rounded-xl bg-red-100 hover:bg-red-200 text-sm text-red-600">🗑</button>
+                                    <button type="submit" class="px-4 py-2 rounded-xl bg-red-100 hover:bg-red-200 text-sm text-red-600">🗑</button>
                                 </form>
                             </div>
                         </td>
@@ -93,9 +87,6 @@
                             </td>
                             <td class="px-5 py-4 text-gray-600 max-w-md">
                                 @child.Description
-                            </td>
-                            <td class="px-5 py-4 text-gray-600">
-                                @child.IconName
                             </td>
 
                             <td class="px-5 py-4">
@@ -143,8 +134,5 @@
                 }
             </tbody>
         </table>
-    </div>
-    <div class="back-link">
-        <a href="@Url.Action("Index", "Admin")">← Назад в панель</a>
     </div>
 </div>
