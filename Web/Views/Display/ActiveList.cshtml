@@ -13,19 +13,19 @@
 
 @foreach (var call in Model.ActiveTickets)
 {
-    <div id="window-@call.WindowId" class="bg-primary/10 rounded-3xl p-6 flex flex-col">
-        <div class="flex items-end justify-between">
-            <div class="text-2xl font-bold text-secondary tracking-widest uppercase">Окно №@call.WindowNumber</div>
-            <div class="text-lg font-semibold text-dark tracking-widest uppercase">@call.ServiceName</div>
-        </div>
-
-        <div class="flex items-end gap-4">
-            <div class="text-6xl font-extrabold text-secondary mt-4">
+    <div id="window-@call.WindowId" class="bg-white rounded-2xl border border-line p-5 flex flex-col justify-between">
+        <div>
+            <div class="font-bold text-xl text-muted tracking-widest uppercase">Окно №@call.WindowNumber</div>
+            <div class="text-6xl font-extrabold text-primary-deep mt-4">
                 @(string.IsNullOrEmpty(call.TicketNumber) ? "—" : call.TicketNumber)
             </div>
-            <div class="pb-1 text-lg text-dark">
+        </div>
+
+        <div class="flex flex-col">
+            <div class="pb-1 text-lg text-ink">
                 @(string.IsNullOrEmpty(call.Status.ToString()) ? "" : status[call.Status.ToString()])
             </div>
+            <div class="text-xl font-semibold text-ink tracking-widest">@call.ServiceName</div>
         </div>
     </div>
 }

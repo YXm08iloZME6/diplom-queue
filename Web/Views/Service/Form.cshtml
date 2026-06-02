@@ -8,23 +8,31 @@
 <div class="container mx-auto flex grow justify-center pt-10">
     <div class="flex flex-col items-center gap-8">
         <div class="text-center">
-            <h1 class="text-3xl tracking-wide uppercase font-bold">@Model.Name</h1>
-            <p class="mt-2 tracking-wide text-lg text-dark">Введите данные для получения талона</p>
+            <h1 class="text-3xl tracking-wide uppercase font-bold text-ink">@Model.Name</h1>
+            <p class="mt-2 tracking-wide text-lg text-muted">Введите данные для получения талона</p>
         </div> 
         
-        <form class="flex flex-col gap-8  w-full bg-white rounded-3xl py-12 px-6 border shadow-sm" id="info-form" name="info-form" asp-controller="Service" asp-action="GetTicket" method="post" asp-route-serviceId="@Model.Id" asp-route-letter="@Model.Letter">
+        <form class="flex flex-col gap-8 w-full bg-white rounded-2xl p-6 border border-line" id="info-form" name="info-form" asp-controller="Service" asp-action="GetTicket" method="post" asp-route-serviceId="@Model.Id" asp-route-letter="@Model.Letter">
             <div class="flex flex-col gap-2">
-                <label for="phoneNumber" class="text-xl text-secondary">Номер телефона</label>
-                <input id="phoneNumber" name="phoneNumber" placeholder="+7 (995) 335 78-78" class="h-16 w-full rounded-2xl border border-dark bg-primary/10 px-5 text-2xl outline-none focus:border-primary placeholder:text-muted-foreground"/>
+                <label for="fullName" class="font-bold tracking-wider uppercase text-muted">Имя</label>
+                <div class="flex items-center gap-2.5 p-3 border border-line rounded-lg bg-white color-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round text-muted"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                    <input id="fullName" name="fullName" placeholder="Введите имя" class="w-full border-none bg-transparent text-xl outline-none focus:border-primary placeholder:text-muted"/>
+                </div>
             </div>
             <div class="flex flex-col gap-2">
-                <label for="fullName" class="text-xl text-secondary">Имя</label>
-                <input id="fullName" name="fullName" placeholder="Введите имя" class="h-16 w-full rounded-2xl border border-dark bg-primary/10 px-5 text-2xl outline-none focus:border-primary placeholder:text-muted-foreground"/>
+                <label for="phoneNumber" class="font-bold tracking-wider uppercase text-muted">Номер телефона</label>
+                <div class="flex items-center gap-2.5 p-3 border border-line rounded-lg bg-white color-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone-icon lucide-smartphone text-muted"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                    <input id="phoneNumber" name="phoneNumber" placeholder="+7 (995) 335 78-78" class="w-full border-none bg-transparent text-xl outline-none focus:border-primary placeholder:text-muted"/>
+                </div>
+            </div><div class="flex gap-4">
+                <a class="text-primary bg-white font-semibold text-xl rounded-xl py-4 px-6 border" asp-controller="Service" asp-action="Index">Вернуться</a>
+                <button type="submit" form="info-form" class="flex items-center gap-4 text-white bg-primary font-semibold text-xl rounded-xl py-4 px-6 border cursor-pointer">
+                    Получить талон
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
             </div>
         </form>
-        <div class="flex gap-4">
-            <a class="text-dark text-xl rounded-3xl p-4 border shadow-sm" asp-area="" asp-controller="Service" asp-action="Index">Вернуться на главную</a>
-            <button type="submit" form="info-form" class="bg-primary/20 text-secondary text-xl rounded-3xl p-4 border border-primary">Получить талон</button>
-        </div>
     </div>
 </div>

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="h-full">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
 </head>
-<body class="font-display">
-<header>
-    <div class="flex justify-between items-center px-10 py-7 border-b border-b-border" >
+<body class="h-screen flex flex-col font-display bg-surface">
+<header class="bg-primary-deep border-b border-b-line">
+    <div class="flex justify-between items-center px-10 py-7" >
         <div class="flex gap-4 items-center">
-            <div class="bg-primary/50 text-2xl text-secondary rounded-lg px-3 py-1.5 font-bold">О</div>
+            <div class="bg-primary text-2xl text-white rounded-lg px-3 py-1.5 font-bold">О</div>
             <div class="flex flex-col tracking-wide">
-                <div class="font-bold uppercase text-secondary">Лекон</div> 
-                <div class="text-sm text-dark">Димитровград · Гоголя 21</div>
+                <div class="font-bold uppercase text-white text-lg">Лекон</div> 
+                <div class="text-sm text-white opacity-60">Димитровград · Гоголя 21</div>
             </div>
         </div>
 
-        <div class="flex gap-6 text-dark text-lg">
+        <div class="flex gap-6 text-white text-lg tabular-nums">
             <span id="time" class="tracking-widest"></span>
             <span id="date" class="tracking-wide"></span>
         </div>
@@ -25,7 +25,7 @@
     </div>
 </header>
 
-<main>
+<main class="flex-1">
     @RenderBody()
 </main>
 

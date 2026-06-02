@@ -11,20 +11,20 @@
     <div class="flex flex-col items-center gap-8">
         <div class="text-center">
             <h1 class="text-3xl tracking-wide uppercase font-bold">Ваш талон</h1>
-            <p class="mt-2 tracking-wide text-lg text-dark">Запомните номер и ожидайте вызова</p>
+            <p class="mt-2 tracking-wide text-lg text-muted">Запомните номер и ожидайте вызова</p>
         </div>
         
-        <div class="flex h-fit flex-col items-center gap-8 w-full max-w-xl bg-white rounded-3xl py-12 px-6 border shadow-sm text-center">
-            <div class="flex flex-col items-center gap-2 bg-primary/10 rounded-2xl w-full py-10">
+        <div class="flex h-fit flex-col items-center gap-8 w-full bg-white rounded-2xl py-12 px-6 border border-line text-center">
+            <div class="flex flex-col items-center gap-2 bg-primary-soft rounded-2xl w-full py-10 border border-primary">
                 <span class="text-muted-foreground text-xl font-medium">Номер талона</span>
                 <span class="text-7xl font-extrabold tracking-tight">@Model.Number</span>
             </div>
-            <div class="flex justify-between w-full text-lg text-muted-foreground">
-                <span>Статус: <span class="font-semibold text-foreground">@status[@Model.Status]</span></span>
+            <div class="flex justify-between w-full text-lg">
+                <span>Статус: <span class="font-semibold text-muted">@status[@Model.Status]</span></span>
                 <span id="date">@Model.CreatedAt?.ToLocalTime().ToString("HH:mm")</span>
             </div>
         </div>
-        <a class="text-dark text-xl rounded-3xl p-4 border shadow-sm" asp-area="" asp-controller="Service" asp-action="Index">Вернуться на главную</a>
+        <a class="text-primary bg-white font-semibold text-xl rounded-xl py-4 px-6 border" asp-area="" asp-controller="Service" asp-action="Index">Вернуться на главную</a>
     </div>
 </div>
 

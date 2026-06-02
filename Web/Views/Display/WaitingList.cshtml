@@ -1,22 +1,15 @@
 @model Application.DTOs.DisplayDto
 
-@if (!Model.WaitingTickets.Any())
+@for (int i = 0; i < Model.WaitingTickets.Count; i++)
 {
-    <div class="text-2xl text-slate-500 py-4">Очередь пуста</div>
-}
-else
-{
-    @for (int i = 0; i < Model.WaitingTickets.Count; i++)
-    {
-        var t = Model.WaitingTickets[i];
-        <div class="bg-primary/10 rounded-xl p-4 flex">
-            <div class="flex items-center gap-6">
-                <span class="font-bold text-dark text-lg">@(i + 1)</span>
-                <div class="flex flex-col">
-                    <span class="text-secondary font-bold tracking-wide text-lg">@t.TicketNumber</span> 
-                    <span class="text-dark text-sm tracking-wide">@t.ServiceName</span>
-                </div>
+    var t = Model.WaitingTickets[i];
+    <div class="bg-primary-soft rounded-xl p-4 flex">
+        <div class="flex items-center gap-6">
+            <span class="font-bold text-muted text-lg">@(i + 1)</span>
+            <div class="flex flex-col">
+                <span class="text-primary-deep font-bold tracking-wide text-xl">@t.TicketNumber</span>
+                <span class="text-ink text-sm tracking-wide">@t.ServiceName</span>
             </div>
         </div>
-    }
+    </div>
 }
