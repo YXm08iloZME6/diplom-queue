@@ -37,6 +37,7 @@ namespace Queue.Infrastructure.Repositories
         {
             return await _context.Users
                 .Include(u => u.Window)
+                .ThenInclude(w => w.Service)
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
                 .ToListAsync();

@@ -13,7 +13,8 @@ public class UserDto
     public string Email { get; set; }
     public Guid? WindowId { get; set; }
     public string? WindowName { get; set; }
-    public List<string> Roles { get; set; }
+    public List<string> Roles { get; set; } 
+    public string ServiceName { get; set; } 
     public UserDto(User user)
     {
         Id = user.Id;
@@ -23,7 +24,8 @@ public class UserDto
         Status = user.Status;
         Email = user.Email;
         WindowId = user.WindowId;
-         WindowName = user.Window?.Number;
+        WindowName = user.Window?.Number;
+        ServiceName = user.Window?.Service?.Name;
         Roles = user.UserRoles.Select(ur => ur.Role.Title).ToList();
     }
 }
