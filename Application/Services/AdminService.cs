@@ -15,9 +15,11 @@ namespace Queue.Applications.Services
         private readonly ITicketRepository _ticketRepository;
         private readonly ISettingsRepository _settingsRepository;
         private readonly IWindowRepository _windowRepository;
+        private readonly IFileStorageService _fileStorageService;
 
         public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, 
-            IServiceRepository serviceRepository, ITicketRepository ticketRepository, ISettingsRepository settingsRepository, IWindowRepository windowRepository)
+            IServiceRepository serviceRepository, ITicketRepository ticketRepository, ISettingsRepository settingsRepository, IWindowRepository windowRepository,
+            IFileStorageService fileStorageService)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -25,6 +27,7 @@ namespace Queue.Applications.Services
             _ticketRepository = ticketRepository;
             _settingsRepository = settingsRepository;
             _windowRepository = windowRepository;
+            _fileStorageService = fileStorageService;
         }
 
         public async Task<UserDto> GetUserById(Guid id)
@@ -62,7 +65,8 @@ namespace Queue.Applications.Services
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 WindowId = dto.WindowId,
-                Status = dto.Status
+                Status = dto.Status,
+                PhotoPath = await _fileStorageService.SaveFileAsync(dto.Photo)
             };
 
             await _userRepository.AddAsync(user);
@@ -106,6 +110,12 @@ namespace Queue.Applications.Services
             user.Email = dto.Email;
             user.WindowId = dto.WindowId;
             user.Status = dto.Status;
+
+            if (dto.Photo != null)
+            {
+                await _fileStorageService.DeleteFileAsync(user.PhotoPath);
+                user.PhotoPath = await _fileStorageService.SaveFileAsync(dto.Photo);
+            }
 
             if (!string.IsNullOrWhiteSpace(dto.Password))
             {

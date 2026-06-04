@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.DTOs;
 
@@ -13,6 +14,8 @@ public class UserDto
     public string Email { get; set; }
     public Guid? WindowId { get; set; }
     public string? WindowName { get; set; }
+    public string? PhotoPath { get; set; }
+    public string? ServiceName { get; set; }
     public List<string> Roles { get; set; }
     public UserDto(User user)
     {
@@ -25,6 +28,8 @@ public class UserDto
         WindowId = user.WindowId;
          WindowName = user.Window?.Number;
         Roles = user.UserRoles.Select(ur => ur.Role.Title).ToList();
+        PhotoPath = user.PhotoPath;
+        ServiceName = user.Window.Service.Name;
     }
 }
 
@@ -42,6 +47,7 @@ public class CreateUserDto
     public string? MiddleName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
+    public IFormFile? Photo { get; set; }
     public UserStatus Status { get; set; }
     public Guid? WindowId { get; set; }
 }
@@ -61,6 +67,8 @@ public class EditUserDto
     public string? MiddleName { get; set; }
     public string Email { get; set; }
     public string? Password { get; set; }
+    public IFormFile? Photo { get; set; }
+    public string? PhotoPath { get; set; }
     public UserStatus Status { get; set; }
     public Guid? WindowId { get; set; }
     public List<string> Roles { get; set; } = new();
