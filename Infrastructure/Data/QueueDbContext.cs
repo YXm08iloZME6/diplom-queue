@@ -132,8 +132,14 @@ public class QueueDbContext : DbContext
                 Name = "Кол-во билетов на экране",
                 Value = "10",
                 TypeOfSettingsValue = TypeOfSettingsValue.String,
+            },
+            new
+            {
+                Id = Guid.Parse("dc944d51-d0d0-4005-8d84-5d0a2c6b2530"),
+                Name = "Название организации",
+                Value = "Лекон",
+                TypeOfSettingsValue = TypeOfSettingsValue.String,
             }
-            
         );
     }
 }

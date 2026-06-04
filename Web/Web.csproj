@@ -107,6 +107,7 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\icons\" />
+      <Folder Include="wwwroot\uploads\avatars\" />
     </ItemGroup>
     <Target Name="Tailwind" BeforeTargets="Build;PrepareForPublish">
         <Exec Command="npm install" />

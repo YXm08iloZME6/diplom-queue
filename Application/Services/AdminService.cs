@@ -113,7 +113,10 @@ namespace Queue.Applications.Services
 
             if (dto.Photo != null)
             {
-                await _fileStorageService.DeleteFileAsync(user.PhotoPath);
+                if (user.PhotoPath != null)
+                {
+                    await _fileStorageService.DeleteFileAsync(user.PhotoPath);
+                }
                 user.PhotoPath = await _fileStorageService.SaveFileAsync(dto.Photo);
             }
 

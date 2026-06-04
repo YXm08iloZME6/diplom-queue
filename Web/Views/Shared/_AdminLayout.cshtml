@@ -1,6 +1,10 @@
+@inject Application.Interfaces.Services.ISettingsService Settings
+
 @{
     var isAdmin = User.IsInRole("admin");
     var isOperator = User.IsInRole("operator");
+    
+    var name = await Settings.GetSettingByNameAsync("Название организации");
 }
 
 <!DOCTYPE html>
@@ -17,7 +21,7 @@
     <div class="flex items-center gap-3 p-5 border-b border-b-primary/30">
         <div class="bg-primary text-2xl text-white rounded-lg -ml-2 px-3 py-1.5 font-bold">О</div>
         <div class="flex flex-col tracking-wide">
-            <div class="label font-bold uppercase text-white text-lg">Лекон</div> 
+            <div class="label font-bold uppercase text-white text-lg">@name.Value</div> 
             <div class="label text-sm text-white/60">Димитровград · Гоголя 21</div>
         </div>
     </div>

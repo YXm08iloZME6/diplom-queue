@@ -1,3 +1,9 @@
+@inject Application.Interfaces.Services.ISettingsService Settings
+
+@{
+    var name = await Settings.GetSettingByNameAsync("Название организации");
+}
+
 <!DOCTYPE html>
 <html lang="ru" class="h-full">
 <head>
@@ -12,7 +18,7 @@
         <div class="flex gap-4 items-center">
             <div class="bg-primary text-2xl text-white rounded-lg px-3 py-1.5 font-bold">О</div>
             <div class="flex flex-col tracking-wide">
-                <div class="font-bold uppercase text-white text-lg">Лекон</div> 
+                <div class="font-bold uppercase text-white text-lg">@name.Value</div> 
                 <div class="text-sm text-white opacity-60">Димитровград · Гоголя 21</div>
             </div>
         </div>
