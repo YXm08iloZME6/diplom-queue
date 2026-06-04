@@ -41,6 +41,7 @@ builder.Services.AddScoped<IWindowService, WindowService>();
 builder.Services.AddScoped<ISettingsRepository, SettingsRepository>();
 builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddScoped<IQueueNotifier, QueueNotifier>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddSignalR();
 
 

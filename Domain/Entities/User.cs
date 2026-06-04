@@ -11,6 +11,7 @@ public class User
     public UserStatus Status { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
+    public string? PhotoPath { get; set; }
 
     public Guid? WindowId { get; set; }
     public Window? Window { get; set; }

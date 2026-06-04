@@ -171,7 +171,8 @@ namespace Queue.Controllers
                 MiddleName = user.MiddleName,
                 Email = user.Email,
                 WindowId = user.WindowId,
-                Roles = user.Roles
+                Roles = user.Roles,
+                PhotoPath = user.PhotoPath,
             };
 
             var model = new EditUserViewModel
