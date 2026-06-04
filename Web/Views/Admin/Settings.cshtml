@@ -43,8 +43,16 @@
 
                     @if (setting.TypeOfSettingsValue == Domain.Enums.TypeOfSettingsValue.String)
                     {
+                        bool isColorSetting = setting.Name.Contains("Основной цвет");
+
                         <div class="flex gap-3">
-                            <input type="text" name="value" value="@setting.Value" class="w-72 rounded-xl border border-slate-300 px-4 py-2" />
+                            <input type="text" id="value_@setting.Id" name="value" value="@setting.Value" class="@(isColorSetting ? "w-48" : "w-72") rounded-xl border border-slate-300 px-4 py-2" />
+                            @if (isColorSetting)
+                            {
+                                <div class="relative"> 
+                                    <button type="button" id="pickr_@setting.Id" class="w-10 h-10 rounded-full border shadow-sm" style="background:@setting.Value"></button>
+                                </div>
+                            }
                             <button type="submit" class="flex items-center gap-4 text-white bg-primary rounded-xl py-2 px-4 border cursor-pointer">Сохранить</button>
                         </div>
                     }

@@ -266,7 +266,6 @@ namespace Queue.Applications.Services
             return tickets.Select(t => new TicketDto(t, offset)).ToList();
         }
 
-
         private async Task<int> GetUtcOffset()
         {
             var setting = await _settingsRepository.GetSettingByNameAsync("Часовой пояс");
