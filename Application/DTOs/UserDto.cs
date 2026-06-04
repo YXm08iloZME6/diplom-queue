@@ -26,7 +26,8 @@ public class UserDto
         Status = user.Status;
         Email = user.Email;
         WindowId = user.WindowId;
-         WindowName = user.Window?.Number;
+        WindowName = user.Window?.Number;
+        ServiceName = user.Window?.Service?.Name;
         Roles = user.UserRoles.Select(ur => ur.Role.Title).ToList();
         PhotoPath = user.PhotoPath;
         ServiceName = user.Window?.Service?.Name;
