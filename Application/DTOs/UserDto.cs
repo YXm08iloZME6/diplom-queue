@@ -15,8 +15,8 @@ public class UserDto
     public Guid? WindowId { get; set; }
     public string? WindowName { get; set; }
     public string? PhotoPath { get; set; }
-    public string? ServiceName { get; set; }
     public List<string> Roles { get; set; }
+    public string ServiceName { get; set; }
     public UserDto(User user)
     {
         Id = user.Id;
@@ -29,7 +29,7 @@ public class UserDto
          WindowName = user.Window?.Number;
         Roles = user.UserRoles.Select(ur => ur.Role.Title).ToList();
         PhotoPath = user.PhotoPath;
-        ServiceName = user.Window.Service.Name;
+        ServiceName = user.Window?.Service?.Name;
     }
 }
 
