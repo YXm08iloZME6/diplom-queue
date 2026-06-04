@@ -2,6 +2,7 @@
 
 @{
     var name = await Settings.GetSettingByNameAsync("Название организации");
+    var color = await Settings.GetSettingByNameAsync("Основной цвет");
 }
 
 <!DOCTYPE html>
@@ -11,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
+    <style>:root { --color-primary: @color.Value; }</style>
 </head>
 <body class="h-screen flex flex-col font-display bg-surface">
 <header class="bg-primary-deep border-b border-b-line">

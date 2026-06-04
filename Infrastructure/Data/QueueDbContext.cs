@@ -139,6 +139,12 @@ public class QueueDbContext : DbContext
                 Name = "Название организации",
                 Value = "Лекон",
                 TypeOfSettingsValue = TypeOfSettingsValue.String,
+            },
+            new {
+                Id = Guid.Parse("3b9c1f04-7a2e-4d61-8c55-9e0a1b2c3d4e"),
+                Name = "Основной цвет",
+                Value = "#1e8f5e",
+                TypeOfSettingsValue = TypeOfSettingsValue.String,
             }
         );
     }

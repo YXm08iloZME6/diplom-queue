@@ -4,9 +4,9 @@
 
 @theme {
     --color-primary: #1e8f5e;  
-    --color-primary-hover: #177A4F;
-    --color-primary-soft: #E8F4EC;
-    --color-primary-deep: #123F2C;
+    --color-primary-hover: color-mix(in oklab, var(--color-primary) 100%, #000e04 17%);
+    --color-primary-soft: color-mix(in oklab, var(--color-primary) 12%, white);
+    --color-primary-deep: color-mix(in srgb, var(--color-primary) 100%, #15000a 100%);
     
     --color-secondary: #2c2b2a;  
     --color-tertiary: #F7EFE3;  
