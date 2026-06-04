@@ -22,11 +22,12 @@ namespace Queue.Controllers
             _settingsService = settingsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = await _adminService.GetDashboardDataAsync();
+            return View(model);
         }
-
+        
         public async Task<IActionResult> ServiceList()
         {
             var services = await _serviceService.GetAllServicesAsync();

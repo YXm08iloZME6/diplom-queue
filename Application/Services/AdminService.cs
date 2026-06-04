@@ -14,15 +14,17 @@ namespace Queue.Applications.Services
         private readonly IServiceRepository _serviceRepository;
         private readonly ITicketRepository _ticketRepository;
         private readonly ISettingsRepository _settingsRepository;
+        private readonly IWindowRepository _windowRepository;
 
         public AdminService(IUserRepository userRepository, IRoleRepository roleRepository, 
-            IServiceRepository serviceRepository, ITicketRepository ticketRepository, ISettingsRepository settingsRepository)
+            IServiceRepository serviceRepository, ITicketRepository ticketRepository, ISettingsRepository settingsRepository, IWindowRepository windowRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _serviceRepository = serviceRepository;
             _ticketRepository = ticketRepository;
             _settingsRepository = settingsRepository;
+            _windowRepository = windowRepository;
         }
 
         public async Task<UserDto> GetUserById(Guid id)
@@ -260,6 +262,42 @@ namespace Queue.Applications.Services
                 return 0;
             }
             return offset;
+        }
+        
+        public async Task<AdminDashboardDto> GetDashboardDataAsync()
+        {
+            var todayStart = DateTime.UtcNow.Date;
+            var todayEnd = todayStart.AddDays(1);
+
+            var tickets = await _ticketRepository.GetAllAsync();
+            var todayTickets = tickets.Where(t => t.CreatedAt >= todayStart && t.CreatedAt < todayEnd).ToList();
+            var completedToday = todayTickets.Count(t => t.Status == TicketStatus.Completed);
+            var waitingNow = tickets.Count(t => t.Status == TicketStatus.Waiting);
+
+            var operators = await _userRepository.GetAllAsync();
+
+            var services = await _serviceRepository.GetMainServicesAsync();
+            var serviceStats = services.Select(s => new ServiceStatDto
+            {
+                ServiceName = s.Name,
+                TicketCount = tickets.Count(t => t.ServiceId == s.Id)
+            }).OrderByDescending(x => x.TicketCount).ToList();
+
+            var lastTickets = tickets.OrderByDescending(t => t.CreatedAt).Take(10).Select(t => new TicketDto(t)).ToList();
+
+            var windows = await _windowRepository.GetAllWindowsAsync();
+            var windowsList = windows.OrderBy(t => t.Number).Select(w => new WindowDto(w)).ToList();
+
+            return new AdminDashboardDto
+            {
+                TicketsToday = todayTickets.Count,
+                CompletedToday = completedToday,
+                WaitingNow = waitingNow,
+                ActiveOperators = operators.Count,
+                ServiceStats = serviceStats,
+                LastTickets = lastTickets,
+                Windows = windowsList
+            };
         }
     }
 }

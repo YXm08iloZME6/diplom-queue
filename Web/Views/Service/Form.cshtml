@@ -8,7 +8,7 @@
 <div class="container mx-auto flex grow justify-center pt-10">
     <div class="flex flex-col items-center gap-8">
         <div class="text-center">
-            <h1 class="text-3xl tracking-wide uppercase font-bold text-ink">@Model.Name</h1>
+            <h1 class="text-5xl tracking-wide uppercase font-bold text-ink">@Model.Name</h1>
             <p class="mt-2 tracking-wide text-lg text-muted">Введите данные для получения талона</p>
         </div> 
         
@@ -26,7 +26,8 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smartphone-icon lucide-smartphone text-muted"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
                     <input id="phoneNumber" name="phoneNumber" placeholder="+7 (995) 335 78-78" class="w-full border-none bg-transparent text-xl outline-none focus:border-primary placeholder:text-muted"/>
                 </div>
-            </div><div class="flex gap-4">
+            </div>
+            <div class="flex justify-between gap-4">
                 <a class="text-primary bg-white font-semibold text-xl rounded-xl py-4 px-6 border" asp-controller="Service" asp-action="Index">Вернуться</a>
                 <button type="submit" form="info-form" class="flex items-center gap-4 text-white bg-primary font-semibold text-xl rounded-xl py-4 px-6 border cursor-pointer">
                     Получить талон

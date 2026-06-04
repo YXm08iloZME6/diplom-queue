@@ -16,4 +16,5 @@ namespace Application.Interfaces.Services;
     Task ToggleServiceStatus(Guid serviceId);
     Task ToggleServiceFacets(Guid serviceId);
     Task QueueResetAsync();
+    Task<AdminDashboardDto> GetDashboardDataAsync();
 }

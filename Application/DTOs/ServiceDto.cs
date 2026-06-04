@@ -35,6 +35,12 @@ public class ServiceDto
     }
 }
 
+public class ServiceStatDto
+{
+    public string ServiceName { get; set; }
+    public int TicketCount { get; set; }
+}
+
 public class CreateServiceDto
 {
     public string Name { get; set; }
