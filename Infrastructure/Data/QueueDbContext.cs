@@ -157,6 +157,12 @@ public class QueueDbContext : DbContext
                 Name = "Адрес",
                 Value = "Димитровград · Гоголя 21",
                 TypeOfSettingsValue = TypeOfSettingsValue.String,
+            },
+            new {
+                Id = Guid.Parse("27291322-9012-4c02-8869-9347f5dac6da"),
+                Name = "Картинки у сервисов",
+                Value = "false",
+                TypeOfSettingsValue = TypeOfSettingsValue.Bool,
             } 
         );
     }

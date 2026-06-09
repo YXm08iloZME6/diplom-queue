@@ -10,7 +10,7 @@
 
         <h1 class="text-3xl font-bold text-slate-800 mb-8">Добавление услуги</h1>
 
-        <form asp-action="AddService" asp-controller="Admin" method="post" class="space-y-6">
+        <form asp-action="AddService" asp-controller="Admin" method="post" enctype="multipart/form-data" class="space-y-6">
 
             <div asp-validation-summary="ModelOnly" class="rounded-2xl bg-red-50 border border-red-200 text-red-600 px-4 py-3 text-sm"></div>
 
@@ -36,6 +36,15 @@
                 <label class="block mb-2 text-sm font-medium text-slate-700">Иконка</label>
                 <input asp-for="Service.IconName" class="w-full rounded-2xl border border-slate-300 px-4 py-3" />
                 <span asp-validation-for="Service.IconName" class="text-sm text-red-500 mt-1 block"></span>
+            </div>
+            
+            <div>
+                <label class="block mb-2 text-sm font-semibold text-slate-700">Фото услуги</label>
+                <input asp-for="Service.Image" type="file" accept="image/*" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-slate-600
+                  file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0
+                  file:bg-blue-50 file:text-blue-700 file:font-semibold
+                  hover:file:bg-blue-100 transition" />
+                <span asp-validation-for="Service.Image" class="text-sm text-red-500 mt-1 block"></span>
             </div>
 
             <div>

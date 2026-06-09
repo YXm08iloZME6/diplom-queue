@@ -28,7 +28,7 @@
 
                 @if (isLogoSetting)
                 {
-                    <form asp-controller="Admin" asp-action="UploadLogo" method="post" class="flex items-center gap-4">
+                    <form asp-controller="Admin" asp-action="UploadLogo" enctype="multipart/form-data" method="post" class="flex items-center gap-4">
                         @if (!string.IsNullOrEmpty(setting.Value))
                         {
                             <img src="@setting.Value" alt="logo" class="h-12 w-auto rounded border border-border" />

@@ -75,15 +75,15 @@ namespace Queue.Controllers
             {
                 return View(model);
             }
-                
-
+            
             await _adminService.UpdateServiceAsync(new UpdateServiceDto
             {
                 Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
                 IconName = model.IconName,
-                Letter = model.Letter
+                Letter = model.Letter,
+                Image = model.Image
             });
 
             return RedirectToAction(nameof(ServiceList));

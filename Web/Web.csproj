@@ -109,6 +109,7 @@
       <Folder Include="wwwroot\icons\" />
       <Folder Include="wwwroot\uploads\avatars\" />
       <Folder Include="wwwroot\uploads\logo\" />
+      <Folder Include="wwwroot\uploads\serviceImages\" />
     </ItemGroup>
     <Target Name="Tailwind" BeforeTargets="Build;PrepareForPublish">
         <Exec Command="npm install" />

@@ -7,6 +7,7 @@ public class Service
     public string? Description { get; set; }
     public string? Letter { get; set; }
     public string? IconName { get; set; }
+    public string? ImagePath { get; set; }
     public bool IsActive { get; set; } = true;
     public bool IsNeedFacets { get; set; } = true;
 

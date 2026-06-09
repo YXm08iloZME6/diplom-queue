@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.DTOs;
 
@@ -10,6 +11,7 @@ public class ServiceDto
     public List<ServiceDto> Children { get; set; }
     public string? Description { get; set; }
     public string? IconName { get; set; }
+    public string? ImagePath { get; set; }
     public bool IsActive { get; set; }
     public bool IsNeedFacets { get; set; }
     public Guid? ParentId { get; set; }
@@ -22,6 +24,7 @@ public class ServiceDto
         Letter = service.Letter;
         Description = service.Description;
         IconName = service.IconName;
+        ImagePath = service.ImagePath;
 
         IsActive = service.IsActive;
         IsNeedFacets = service.IsNeedFacets;
@@ -42,11 +45,13 @@ public class ServiceStatDto
 }
 
 public class CreateServiceDto
+
 {
     public string Name { get; set; }
     public string? Letter { get; set; }
     public string? Description { get; set; }
     public string? IconName { get; set; }
+    public IFormFile? Image { get; set; }
     public Guid? ParentId { get; set; }
 }
 
@@ -57,6 +62,7 @@ public class UpdateServiceDto
     public string? Letter { get; set; }
     public string? Description { get; set; }
     public string? IconName { get; set; }
+    public IFormFile? Image { get; set; }
 }
 
 

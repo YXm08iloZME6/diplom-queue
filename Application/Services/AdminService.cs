@@ -174,7 +174,8 @@ namespace Queue.Applications.Services
                 Description = serviceDto.Description,
                 IconName = serviceDto.IconName,
                 ParentId = serviceDto.ParentId,
-                Letter = serviceDto.ParentId == null ? serviceDto.Letter : null
+                Letter = serviceDto.ParentId == null ? serviceDto.Letter : null,
+                ImagePath = await _fileStorageService.SaveFileAsync(serviceDto.Image, "serviceImages")
             };
 
             await _serviceRepository.CreateServiceAsync(newService);
@@ -185,7 +186,8 @@ namespace Queue.Applications.Services
                 Letter = serviceDto.Letter,
                 Description = serviceDto.Description,
                 IconName = serviceDto.IconName,
-                ParentId = serviceDto.ParentId
+                ParentId = serviceDto.ParentId,
+                ImagePath = await _fileStorageService.SaveFileAsync(serviceDto.Image, "serviceImages")
             };
         }
 
@@ -199,6 +201,15 @@ namespace Queue.Applications.Services
             service.Name = dto.Name;
             service.Description = dto.Description;
             service.IconName = dto.IconName;
+
+            if (dto.Image != null)
+            {
+                if (service.ImagePath != null)
+                {
+                    await _fileStorageService.DeleteFileAsync(service.ImagePath);
+                }
+                service.ImagePath = await _fileStorageService.SaveFileAsync(dto.Image, "serviceImages");
+            }
 
             if (service.ParentId == null)
             {
