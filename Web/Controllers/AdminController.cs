@@ -13,13 +13,16 @@ namespace Queue.Controllers
         private readonly IWindowService _windowService;
         private readonly IServiceService _serviceService;
         private readonly ISettingsService _settingsService;
+        private readonly IFileStorageService _fileStorageService;
 
-        public AdminController(IAdminService adminService, IWindowService windowService, IServiceService serviceService, ISettingsService settingsService)
+        public AdminController(IAdminService adminService, IWindowService windowService, IServiceService serviceService,
+            ISettingsService settingsService, IFileStorageService fileStorageService)
         {
             _adminService = adminService;
             _windowService = windowService;
             _serviceService = serviceService;
             _settingsService = settingsService;
+            _fileStorageService = fileStorageService;
         }
 
         public async Task<IActionResult> Index()
@@ -350,6 +353,22 @@ namespace Queue.Controllers
         {
             await _settingsService.UpdateSettingValueAsync(id, value);
             return RedirectToAction(nameof(Settings));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadLogo(IFormFile logo)
+        {
+           var logoSetting = await _settingsService.GetSettingByNameAsync("Логотип");
+
+           if (logoSetting.Value != null)
+           {
+               await _fileStorageService.DeleteFileAsync(logoSetting.Value);
+           }
+
+           var path = await _fileStorageService.SaveFileAsync(logo, "logo");
+           await _settingsService.UpdateSettingValueAsync(logoSetting!.Id, path!);
+           
+           return RedirectToAction(nameof(Settings));
         }
     }
 }

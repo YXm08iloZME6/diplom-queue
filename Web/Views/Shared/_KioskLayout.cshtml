@@ -3,6 +3,7 @@
 @{
     var name = await Settings.GetSettingByNameAsync("Название организации");
     var color = await Settings.GetSettingByNameAsync("Основной цвет");
+    var logo = await Settings.GetSettingByNameAsync("Логотип");
 }
 
 <!DOCTYPE html>
@@ -18,9 +19,16 @@
 <header class="bg-primary-deep border-b border-b-line">
     <div class="flex justify-between items-center px-10 py-7" >
         <div class="flex gap-4 items-center">
-            <div class="bg-primary text-2xl text-white rounded-lg px-3 py-1.5 font-bold">О</div>
+            @if (!string.IsNullOrEmpty(logo!.Value))
+            {
+                <img src="@logo.Value" alt="logo" class="h-12 w-12"/>
+            }
+            else
+            {
+                <div class="bg-primary text-2xl text-white rounded-lg px-3 py-1.5 font-bold">О</div>
+            }
             <div class="flex flex-col tracking-wide">
-                <div class="font-bold uppercase text-white text-lg">@name.Value</div> 
+                <div class="font-bold uppercase text-white text-lg">@name.Value</div>
                 <div class="text-sm text-white opacity-60">Димитровград · Гоголя 21</div>
             </div>
         </div>

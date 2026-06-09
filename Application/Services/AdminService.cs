@@ -66,7 +66,7 @@ namespace Queue.Applications.Services
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 WindowId = dto.WindowId,
                 Status = dto.Status,
-                PhotoPath = await _fileStorageService.SaveFileAsync(dto.Photo)
+                PhotoPath = await _fileStorageService.SaveFileAsync(dto.Photo, "avatars")
             };
 
             await _userRepository.AddAsync(user);
@@ -117,7 +117,7 @@ namespace Queue.Applications.Services
                 {
                     await _fileStorageService.DeleteFileAsync(user.PhotoPath);
                 }
-                user.PhotoPath = await _fileStorageService.SaveFileAsync(dto.Photo);
+                user.PhotoPath = await _fileStorageService.SaveFileAsync(dto.Photo, "avatars");
             }
 
             if (!string.IsNullOrWhiteSpace(dto.Password))

@@ -5,12 +5,12 @@ namespace Application.Services;
 
 public class FileStorageService : IFileStorageService
 {
-    public async Task<string?> SaveFileAsync(IFormFile? file)
+    public async Task<string?> SaveFileAsync(IFormFile? file, string path)
     {
         if (file == null || file.Length == 0)
             return null;
 
-        var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "avatars");
+        var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", path);
         Directory.CreateDirectory(folder);
 
         var extension = Path.GetExtension(file.FileName);
@@ -20,7 +20,7 @@ public class FileStorageService : IFileStorageService
         using var stream = new FileStream(fullPath, FileMode.Create);
         await file.CopyToAsync(stream);
 
-        return $"/uploads/avatars/{fileName}";
+        return $"/uploads/{path}/{fileName}";
     }
 
     public async Task DeleteFileAsync(string? filePath)

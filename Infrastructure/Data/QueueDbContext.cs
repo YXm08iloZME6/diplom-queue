@@ -145,6 +145,12 @@ public class QueueDbContext : DbContext
                 Name = "Основной цвет",
                 Value = "#1e8f5e",
                 TypeOfSettingsValue = TypeOfSettingsValue.String,
+            },
+            new {
+                Id = Guid.Parse("d4e5133b-edfa-4438-9945-76c383dd2a33"),
+                Name = "Логотип",
+                Value = "",
+                TypeOfSettingsValue = TypeOfSettingsValue.String,
             }
         );
     }
