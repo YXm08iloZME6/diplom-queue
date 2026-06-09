@@ -4,6 +4,7 @@
     var name = await Settings.GetSettingByNameAsync("Название организации");
     var color = await Settings.GetSettingByNameAsync("Основной цвет");
     var logo = await Settings.GetSettingByNameAsync("Логотип");
+    var address = await Settings.GetSettingByNameAsync("Адрес");
 }
 
 <!DOCTYPE html>
@@ -28,8 +29,8 @@
                 <div class="bg-primary text-2xl text-white rounded-lg px-3 py-1.5 font-bold">О</div>
             }
             <div class="flex flex-col tracking-wide">
-                <div class="font-bold uppercase text-white text-lg">@name.Value</div>
-                <div class="text-sm text-white opacity-60">Димитровград · Гоголя 21</div>
+                <div class="font-bold uppercase text-white text-lg">@name!.Value</div>
+                <div class="text-sm text-white opacity-60">@address!.Value</div>
             </div>
         </div>
 
