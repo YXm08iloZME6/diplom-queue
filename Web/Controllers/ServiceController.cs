@@ -1,4 +1,5 @@
 using System.Diagnostics.Metrics;
+using System.Runtime.CompilerServices;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -24,13 +25,13 @@ public class ServiceController : Controller
     {
         var settingSimpleMode = await _settingsService.GetSettingByNameAsync("Простой режим");
         var settingSimpleModeLetter = await _settingsService.GetSettingByNameAsync("Буква для простого режима");
-        
-        if (settingSimpleMode?.Value == "true")
+        var services = await _serviceService.GetMainServicesAsync();
+
+        if (settingSimpleMode?.Value == "true" || !services.Any())
         {
             return View("SimpleIndex", settingSimpleModeLetter);
         }
 
-        var services = await _serviceService.GetMainServicesAsync();
         return View(services);
     }
 

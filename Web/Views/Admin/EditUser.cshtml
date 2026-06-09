@@ -47,17 +47,20 @@
                     @if (!string.IsNullOrEmpty(Model.UserData.PhotoPath))
                     {
                         <div class="mb-3 flex items-center gap-4">
-                            <img src="@Model.UserData.PhotoPath" alt="Фото профиля"
-                                 class="w-16 h-16 rounded-2xl object-cover border border-slate-200" />
+                            <div class="relative group">
+                                <img src="@Model.UserData.PhotoPath" class="w-24 h-24 rounded-2xl object-cover border border-slate-200" />
+                                <button type="button" onclick="removePhoto()" class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition">
+                                    ✕
+                                </button>
+                            </div>
+
                             <span class="text-sm text-slate-500">Текущее фото. Загрузите новое чтобы заменить.</span>
                         </div>
                     }
 
-                    <input asp-for="UserData.Photo" type="file" accept="image/*"
-                           class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-slate-600
-                  file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0
-                  file:bg-blue-50 file:text-blue-700 file:font-semibold
-                  hover:file:bg-blue-100 transition" />
+                    <input asp-for="UserData.Photo" type="file" accept="image/*" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-slate-600 
+                    file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-blue-50 
+                    file:text-blue-700 file:font-semibold hover:file:bg-blue-100 transition" />
                     <span asp-validation-for="UserData.Photo" class="text-sm text-red-500 mt-1 block"></span>
                 </div>
 
@@ -129,4 +132,19 @@
         </div>
     </div>
 </div>
+
+
+<form id="removePhotoForm" asp-action="RemovePhoto" method="post" class="hidden">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.UserData.Id" />
+</form>
+
+
+<script>
+    function removePhoto() {
+        if (confirm('Удалить фотографию?')) {
+            document.getElementById('removePhotoForm').submit();
+        }
+    }
+</script>
 

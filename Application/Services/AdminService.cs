@@ -166,6 +166,16 @@ namespace Queue.Applications.Services
             return true;
         }
 
+        public async Task RemovePhoto(Guid id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return;
+
+            await _fileStorageService.DeleteFileAsync(user.PhotoPath);
+            user.PhotoPath = null;
+            await _userRepository.UpdateAsync(user);
+        }
+
         public async Task<ServiceDto> AddServiceAsync(CreateServiceDto serviceDto)
         {
             var newService = new Service

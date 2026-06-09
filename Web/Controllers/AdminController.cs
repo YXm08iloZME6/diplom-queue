@@ -211,6 +211,13 @@ namespace Queue.Controllers
             return RedirectToAction(nameof(UserList));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RemovePhoto(Guid id)
+        {
+            await _adminService.RemovePhoto(id);
+            return RedirectToAction(nameof(EditUser), new { id });
+        }
+
         [HttpGet]
         public async Task<IActionResult> WindowsList()
         {
