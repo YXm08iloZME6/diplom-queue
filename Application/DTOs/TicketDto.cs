@@ -41,9 +41,7 @@ public class TicketDto
         Status = ticket.Status.ToString();
 
         CreatedAt = ticket.CreatedAt?.AddHours(utcOffset);
-
         StartedAt = ticket.StartedAt?.AddHours(utcOffset);
-
         CompletedAt = ticket.CompletedAt?.AddHours(utcOffset);
     }
 }

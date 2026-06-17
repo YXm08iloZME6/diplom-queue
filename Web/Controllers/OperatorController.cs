@@ -55,6 +55,22 @@ namespace Web.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> WaitingList()
+        {
+            var userId = GetUserId();
+            var dto = await _operatorService.GetDashboardData(userId);
+            var vm = new OperatorDashboardViewModel
+            {
+                dashboard = dto,
+                windowName = dto.Window.Number,
+                serviceName = dto.Window.ServiceName,
+                IsSimpleMode = false
+            };
+
+            return PartialView("WaitingList", vm);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CallNext()

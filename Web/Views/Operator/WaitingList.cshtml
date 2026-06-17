@@ -1,0 +1,36 @@
+﻿@model Web.Models.OperatorDashboardViewModel
+
+<div class="flex items-center justify-between mb-6 px-2">
+    <h2 class="font-semibold text-slate-800">Ожидают в очереди</h2>
+    <span class="text-xs font-bold bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">
+        @(Model.dashboard.WaitingTickets?.Count() ?? 0)
+    </span>
+</div>
+
+<div class="space-y-2">
+    @if (Model.dashboard.WaitingTickets != null && Model.dashboard.WaitingTickets.Any())
+    {
+        @foreach (var ticket in Model.dashboard.WaitingTickets)
+        {
+            <div class="p-4 bg-slate-50/50 border border-slate-100 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all group">
+                <div class="flex items-center justify-between">
+                    <span class="font-semibold text-slate-700 group-hover:text-blue-600">@ticket.Number</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-white px-2 py-1 rounded border border-slate-100">Ожидает</span>
+                </div>
+
+                @if (ticket.RedirectComment != null)
+                {
+                    <div class="mt-1.5 text-[10px] italic text-slate-400 group-hover:text-slate-500 transition-colors break-words">
+                        @ticket.RedirectComment
+                    </div>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center py-10 border-2 border-dashed border-slate-100 rounded-2xl">
+            <p class="text-sm text-slate-400">Список пуст</p>
+        </div>
+    }
+</div>
