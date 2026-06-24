@@ -64,7 +64,7 @@ public class OperatorService : IOperatorService
     private async Task SaveAndNotify(Ticket ticket)
     {
         await _operatorRepository.UpdateTicketAsync(ticket);
-        await _operatorRepository.SaveChangesAsync();
+        // await _operatorRepository.SaveChangesAsync();
         await _queueNotifier.NotifyUpdateTicketAsync(new TicketDto(ticket));
     }
 
@@ -270,7 +270,7 @@ public class OperatorService : IOperatorService
 
         window.Status = WindowStatus.Open;
         await _operatorRepository.UpdateWindowAsync(window);
-        await _operatorRepository.SaveChangesAsync();
+        // await _operatorRepository.SaveChangesAsync();
 
         return new WindowDto(window);
     }
@@ -282,7 +282,7 @@ public class OperatorService : IOperatorService
 
         window.Status = WindowStatus.Offline;
         await _operatorRepository.UpdateWindowAsync(window);
-        await _operatorRepository.SaveChangesAsync();
+        // await _operatorRepository.SaveChangesAsync();
 
         return new WindowDto(window);
     }
