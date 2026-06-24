@@ -40,7 +40,7 @@
                     @if (Model.dashboard.CurrentTicket == null)
                     {
                         <form asp-action="CallNext" method="post">
-                            <button type="submit" class="w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white font-medium py-4 rounded-2xl transition-all duration-200 shadow-sm active:transform active:scale-[0.99]">
+                            <button type="submit" class="w-full bg-primary text-white font-medium py-4 rounded-2xl transition-all duration-200 shadow-sm active:transform active:scale-[0.99]">
                                 Вызвать следующего клиента
                             </button>
                         </form>
@@ -52,7 +52,7 @@
                             {
                                 <form asp-action="StartProcessing" method="post">
                                     <input type="hidden" name="ticketId" value="@Model.dashboard.CurrentTicket.Id" />
-                                    <button type="submit" class="w-full bg-[#10B981] hover:bg-[#059669] text-white font-medium py-3.5 rounded-xl transition-all">
+                                    <button type="submit" class="w-full bg-primary text-white font-medium py-3.5 rounded-xl transition-all">
                                         Начать обслуживание
                                     </button>
                                 </form>
@@ -76,26 +76,11 @@
                             {
                                 <form asp-action="Complete" method="post">
                                     <input type="hidden" name="ticketId" value="@Model.dashboard.CurrentTicket.Id" />
-                                    <button type="submit" class="w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white font-medium py-4 rounded-xl shadow-sm transition-all">
+                                    <button type="submit" class="w-full bg-primary text-white font-medium py-4 rounded-xl shadow-sm transition-all">
                                         Завершить прием
                                     </button>
                                 </form>
-                                
-                                @if (!Model.IsSimpleMode) 
-                                {
-                                    <div class="space-y-3">
-                                    <select id="targetService" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4">
-                                        <option value="">Выберите услугу...</option>
-                                        @foreach (var service in Model.dashboard.AllServices)
-                                        {
-                                            <option value="@service.Id">
-                                                @service.Name
-                                            </option>
-                                        }
-                                    </select>
-                                    <button type="button" onclick="openRedirectModal()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 rounded-xl">Перенаправить клиента</button>
-                                </div>
-                                }
+                                <button type="button" onclick="openRedirectModal()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 rounded-xl">Перенаправить клиента</button>
                             }
                         </div>
                     }
@@ -105,28 +90,96 @@
 
         <div class="col-span-12 lg:col-span-5">
             <div class="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-6 h-full">
-                <div id="waiting-list">
-                    @await Html.PartialAsync("WaitingList", Model)
+                <div class="flex items-center justify-between mb-6 px-2">
+                    <h2 class="font-semibold text-slate-800">Ожидают в очереди</h2>
+                    <span class="text-xs font-bold bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">
+                        @(Model.dashboard.WaitingTickets?.Count() ?? 0)
+                    </span>
+                </div>
+
+                <div class="space-y-2">
+                    @if (Model.dashboard.WaitingTickets != null && Model.dashboard.WaitingTickets.Any())
+                    {
+                        @foreach (var ticket in Model.dashboard.WaitingTickets)
+                        {
+                            <div class="p-4 bg-slate-50/50 border border-slate-100 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all group">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-semibold text-slate-700 group-hover:text-blue-600">@ticket.Number</span>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-white px-2 py-1 rounded border border-slate-100">Ожидает</span>
+                                </div>
+
+                                @if (ticket.RedirectComment != null)
+                                {
+                                    <div class="mt-1.5 text-[10px] italic text-slate-400 group-hover:text-slate-500 transition-colors break-words">
+                                        @ticket.RedirectComment
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-10 border-2 border-dashed border-slate-100 rounded-2xl">
+                            <p class="text-sm text-slate-400">Список пуст</p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-</main>
+    </main>
 
 
     <div id="redirectModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
         <div class="bg-white rounded-3xl shadow-xl w-full max-w-md p-6">
-            <h2 class="text-xl font-semibold text-slate-800 mb-4">Перенаправление клиента</h2>
+
+            <h2 class="text-xl font-semibold text-slate-800 mb-4">
+                Перенаправление клиента
+            </h2>
+
             <form asp-action="Redirect" method="post">
-                <input type="hidden"id="modalServiceId"name="serviceId" />
+
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Комментарий</label>
-                    <textarea name="comment" rows="4" placeholder="Причина перенаправления..." class="w-full rounded-xl border border-slate-300 px-4 py-3 resize-none"></textarea>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">
+                        Выберите услугу
+                    </label>
+
+                    <select id="modalServiceSelect"
+                            name="serviceId"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4">
+                        <option value="">Выберите услугу...</option>
+
+                        @foreach (var service in Model.dashboard.AllServices)
+                        {
+                            <option value="@service.Id">
+                                @service.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">
+                        Комментарий
+                    </label>
+
+                    <textarea name="comment"
+                              rows="4"
+                              class="w-full rounded-xl border border-slate-300 px-4 py-3 resize-none"></textarea>
                 </div>
 
                 <div class="flex gap-3">
-                    <button type="button" onclick="closeRedirectModal()" class="flex-1 border border-slate-300 rounded-xl py-3">Отмена</button>
-                    <button type="submit" class="flex-1 bg-blue-600 text-white rounded-xl py-3 hover:bg-blue-700">Перенаправить</button>
+                    <button type="button"
+                            onclick="closeRedirectModal()"
+                            class="flex-1 border border-slate-300 rounded-xl py-3">
+                        Отмена
+                    </button>
+
+                    <button type="submit"
+                            class="flex-1 bg-blue-600 text-white rounded-xl py-3 hover:bg-blue-700">
+                        Перенаправить
+                    </button>
                 </div>
+
             </form>
         </div>
     </div>
@@ -139,32 +192,14 @@
         .withAutomaticReconnect()
         .build();
 
-    async function updateList(id, action) {
-        const res = await fetch(action);
-        document.getElementById(id).innerHTML = await res.text();
-    }
-
     connection.on("NewTicket", () => {
-        updateList("waiting-list", "@Url.Action("WaitingList", "Operator")");
+        window.location.reload();
     });
 
     connection.start().catch(err => console.error(err));
 
     function openRedirectModal() {
-
-        const serviceId =
-            document.getElementById("targetService").value;
-
-        if (!serviceId) {
-            alert("Сначала выберите услугу");
-            return;
-        }
-
-        document.getElementById("modalServiceId").value =
-            serviceId;
-
-        const modal =
-            document.getElementById("redirectModal");
+        const modal = document.getElementById("redirectModal");
 
         modal.classList.remove("hidden");
         modal.classList.add("flex");
