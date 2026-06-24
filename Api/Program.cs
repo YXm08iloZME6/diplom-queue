@@ -9,6 +9,13 @@ using Microsoft.IdentityModel.Tokens;
 using Queue.Applications.Services;
 using Queue.Infrastructure.Repositories;
 using System.Text;
+using Infrastructure.Notifications;
+using Infrastructure.Hubs;
+
+// Без этого переключателя Npgsql в строгом режиме требует DateTime.Kind=Utc
+// для всех timestamptz-колонок, что ломает ряд запросов.
+// Web/Program.cs уже имеет эту строку, теперь Api ведёт себя так же.
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
-
+builder.Services.AddSignalR();
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -63,7 +70,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Те же сервисы что и в Web
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
@@ -76,6 +82,12 @@ builder.Services.AddScoped<IOperatorRepository, OperatorRepository>();
 builder.Services.AddScoped<IOperatorService, OperatorService>();
 builder.Services.AddScoped<IWindowRepository, WindowRepository>();
 builder.Services.AddScoped<IWindowService, WindowService>();
+builder.Services.AddScoped<ISettingsRepository, SettingsRepository>();
+builder.Services.AddScoped<ISettingsService, SettingsService>();
+builder.Services.AddScoped<IQueueNotifier, QueueNotifier>();
+builder.Services.AddScoped<IDisplayRepository, DisplayRepository>();
+builder.Services.AddScoped<IDisplayService, DisplayService>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
 var app = builder.Build();
 
@@ -86,5 +98,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<Infrastructure.Hubs.QueueHub>("/queueHub");
 
 app.Run();

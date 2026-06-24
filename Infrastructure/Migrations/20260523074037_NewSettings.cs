@@ -14,51 +14,33 @@ namespace Infrastructure.Migrations
                 keyColumn: "id",
                 keyValue: new Guid("ef30bd6a-f192-4b25-8885-f7d679c6b313"));
 
-            migrationBuilder.DeleteData(
-                table: "settings",
-                keyColumn: "id",
-                keyValue: new Guid("a55d9913-f36a-43a4-8321-272d22f85a2a"));
+            // migrationBuilder.DeleteData(
+            //     table: "settings",
+            //     keyColumn: "id",
+            //     keyValue: new Guid("a55d9913-f36a-43a4-8321-272d22f85a2a"));
 
-            migrationBuilder.DropColumn(
-                name: "simple_mode",
-                table: "settings");
+            // migrationBuilder.DropColumn(
+            //     name: "simple_mode",
+            //     table: "settings");
 
-            migrationBuilder.DropColumn(
-                name: "simple_mode_service_id",
-                table: "settings");
+            // migrationBuilder.DropColumn(
+            //     name: "simple_mode_service_id",
+            //     table: "settings");
 
-            migrationBuilder.AlterColumn<Guid>(
-                name: "id",
-                table: "settings",
-                type: "uuid",
-                nullable: false,
-                defaultValueSql: "gen_random_uuid()",
-                oldClrType: typeof(Guid),
-                oldType: "uuid");
+            // migrationBuilder.AlterColumn<Guid>(
+            //     name: "id",
+            //     table: "settings", ...);
 
-            migrationBuilder.AddColumn<string>(
-                name: "name",
-                table: "settings",
-                type: "character varying(50)",
-                maxLength: 50,
-                nullable: false,
-                defaultValue: "");
+            // migrationBuilder.AddColumn<string>(
+            //     name: "name",
+            //     table: "settings", ...);
 
-            migrationBuilder.AddColumn<string>(
-                name: "value",
-                table: "settings",
-                type: "text",
-                nullable: false,
-                defaultValue: "");
+            // migrationBuilder.AddColumn<string>(
+            //     name: "value",
+            //     table: "settings", ...);
 
-            migrationBuilder.InsertData(
-                table: "settings",
-                columns: new[] { "id", "name", "value" },
-                values: new object[,]
-                {
-                    { new Guid("aaca4ae5-734e-48ad-a34a-5b12f6c64212"), "Буква для простого мода", "D" },
-                    { new Guid("b442d4a8-6b6d-42c6-b769-8c3dd4eb5147"), "Простой мод", "false" }
-                });
+            // migrationBuilder.InsertData(
+            //     table: "settings", ...);
 
             migrationBuilder.UpdateData(
                 table: "users",

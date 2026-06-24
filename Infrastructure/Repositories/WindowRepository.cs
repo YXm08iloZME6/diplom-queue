@@ -16,6 +16,7 @@ public class WindowRepository : IWindowRepository
 
     public async Task CreateWindowAsync(Window window)
     {
+        
         await _context.Windows.AddAsync(window);
         await _context.SaveChangesAsync();
     }

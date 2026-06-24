@@ -11,6 +11,7 @@ public class WindowDto
     public Guid? ServiceId { get; set; }
     public string ServiceName { get; set; }
     public WindowDto() { }
+    public ServiceDto? Service { get; set; } // добавляем
     public WindowDto(Window window)
     {
         Id = window.Id;
