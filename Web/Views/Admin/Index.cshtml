@@ -1,86 +1,135 @@
 ﻿@model Application.DTOs.AdminDashboardDto
 
-<h1>Главная админ панели</h1>
+<div class="h-[calc(100vh-80px)] flex flex-col gap-6 p-6 overflow-hidden">
 
-<div>
-    <div>Талоны сегодня: @Model.TicketsToday</div>
-    <div>Завершено сегодня: @Model.CompletedToday</div>
-    <div>В очереди: @Model.WaitingNow</div>
-    <div>Операторов: @Model.ActiveOperators</div>
+    <div>
+        <h1 class="text-3xl font-bold text-slate-800">Главная</h1>
+        <p class="text-slate-500">Общая информация о работе системы</p>
+    </div>
+
+    <div class="grid grid-cols-4 gap-4">
+
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+            <div class="text-sm text-slate-500">Талоны сегодня</div>
+            <div class="text-4xl font-bold text-slate-800 mt-2">@Model.TicketsToday</div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+            <div class="text-sm text-slate-500">Завершено</div>
+            <div class="text-4xl font-bold text-emerald-600 mt-2">@Model.CompletedToday</div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+            <div class="text-sm text-slate-500">В очереди</div>
+            <div class="text-4xl font-bold text-amber-500 mt-2">@Model.WaitingNow</div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+            <div class="text-sm text-slate-500">Операторов</div>
+            <div class="text-4xl font-bold text-blue-600 mt-2">@Model.ActiveOperators</div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-12 gap-6 flex-1 overflow-hidden">
+
+        <div class="col-span-4 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 overflow-auto">
+
+            <h2 class="text-lg font-semibold text-slate-800 mb-4">
+                Популярность услуг
+            </h2>
+
+            <div class="space-y-3">
+
+                @foreach (var item in Model.ServiceStats.OrderByDescending(x => x.TicketCount))
+                {
+                    var maxCount = Model.ServiceStats.Max(x => x.TicketCount);
+                    var width = maxCount == 0 ? 0 : item.TicketCount * 100 / maxCount;
+
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>@item.ServiceName</span>
+                            <span class="font-semibold">@item.TicketCount</span>
+                        </div>
+
+                        <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-500 rounded-full" style="width:@(width)%"></div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="col-span-5 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 overflow-auto">
+
+            <h2 class="text-lg font-semibold text-slate-800 mb-4">
+                Последние талоны
+            </h2>
+
+            <div class="space-y-2">
+
+                @foreach (var t in Model.LastTickets)
+                {
+                    <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+
+                        <div>
+                            <div class="font-semibold text-slate-800">@t.Number</div>
+                            <div class="text-xs text-slate-500">@t.CreatedAt</div>
+                        </div>
+
+                        <div class="text-sm font-medium">
+                            @(t.Status == "Waiting" ? "Ожидает" :
+                                t.Status == "Called" ? "Вызван" :
+                                t.Status == "Processing" ? "Обработка" :
+                                t.Status == "Completed" ? "Завершён" :
+                                t.Status == "Cancelled" ? "Отменён" :
+                                t.Status)
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm p-5 overflow-auto">
+
+            <h2 class="text-lg font-semibold text-slate-800 mb-4">
+                Состояние окон
+            </h2>
+
+            <div class="space-y-3">
+
+                @foreach (var w in Model.Windows)
+                {
+                    <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+
+                        <span class="font-medium">
+                            Окно @w.Number
+                        </span>
+
+                        <span class="text-sm font-semibold">
+
+                            @(w.Status == Domain.Enums.WindowStatus.Open
+                                ? "🟢 Открыто"
+                                : w.Status == Domain.Enums.WindowStatus.Busy
+                                ? "🟡 Занято"
+                                : w.Status == Domain.Enums.WindowStatus.Offline
+                                ? "🔴 Неактивно"
+                                : "⚪ Закрыто")
+
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
-
-<hr />
-
-
-<h2>Количество талонов по услугам</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Имя услуги</th>
-            <th>Количество билетов</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.ServiceStats)
-        {
-            <tr>
-                <td>@item.ServiceName</td>
-                <td>@item.TicketCount</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<hr />
-
-<h2>Последние талоны</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Номер</th>
-            <th>Статус</th>
-            <th>Дата</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var t in Model.LastTickets)
-        {
-            <tr>
-                <td>@t.Number</td>
-                <td>
-                    @(t.Status == "Waiting" ? "Ожидает" :
-                        t.Status == "Called" ? "Вызван" :
-                        t.Status == "Processing" ? "В обработке" :
-                        t.Status == "Completed" ? "Завершен" :
-                        t.Status == "Cancelled" ? "Отменен" :
-                        t.Status)
-                </td>
-                <td>@t.CreatedAt</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<hr />
-
-<h2>Окна</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Номер</th>
-            <th>Статус</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var w in Model.Windows)
-        {
-            <tr>
-                <td>@w.Number</td>
-                <td>@(w.Status == Domain.Enums.WindowStatus.Open ? "Открыто" :
-                    w.Status == Domain.Enums.WindowStatus.Close ? "Закрыто" :
-                    w.Status)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
