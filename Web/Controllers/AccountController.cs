@@ -20,24 +20,24 @@ namespace Queue.Controllers
             _authService = authService;
         }
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //public IActionResult Register()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterUserDto model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Register(RegisterUserDto model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(model);
 
-            var user = await _authService.CreateUser(model);
+        //    var user = await _authService.CreateUser(model);
             
-            await Authenticate(user);
-            return RedirectToAction("Index", "Home");
-        }
+        //    await Authenticate(user);
+        //    return RedirectToAction("Index", "Home");
+        //}
 
         [HttpGet]
         public IActionResult Login()
@@ -71,7 +71,13 @@ namespace Queue.Controllers
             }
 
             await Authenticate(user);
-            return RedirectToAction("Index", "Home");
+
+            if (user.Roles.Contains("admin"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            return RedirectToAction("Index", "Operator");
 
         }
 
