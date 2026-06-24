@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vma="clr-namespace:QueueClient.ViewModels.Admin"
+             xmlns:m="clr-namespace:QueueClient.Models"
+             xmlns:conv="clr-namespace:QueueClient"
+             x:Class="QueueClient.Views.Admin.AdminServicesView"
+             x:DataType="vma:AdminServicesViewModel">
+
+    <Grid Margin="32" RowDefinitions="Auto,*">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Услуги" FontSize="24" FontWeight="Bold" Foreground="#1E293B" />
+                <TextBlock Text="{Binding Error}" Foreground="#DC2626" FontSize="13"
+                           IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+            <Button Grid.Column="1" Content="+ Добавить" Command="{Binding NewCommand}"
+                    Background="#2563EB" Foreground="White" CornerRadius="10" Padding="16,8"
+                    VerticalAlignment="Center" />
+        </Grid>
+
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="8"
+                IsVisible="{Binding !IsFormOpen}">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding Services}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="m:ServiceModel">
+                            <Border BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="12">
+                                <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                    <Border Grid.Column="0" Background="#EFF6FF" CornerRadius="8"
+                                            Width="40" Height="40" Margin="0,0,12,0">
+                                        <TextBlock Text="{Binding Letter}" FontWeight="Bold" Foreground="#2563EB"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="#1E293B" />
+                                        <TextBlock Text="{Binding Description}" FontSize="12" Foreground="#94A3B8" />
+                                    </StackPanel>
+                                    <Button Grid.Column="2" Margin="0,0,6,0" CornerRadius="8" Padding="10,4"
+                                            Background="#F1F5F9" Foreground="#334155"
+                                            Content="{Binding IsActive, Converter={x:Static conv:Labels.ActiveToggle}}"
+                                            Command="{Binding $parent[ItemsControl].((vma:AdminServicesViewModel)DataContext).ToggleStatusCommand}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Grid.Column="3" CornerRadius="8" Padding="10,4"
+                                            Background="#F1F5F9" Foreground="#334155"
+                                            Content="{Binding IsNeedFacets, Converter={x:Static conv:Labels.FacetsToggle}}"
+                                            Command="{Binding $parent[ItemsControl].((vma:AdminServicesViewModel)DataContext).ToggleFacetsCommand}"
+                                            CommandParameter="{Binding}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="24"
+                IsVisible="{Binding IsFormOpen}">
+            <StackPanel Spacing="12" MaxWidth="560" HorizontalAlignment="Left">
+                <TextBox Watermark="Название" Text="{Binding FormName}" />
+                <TextBox Watermark="Буква (например A)" Text="{Binding FormLetter}" />
+                <TextBox Watermark="Описание" Text="{Binding FormDescription}" />
+                <StackPanel>
+                    <TextBlock Text="Родительская услуга (необязательно)" FontSize="12" Foreground="#64748B" />
+                    <ComboBox ItemsSource="{Binding Parents}" SelectedItem="{Binding FormParent}"
+                              PlaceholderText="Нет (главная услуга)" HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="m:ServiceModel">
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,8,0,0">
+                    <Button Content="Сохранить" Command="{Binding SaveCommand}"
+                            Background="#2563EB" Foreground="White" CornerRadius="10" Padding="20,8" />
+                    <Button Content="Отмена" Command="{Binding CloseFormCommand}"
+                            Background="#E2E8F0" Foreground="#334155" CornerRadius="10" Padding="20,8" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

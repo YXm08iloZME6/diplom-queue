@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vma="clr-namespace:QueueClient.ViewModels.Admin"
+             xmlns:m="clr-namespace:QueueClient.Models"
+             x:Class="QueueClient.Views.Admin.AdminWindowsView"
+             x:DataType="vma:AdminWindowsViewModel">
+
+    <Grid Margin="32" RowDefinitions="Auto,*">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Окна обслуживания" FontSize="24" FontWeight="Bold" Foreground="#1E293B" />
+                <TextBlock Text="{Binding Error}" Foreground="#DC2626" FontSize="13"
+                           IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+            <Button Grid.Column="1" Content="+ Создать" Command="{Binding NewCommand}"
+                    Background="#2563EB" Foreground="White" CornerRadius="10" Padding="16,8"
+                    VerticalAlignment="Center" />
+        </Grid>
+
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="8"
+                IsVisible="{Binding !IsFormOpen}">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding Windows}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="m:WindowModel">
+                            <Border BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="12">
+                                <Grid ColumnDefinitions="*,*,Auto">
+                                    <TextBlock Grid.Column="0" Text="{Binding Number}" FontWeight="SemiBold"
+                                               Foreground="#1E293B" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{Binding ServiceName}" FontSize="12"
+                                               Foreground="#64748B" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Status}" FontSize="12"
+                                               Foreground="#94A3B8" VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="24"
+                IsVisible="{Binding IsFormOpen}">
+            <StackPanel Spacing="12" MaxWidth="480" HorizontalAlignment="Left">
+                <TextBox Watermark="Название (номер окна)" Text="{Binding FormNumber}" />
+                <StackPanel>
+                    <TextBlock Text="Статус" FontSize="12" Foreground="#64748B" />
+                    <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding FormStatus}"
+                              HorizontalAlignment="Stretch" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Услуга" FontSize="12" Foreground="#64748B" />
+                    <ComboBox ItemsSource="{Binding Services}" SelectedItem="{Binding FormService}"
+                              PlaceholderText="Выберите услугу" HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="m:ServiceModel">
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,8,0,0">
+                    <Button Content="Сохранить" Command="{Binding SaveCommand}"
+                            Background="#2563EB" Foreground="White" CornerRadius="10" Padding="20,8" />
+                    <Button Content="Отмена" Command="{Binding CloseFormCommand}"
+                            Background="#E2E8F0" Foreground="#334155" CornerRadius="10" Padding="20,8" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

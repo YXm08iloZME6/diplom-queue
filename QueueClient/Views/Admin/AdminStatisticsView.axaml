@@ -1,0 +1,88 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vma="clr-namespace:QueueClient.ViewModels.Admin"
+             xmlns:m="clr-namespace:QueueClient.Models"
+             x:Class="QueueClient.Views.Admin.AdminStatisticsView"
+             x:DataType="vma:AdminStatisticsViewModel">
+
+    <Grid Margin="32" RowDefinitions="Auto,Auto,Auto,*">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+            <TextBlock Grid.Column="0" Text="Статистика талонов" FontSize="24" FontWeight="Bold"
+                       Foreground="#1E293B" />
+            <Button Grid.Column="1" Content="🔄 Сбросить очередь" Command="{Binding ResetQueueCommand}"
+                    Background="#FEE2E2" Foreground="#991B1B" CornerRadius="10" Padding="16,8" />
+        </Grid>
+
+        <!-- Фильтр по датам -->
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="16" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <StackPanel>
+                    <TextBlock Text="Начало" FontSize="12" Foreground="#64748B" />
+                    <CalendarDatePicker SelectedDate="{Binding StartDate}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Конец" FontSize="12" Foreground="#64748B" />
+                    <CalendarDatePicker SelectedDate="{Binding EndDate}" />
+                </StackPanel>
+                <Button Content="Показать" Command="{Binding SearchCommand}" VerticalAlignment="Bottom"
+                        Background="#2563EB" Foreground="White" CornerRadius="10" Padding="20,8" />
+            </StackPanel>
+        </Border>
+
+        <!-- Сводка -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="12" Margin="0,0,0,16">
+            <Border Background="White" CornerRadius="14" Padding="20,12">
+                <StackPanel>
+                    <TextBlock Text="Всего" FontSize="12" Foreground="#64748B" />
+                    <TextBlock Text="{Binding Total}" FontSize="26" FontWeight="Bold" Foreground="#1E293B" />
+                </StackPanel>
+            </Border>
+            <Border Background="White" CornerRadius="14" Padding="20,12">
+                <StackPanel>
+                    <TextBlock Text="Завершено" FontSize="12" Foreground="#64748B" />
+                    <TextBlock Text="{Binding Completed}" FontSize="26" FontWeight="Bold" Foreground="#16A34A" />
+                </StackPanel>
+            </Border>
+            <Border Background="White" CornerRadius="14" Padding="20,12">
+                <StackPanel>
+                    <TextBlock Text="Отменено" FontSize="12" Foreground="#64748B" />
+                    <TextBlock Text="{Binding Cancelled}" FontSize="26" FontWeight="Bold" Foreground="#DC2626" />
+                </StackPanel>
+            </Border>
+            <TextBlock Text="{Binding Info}" Foreground="#16A34A" VerticalAlignment="Center"
+                       IsVisible="{Binding Info, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock Text="{Binding Error}" Foreground="#DC2626" VerticalAlignment="Center"
+                       IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+        </StackPanel>
+
+        <!-- Таблица -->
+        <Border Grid.Row="3" Background="White" CornerRadius="16" Padding="8">
+            <DockPanel>
+                <Grid DockPanel.Dock="Top" ColumnDefinitions="*,*,2*,2*" Margin="12,8">
+                    <TextBlock Grid.Column="0" Text="Номер" FontWeight="SemiBold" Foreground="#64748B" />
+                    <TextBlock Grid.Column="1" Text="Статус" FontWeight="SemiBold" Foreground="#64748B" />
+                    <TextBlock Grid.Column="2" Text="Создан" FontWeight="SemiBold" Foreground="#64748B" />
+                    <TextBlock Grid.Column="3" Text="Завершён" FontWeight="SemiBold" Foreground="#64748B" />
+                </Grid>
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Tickets}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="m:TicketModel">
+                                <Border BorderBrush="#F1F5F9" BorderThickness="0,1,0,0" Padding="12,10">
+                                    <Grid ColumnDefinitions="*,*,2*,2*">
+                                        <TextBlock Grid.Column="0" Text="{Binding Number}" FontWeight="SemiBold"
+                                                   Foreground="#1E293B" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Status}" Foreground="#64748B" />
+                                        <TextBlock Grid.Column="2" Text="{Binding CreatedAt}" Foreground="#64748B" />
+                                        <TextBlock Grid.Column="3" Text="{Binding CompletedAt}" Foreground="#64748B" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

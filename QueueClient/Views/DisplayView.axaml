@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:QueueClient.ViewModels"
+             xmlns:m="clr-namespace:QueueClient.Models"
+             x:Class="QueueClient.Views.DisplayView"
+             x:DataType="vm:DisplayViewModel">
+
+    <Grid Background="#0B1220" RowDefinitions="Auto,*,Auto">
+
+        <TextBlock Grid.Row="0" Text="Текущие вызовы" FontSize="34" FontWeight="ExtraBold"
+                   Foreground="White" Margin="40,32,40,16" />
+
+        <!-- Активные вызовы по окнам -->
+        <ScrollViewer Grid.Row="1" Margin="40,0">
+            <ItemsControl ItemsSource="{Binding ActiveTickets}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="m:DisplayTicketModel">
+                        <Border Background="White" CornerRadius="18" Margin="10" Padding="40,28"
+                                Width="320">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding ServiceName}" FontSize="20" FontWeight="SemiBold"
+                                           Foreground="#38BDF8" HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding TicketNumber}" FontSize="72" FontWeight="ExtraBold"
+                                           Foreground="Black" HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding WindowNumber, StringFormat='Окно {0}'}"
+                                           FontSize="18" Foreground="#64748B" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Очередь ожидания -->
+        <StackPanel Grid.Row="2" Margin="40,16,40,32" Spacing="12">
+            <TextBlock Text="Следующие" FontSize="28" FontWeight="ExtraBold" Foreground="White" />
+            <ItemsControl ItemsSource="{Binding WaitingTickets}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="m:DisplayTicketModel">
+                        <Border Background="White" CornerRadius="12" Margin="6" Padding="28,16">
+                            <TextBlock Text="{Binding TicketNumber}" FontSize="32" FontWeight="ExtraBold"
+                                       Foreground="Black" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</UserControl>

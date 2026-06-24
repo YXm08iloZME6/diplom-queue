@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vma="clr-namespace:QueueClient.ViewModels.Admin"
+             xmlns:m="clr-namespace:QueueClient.Models"
+             xmlns:conv="clr-namespace:QueueClient"
+             x:Class="QueueClient.Views.Admin.AdminUsersView"
+             x:DataType="vma:AdminUsersViewModel">
+
+    <Grid Margin="32" RowDefinitions="Auto,*">
+
+        <!-- Шапка -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Сотрудники" FontSize="24" FontWeight="Bold" Foreground="#1E293B" />
+                <TextBlock Text="{Binding Error}" Foreground="#DC2626" FontSize="13"
+                           IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+            <Button Grid.Column="1" Content="+ Добавить" Command="{Binding NewCommand}"
+                    Background="#2563EB" Foreground="White" CornerRadius="10" Padding="16,8"
+                    VerticalAlignment="Center" />
+        </Grid>
+
+        <!-- Таблица -->
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="8"
+                IsVisible="{Binding !IsFormOpen}">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding Users}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="m:UserModel">
+                            <Border BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="12">
+                                <Grid ColumnDefinitions="2*,2*,*,Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding Email}" FontWeight="SemiBold" Foreground="#1E293B" />
+                                        <TextBlock FontSize="12" Foreground="#64748B">
+                                            <Run Text="{Binding Surname}" />
+                                            <Run Text="{Binding Name}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="12"
+                                               Foreground="#64748B"
+                                               Text="{Binding Roles, Converter={x:Static conv:StringJoin.Comma}}" />
+                                    <TextBlock Grid.Column="2" VerticalAlignment="Center" FontSize="12"
+                                               Foreground="#64748B" Text="{Binding Status}" />
+                                    <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6">
+                                        <Button Content="Изм." Background="#E2E8F0" Foreground="#334155"
+                                                CornerRadius="8" Padding="10,4"
+                                                Command="{Binding $parent[ItemsControl].((vma:AdminUsersViewModel)DataContext).EditCommand}"
+                                                CommandParameter="{Binding}" />
+                                        <Button Content="Удал." Background="#FEE2E2" Foreground="#DC2626"
+                                                CornerRadius="8" Padding="10,4"
+                                                Command="{Binding $parent[ItemsControl].((vma:AdminUsersViewModel)DataContext).RemoveCommand}"
+                                                CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Форма -->
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="24"
+                IsVisible="{Binding IsFormOpen}">
+            <ScrollViewer>
+                <StackPanel Spacing="12" MaxWidth="560" HorizontalAlignment="Left">
+                    <Grid ColumnDefinitions="*,*" >
+                        <TextBox Grid.Column="0" Margin="0,0,6,0" Watermark="Имя" Text="{Binding FormName}" />
+                        <TextBox Grid.Column="1" Margin="6,0,0,0" Watermark="Фамилия" Text="{Binding FormSurname}" />
+                    </Grid>
+                    <TextBox Watermark="Отчество" Text="{Binding FormMiddleName}" />
+                    <TextBox Watermark="Email" Text="{Binding FormEmail}" />
+                    <TextBox Watermark="Пароль (при редактировании — оставьте пустым, чтобы не менять)"
+                             Text="{Binding FormPassword}" PasswordChar="•" />
+
+                    <Grid ColumnDefinitions="*,*">
+                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                            <TextBlock Text="Статус" FontSize="12" Foreground="#64748B" />
+                            <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding FormStatus}"
+                                      HorizontalAlignment="Stretch" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                            <TextBlock Text="Окно" FontSize="12" Foreground="#64748B" />
+                            <ComboBox ItemsSource="{Binding Windows}" SelectedItem="{Binding FormWindow}"
+                                      PlaceholderText="Не выбрано" HorizontalAlignment="Stretch">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="m:WindowModel">
+                                        <TextBlock Text="{Binding Number}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+
+                    <CheckBox Content="Администратор (роль operator выдаётся всегда)"
+                              IsChecked="{Binding FormIsAdmin}" />
+
+                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,8,0,0">
+                        <Button Content="Сохранить" Command="{Binding SaveCommand}"
+                                Background="#2563EB" Foreground="White" CornerRadius="10" Padding="20,8" />
+                        <Button Content="Отмена" Command="{Binding CloseFormCommand}"
+                                Background="#E2E8F0" Foreground="#334155" CornerRadius="10" Padding="20,8" />
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,142 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:QueueClient.ViewModels"
+             xmlns:m="clr-namespace:QueueClient.Models"
+             x:Class="QueueClient.Views.OperatorView"
+             x:DataType="vm:OperatorViewModel">
+
+    <ScrollViewer Padding="32">
+        <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,360" Margin="0">
+
+            <!-- Шапка -->
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Spacing="2" Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal" Spacing="14">
+                    <TextBlock Text="Панель оператора" FontSize="24" FontWeight="Bold" Foreground="#1E293B" />
+                    <Button Content="↻ Обновить" Command="{Binding RefreshCommand}"
+                            Background="#E2E8F0" Foreground="#334155" CornerRadius="8" Padding="10,4" />
+                    <Button Content="Начать смену" Command="{Binding StartShiftCommand}"
+                            Background="#DCFCE7" Foreground="#166534" CornerRadius="8" Padding="10,4" />
+                    <Button Content="Завершить смену" Command="{Binding EndShiftCommand}"
+                            Background="#FEE2E2" Foreground="#991B1B" CornerRadius="8" Padding="10,4" />
+                </StackPanel>
+                <TextBlock FontSize="13" Foreground="#64748B">
+                    <Run Text="Окно:" />
+                    <Run Text="{Binding WindowTitle}" />
+                    <Run Text="  •  " />
+                    <Run Text="{Binding ServiceName}" />
+                </TextBlock>
+                <TextBlock Text="{Binding Error}" Foreground="#DC2626" FontSize="13" TextWrapping="Wrap"
+                           IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <TextBlock Text="{Binding Info}" Foreground="#16A34A" FontSize="13" TextWrapping="Wrap"
+                           IsVisible="{Binding Info, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+
+            <!-- Текущий талон + действия -->
+            <Border Grid.Row="1" Grid.Column="0" Background="White" CornerRadius="20"
+                    Padding="40" Margin="0,0,16,0">
+                <StackPanel Spacing="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                    <StackPanel IsVisible="{Binding HasTicket}" Spacing="8" HorizontalAlignment="Center">
+                        <TextBlock Text="Сейчас в обслуживании" FontSize="12" Foreground="#94A3B8"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding CurrentTicket.Number}" FontSize="90" FontWeight="Light"
+                                   Foreground="#0F172A" HorizontalAlignment="Center" />
+                        <Border Background="#F1F5F9" CornerRadius="20" Padding="14,4" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding CurrentTicket.Status}" FontSize="12" Foreground="#64748B" />
+                        </Border>
+
+                        <!-- Комментарий от перенаправившего оператора -->
+                        <Border Background="#FEF3C7" BorderBrush="#FCD34D" BorderThickness="1"
+                                CornerRadius="12" Padding="14,10" MaxWidth="360"
+                                IsVisible="{Binding HasRedirectComment}">
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="↪ Перенаправлен с комментарием:" FontSize="11"
+                                           Foreground="#92400E" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding CurrentRedirectComment}" FontSize="14"
+                                           Foreground="#78350F" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel IsVisible="{Binding !HasTicket}" Spacing="6" HorizontalAlignment="Center">
+                        <TextBlock Text="☕" FontSize="40" HorizontalAlignment="Center" />
+                        <TextBlock Text="Очередь свободна" FontSize="18" Foreground="#94A3B8" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="10" Width="340">
+                        <!-- Нет талона -->
+                        <Button Content="Вызвать следующего клиента"
+                                Command="{Binding CallNextCommand}" IsVisible="{Binding !HasTicket}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                Background="#3B82F6" Foreground="White" CornerRadius="12" Padding="0,14" />
+
+                        <!-- Статус Called -->
+                        <Button Content="Начать обслуживание"
+                                Command="{Binding StartProcessingCommand}" IsVisible="{Binding IsCalled}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                Background="#10B981" Foreground="White" CornerRadius="12" Padding="0,12" />
+                        <Grid ColumnDefinitions="*,*" IsVisible="{Binding IsCalled}">
+                            <Button Grid.Column="0" Content="Повторить вызов" Command="{Binding RecallCommand}"
+                                    Margin="0,0,5,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                    Background="#E2E8F0" Foreground="#334155" CornerRadius="12" Padding="0,10" />
+                            <Button Grid.Column="1" Content="Отменить" Command="{Binding CancelCommand}"
+                                    Margin="5,0,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                    Background="#FEE2E2" Foreground="#DC2626" CornerRadius="12" Padding="0,10" />
+                        </Grid>
+
+                        <!-- Статус Processing -->
+                        <Button Content="Завершить приём"
+                                Command="{Binding CompleteCommand}" IsVisible="{Binding IsProcessing}"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                Background="#3B82F6" Foreground="White" CornerRadius="12" Padding="0,14" />
+
+                        <StackPanel Spacing="8" IsVisible="{Binding IsProcessing}">
+                            <ComboBox ItemsSource="{Binding AllServices}" SelectedItem="{Binding RedirectTarget}"
+                                      PlaceholderText="Перенаправить в услугу..." HorizontalAlignment="Stretch">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="m:ServiceModel">
+                                        <TextBlock Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBox Watermark="Комментарий к перенаправлению" Text="{Binding RedirectComment}"
+                                     AcceptsReturn="True" Height="60" />
+                            <Button Content="Перенаправить клиента" Command="{Binding RedirectCommand}"
+                                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                    Background="#F59E0B" Foreground="White" CornerRadius="12" Padding="0,10" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Очередь ожидания -->
+            <Border Grid.Row="1" Grid.Column="1" Background="White" CornerRadius="20" Padding="20">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="4,0,4,14">
+                        <TextBlock Grid.Column="0" Text="Ожидают в очереди" FontWeight="SemiBold" Foreground="#1E293B" />
+                        <Border Grid.Column="1" Background="#F1F5F9" CornerRadius="12" Padding="10,2">
+                            <TextBlock Text="{Binding WaitingCount}" Foreground="#64748B" FontSize="12" />
+                        </Border>
+                    </Grid>
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding WaitingTickets}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="m:TicketModel">
+                                    <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1"
+                                            CornerRadius="14" Padding="16,12" Margin="0,3">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <TextBlock Grid.Column="0" Text="{Binding Number}" FontWeight="SemiBold"
+                                                       Foreground="#334155" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Status}" FontSize="11"
+                                                       Foreground="#94A3B8" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

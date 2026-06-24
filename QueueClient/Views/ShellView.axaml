@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:QueueClient.ViewModels"
+             x:Class="QueueClient.Views.ShellView"
+             x:DataType="vm:ShellViewModel">
+
+    <Grid ColumnDefinitions="260,*" Background="#F1F5F9">
+
+        <!-- Боковое меню -->
+        <Border Grid.Column="0" Background="#0F172A">
+            <DockPanel Margin="16">
+                <StackPanel DockPanel.Dock="Top" Spacing="2" Margin="8,8,8,20">
+                    <TextBlock Text="Электронная очередь" Foreground="White"
+                               FontSize="16" FontWeight="Bold" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding RoleLabel}" Foreground="#94A3B8" FontSize="12" />
+                    <TextBlock Text="{Binding UserEmail}" Foreground="#64748B" FontSize="11"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <!-- Выход — прижат к низу -->
+                <Button DockPanel.Dock="Bottom" Command="{Binding LogoutCommand}"
+                        Margin="0,12,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Background="Transparent" Foreground="#F87171"
+                        Padding="12,10" CornerRadius="10"
+                        Content="⏻  Выйти из аккаунта" />
+
+                <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:NavItem">
+                            <Button Margin="0,2"
+                                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                    Background="Transparent" Foreground="#E2E8F0"
+                                    Padding="12,10" CornerRadius="10"
+                                    Command="{Binding $parent[ItemsControl].((vm:ShellViewModel)DataContext).SelectCommand}"
+                                    CommandParameter="{Binding}">
+                                <TextBlock>
+                                    <Run Text="{Binding Icon}" />
+                                    <Run Text="  " />
+                                    <Run Text="{Binding Title}" />
+                                </TextBlock>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </Border>
+
+        <!-- Активный раздел -->
+        <ContentControl Grid.Column="1" Content="{Binding CurrentSection}" />
+    </Grid>
+</UserControl>

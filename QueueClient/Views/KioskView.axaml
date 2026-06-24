@@ -1,0 +1,89 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:QueueClient.ViewModels"
+             xmlns:m="clr-namespace:QueueClient.Models"
+             x:Class="QueueClient.Views.KioskView"
+             x:DataType="vm:KioskViewModel">
+
+    <Grid Background="#0F172A">
+
+        <!-- ШАГ 1. Приветствие -->
+        <StackPanel IsVisible="{Binding IsWelcome}" Spacing="40"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Электронная очередь" FontSize="56" FontWeight="Bold"
+                       Foreground="White" HorizontalAlignment="Center" />
+            <TextBlock Text="Нажмите, чтобы получить талон" FontSize="24" Foreground="#94A3B8"
+                       HorizontalAlignment="Center" />
+            <Button Content="Получить талон" Command="{Binding StartCommand}"
+                    FontSize="32" Padding="60,30" HorizontalAlignment="Center"
+                    Background="#2563EB" Foreground="White" CornerRadius="16" />
+        </StackPanel>
+
+        <!-- ШАГ 2. Выбор услуги -->
+        <Grid IsVisible="{Binding IsServices}" RowDefinitions="Auto,*,Auto" Margin="40">
+            <TextBlock Grid.Row="0" Text="{Binding ListTitle}" FontSize="40" FontWeight="Bold"
+                       Foreground="White" Margin="0,0,0,24" />
+
+            <Panel Grid.Row="1">
+                <Button Content="Получить талон" Command="{Binding SimpleTicketCommand}"
+                        IsVisible="{Binding IsSimpleMode}" FontSize="36" Padding="80,40"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Background="#2563EB" Foreground="White" CornerRadius="16" />
+
+                <ScrollViewer IsVisible="{Binding !IsSimpleMode}">
+                    <ItemsControl ItemsSource="{Binding Services}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="m:ServiceModel">
+                                <Button Width="280" Height="160" Margin="12"
+                                        Background="#1E293B" Foreground="White" CornerRadius="16"
+                                        Command="{Binding $parent[ItemsControl].((vm:KioskViewModel)DataContext).SelectCommand}"
+                                        CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding Name}" FontSize="24" FontWeight="SemiBold"
+                                               TextWrapping="Wrap" TextAlignment="Center" />
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Panel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="20" Margin="0,16,0,0">
+                <Button Content="Назад" Command="{Binding BackCommand}" FontSize="22" Padding="40,16"
+                        Background="#334155" Foreground="White" CornerRadius="12" />
+                <TextBlock Text="{Binding Error}" Foreground="#F87171" FontSize="18" VerticalAlignment="Center"
+                           IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+        </Grid>
+
+        <!-- ШАГ 3. Ввод данных -->
+        <StackPanel IsVisible="{Binding IsFacets}" Spacing="24" Width="600"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Введите данные для записи" FontSize="32" FontWeight="Bold"
+                       Foreground="White" HorizontalAlignment="Center" />
+            <TextBox Watermark="Телефон" Text="{Binding PhoneNumber}" FontSize="24" Padding="16" />
+            <TextBox Watermark="ФИО" Text="{Binding FullName}" FontSize="24" Padding="16" />
+            <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center">
+                <Button Content="Отмена" Command="{Binding CancelCommand}" FontSize="22" Padding="40,16"
+                        Background="#334155" Foreground="White" CornerRadius="12" />
+                <Button Content="Получить талон" Command="{Binding ConfirmFacetsCommand}" FontSize="22" Padding="40,16"
+                        Background="#2563EB" Foreground="White" CornerRadius="12" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- ШАГ 4. Талон -->
+        <StackPanel IsVisible="{Binding IsTicket}" Spacing="24"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Ваш талон" FontSize="32" Foreground="#94A3B8" HorizontalAlignment="Center" />
+            <Border Background="#2563EB" CornerRadius="24" Padding="80,40" HorizontalAlignment="Center">
+                <TextBlock Text="{Binding TicketNumber}" FontSize="120" FontWeight="Bold" Foreground="White" />
+            </Border>
+            <TextBlock FontSize="18" Foreground="#64748B" HorizontalAlignment="Center"
+                       Text="{Binding SecondsLeft, StringFormat='Возврат через {0} сек.'}" />
+            <Button Content="Готово" Command="{Binding DoneCommand}" FontSize="24" Padding="60,20"
+                    HorizontalAlignment="Center" Background="#334155" Foreground="White" CornerRadius="14" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:QueueClient.ViewModels"
+             x:Class="QueueClient.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+    <Grid Background="#0F172A">
+        <Border Background="White" CornerRadius="20" Padding="40" Width="420"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Spacing="18">
+                <TextBlock Text="Электронная очередь" FontSize="26" FontWeight="Bold"
+                           Foreground="#0F172A" HorizontalAlignment="Center" />
+                <TextBlock Text="Вход для сотрудников" FontSize="14" Foreground="#64748B"
+                           HorizontalAlignment="Center" Margin="0,0,0,10" />
+
+                <TextBox Watermark="Email" Text="{Binding Email}" FontSize="16" Padding="12" />
+                <TextBox Watermark="Пароль" Text="{Binding Password}" PasswordChar="•"
+                         FontSize="16" Padding="12" />
+
+                <TextBlock Text="{Binding Error}" Foreground="#DC2626" FontSize="13"
+                           TextWrapping="Wrap"
+                           IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+                <Button Content="Войти" Command="{Binding LoginCommand}"
+                        IsEnabled="{Binding !IsBusy}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        FontSize="16" Padding="0,14"
+                        Background="#2563EB" Foreground="White" CornerRadius="12" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

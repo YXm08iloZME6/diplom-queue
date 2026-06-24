@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vma="clr-namespace:QueueClient.ViewModels.Admin"
+             x:Class="QueueClient.Views.Admin.AdminSettingsView"
+             x:DataType="vma:AdminSettingsViewModel">
+
+    <Grid Margin="32" RowDefinitions="Auto,*">
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Настройки системы" FontSize="24" FontWeight="Bold" Foreground="#1E293B" />
+            <TextBlock Text="{Binding Info}" Foreground="#16A34A" FontSize="13"
+                       IsVisible="{Binding Info, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock Text="{Binding Error}" Foreground="#DC2626" FontSize="13"
+                       IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Settings}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vma:SettingItem">
+                        <Border Background="White" CornerRadius="16" Padding="20" Margin="0,0,0,12">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="#1E293B" />
+                                <TextBlock Text="{Binding Description}" FontSize="12" Foreground="#94A3B8"
+                                           IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+                                <!-- Bool -->
+                                <StackPanel Orientation="Horizontal" Spacing="12" IsVisible="{Binding IsBool}">
+                                    <ToggleSwitch IsChecked="{Binding BoolValue}" />
+                                    <Button Content="Сохранить" CornerRadius="8" Padding="14,6"
+                                            Background="#2563EB" Foreground="White"
+                                            Command="{Binding $parent[ItemsControl].((vma:AdminSettingsViewModel)DataContext).SaveCommand}"
+                                            CommandParameter="{Binding}" />
+                                </StackPanel>
+
+                                <!-- Int -->
+                                <StackPanel Orientation="Horizontal" Spacing="12" IsVisible="{Binding IsInt}">
+                                    <TextBox Text="{Binding Value}" Width="160" />
+                                    <Button Content="Сохранить" CornerRadius="8" Padding="14,6"
+                                            Background="#2563EB" Foreground="White"
+                                            Command="{Binding $parent[ItemsControl].((vma:AdminSettingsViewModel)DataContext).SaveCommand}"
+                                            CommandParameter="{Binding}" />
+                                </StackPanel>
+
+                                <!-- String -->
+                                <StackPanel Orientation="Horizontal" Spacing="12" IsVisible="{Binding IsString}">
+                                    <TextBox Text="{Binding Value}" Width="300" />
+                                    <Button Content="Сохранить" CornerRadius="8" Padding="14,6"
+                                            Background="#2563EB" Foreground="White"
+                                            Command="{Binding $parent[ItemsControl].((vma:AdminSettingsViewModel)DataContext).SaveCommand}"
+                                            CommandParameter="{Binding}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
