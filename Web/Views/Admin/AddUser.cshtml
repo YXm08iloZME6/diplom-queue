@@ -85,7 +85,7 @@
                                 <option value="">Не выбрано</option>
                                 @foreach (var window in Model.AvailableWindows)
                                 {
-                                    <option value="@window.Id">@window.Number</option>
+                                    <option value="@window.Id">@window.Number - @window.ServiceName</option>
                                 }
                             </select>
                             <span asp-validation-for="UserData.WindowId" class="text-sm text-red-500 mt-1 block"></span>

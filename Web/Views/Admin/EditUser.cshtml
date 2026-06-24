@@ -103,7 +103,7 @@
                                 @foreach (var window in Model.AvailableWindows)
                                 {
                                     <option value="@window.Id">
-                                        @window.Number
+                                        @window.Number - @window.ServiceName
                                     </option>
                                 }
                             </select>
